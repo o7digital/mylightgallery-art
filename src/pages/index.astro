@@ -9,38 +9,342 @@ import Hero from '../components/Hero.astro';
 >
   <Hero />
 
-  <section class="section">
+  <section id="colecciones" class="section section-colecciones">
     <div class="container">
-      <h2>Nuestra Experiencia</h2>
-      <p>
-        Somos una galería familiar ubicada en el corazón del mundo del arte. Durante generaciones hemos tratado con pinturas de la más alta calidad, que datan del siglo XVII al XXI. Formar una colección de pinturas es una experiencia de lo más interesante y gratificante. Sin embargo, el arte debe seleccionarse sabiamente con asesoramiento profesional. Ayudamos a los clientes a construir colecciones que expresen su propia individualidad, proporcionando la procedencia y el trasfondo académico de cada pintura, y asesorando sobre enmarcado, colgado y todos los demás aspectos de la colección.
+      <h2>Colecciones</h2>
+      <p class="section-intro">
+        Somos una galería familiar ubicada en el corazón del mundo del arte. Durante generaciones hemos tratado con pinturas de la más alta calidad, que datan del siglo XVII al XXI. Formar una colección de pinturas es una experiencia de lo más interesante y gratificante.
       </p>
+      <div class="categories-grid">
+        <a href="/colecciones/arte-contemporaneo" class="category-card">
+          <div class="category-image" style="background: #d4c5b9;"></div>
+          <h3>Arte Contemporáneo</h3>
+        </a>
+        <a href="/colecciones/arte-clasico" class="category-card">
+          <div class="category-image" style="background: #b8a89a;"></div>
+          <h3>Arte Clásico</h3>
+        </a>
+        <a href="/colecciones/escultura" class="category-card">
+          <div class="category-image" style="background: #9e8b7b;"></div>
+          <h3>Escultura</h3>
+        </a>
+        <a href="/colecciones/fotografia" class="category-card">
+          <div class="category-image" style="background: #c9b8a8;"></div>
+          <h3>Fotografía</h3>
+        </a>
+      </div>
+      <div class="section-footer">
+        <a href="/colecciones" class="btn-secondary">Ver Todas las Colecciones</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="eventos" class="section section-eventos">
+    <div class="container">
+      <h2>Eventos</h2>
+      <div class="events-grid">
+        <div class="event-card">
+          <div class="event-badge">AHORA</div>
+          <div class="event-image" style="background: #e5dcd3;"></div>
+          <h3>Exposición de Invierno 2026</h3>
+          <p>Una selección exclusiva de obras contemporáneas y clásicas</p>
+          <a href="/eventos/exposicion-invierno" class="event-link">Más información</a>
+        </div>
+        <div class="event-card">
+          <div class="event-badge">PRÓXIMO</div>
+          <div class="event-image" style="background: #d8cec3;"></div>
+          <h3>Art Fair Texas 2026</h3>
+          <p>DALLAS, TX - 15-23 FEBRERO 2026</p>
+          <a href="/eventos/art-fair-texas" class="event-link">Más información</a>
+        </div>
+      </div>
+      <div class="section-footer">
+        <a href="/eventos" class="btn-secondary">Ver Todos los Eventos</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="noticias" class="section section-noticias">
+    <div class="container">
+      <h2>Noticias</h2>
+      <div class="news-grid">
+        <article class="news-card">
+          <div class="news-image" style="background: #cfc5ba;"></div>
+          <div class="news-content">
+            <h3>Nueva Adquisición: Obra del Siglo XIX</h3>
+            <p>My Light Gallery Art se complace en anunciar la adquisición de una obra excepcional del siglo XIX...</p>
+            <a href="/noticias/nueva-adquisicion" class="news-link">Leer más</a>
+          </div>
+        </article>
+        <article class="news-card">
+          <div class="news-image" style="background: #bfb5aa;"></div>
+          <div class="news-content">
+            <h3>Artista Destacado: Exposición Individual</h3>
+            <p>Descubra la última exposición de uno de los artistas contemporáneos más prometedores...</p>
+            <a href="/noticias/artista-destacado" class="news-link">Leer más</a>
+          </div>
+        </article>
+      </div>
+      <div class="section-footer">
+        <a href="/noticias" class="btn-secondary">Últimas Noticias</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="quienes-somos" class="section section-about">
+    <div class="container">
+      <h2>Quienes Somos</h2>
+      <div class="about-content">
+        <div class="about-text">
+          <p>
+            My Light Gallery Art es una galería familiar establecida en 2026, ubicada en Irving, Texas. Nos especializamos en obras de arte de la más alta calidad, ofreciendo asesoramiento profesional para ayudar a nuestros clientes a construir colecciones que expresen su individualidad.
+          </p>
+          <p>
+            Proporcionamos la procedencia y el trasfondo académico de cada obra, asesorando sobre enmarcado, conservación y todos los aspectos de la colección de arte.
+          </p>
+          <a href="/quienes-somos" class="btn-secondary">Conocer Más</a>
+        </div>
+        <div class="about-image" style="background: #d9cfc5;"></div>
+      </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
   .section {
-    padding: 4rem 2rem;
+    padding: 5rem 2rem;
   }
 
   .container {
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
   }
 
   h2 {
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 300;
     letter-spacing: 0.05em;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
     text-align: center;
+    text-transform: uppercase;
   }
 
-  p {
+  .section-intro {
     font-size: 1.1rem;
     line-height: 1.8;
     color: #555;
     text-align: center;
+    max-width: 900px;
+    margin: 0 auto 3rem;
+  }
+
+  .section-footer {
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  .btn-secondary {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    border: 2px solid #000;
+    color: #000;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+  }
+
+  .btn-secondary:hover {
+    background: #000;
+    color: white;
+  }
+
+  /* Colecciones Section */
+  .section-colecciones {
+    background: white;
+  }
+
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .category-card {
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s;
+  }
+
+  .category-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .category-image {
+    width: 100%;
+    height: 300px;
+    margin-bottom: 1rem;
+  }
+
+  .category-card h3 {
+    font-size: 1.2rem;
+    font-weight: 400;
+    text-align: center;
+  }
+
+  /* Eventos Section */
+  .section-eventos {
+    background: #f9f7f5;
+  }
+
+  .events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 3rem;
+  }
+
+  .event-card {
+    background: white;
+    padding: 1.5rem;
+    position: relative;
+  }
+
+  .event-badge {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    background: #000;
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    z-index: 1;
+  }
+
+  .event-image {
+    width: 100%;
+    height: 250px;
+    margin-bottom: 1.5rem;
+  }
+
+  .event-card h3 {
+    font-size: 1.3rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+  }
+
+  .event-card p {
+    color: #666;
+    margin-bottom: 1rem;
+    text-align: left;
+    font-size: 1rem;
+  }
+
+  .event-link {
+    color: #000;
+    text-decoration: none;
+    border-bottom: 1px solid #000;
+    transition: opacity 0.3s;
+    font-size: 0.95rem;
+  }
+
+  .event-link:hover {
+    opacity: 0.7;
+  }
+
+  /* Noticias Section */
+  .section-noticias {
+    background: white;
+  }
+
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 3rem;
+  }
+
+  .news-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .news-image {
+    width: 100%;
+    height: 250px;
+    margin-bottom: 1.5rem;
+  }
+
+  .news-content h3 {
+    font-size: 1.3rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+  }
+
+  .news-content p {
+    color: #666;
+    margin-bottom: 1rem;
+    text-align: left;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .news-link {
+    color: #000;
+    text-decoration: none;
+    border-bottom: 1px solid #000;
+    transition: opacity 0.3s;
+    align-self: flex-start;
+    font-size: 0.95rem;
+  }
+
+  .news-link:hover {
+    opacity: 0.7;
+  }
+
+  /* Quienes Somos Section */
+  .section-about {
+    background: #f9f7f5;
+  }
+
+  .about-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .about-text p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+
+  .about-image {
+    width: 100%;
+    height: 400px;
+  }
+
+  @media (max-width: 768px) {
+    .categories-grid,
+    .events-grid,
+    .news-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .about-content {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .about-image {
+      height: 300px;
+    }
+
+    h2 {
+      font-size: 2rem;
+    }
   }
 </style>
