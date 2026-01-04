@@ -1,32 +1,54 @@
 <header class="site-header">
   <div class="container">
     <nav class="main-nav">
-      <a href="/">Inicio</a>
-      <a href="/services">Servicios</a>
-      <a href="/portfolio">Portafolio</a>
-      <a href="/about">Acerca de</a>
-      <a href="/news">Noticias</a>
-      <a href="/contact">Contacto</a>
+      <div class="nav-left">
+        <a href="/colecciones">Colecciones</a>
+        <a href="/compra">Compra</a>
+        <a href="/eventos">Eventos</a>
+      </div>
+      <a href="/" class="logo">My Light Gallery Art</a>
+      <div class="nav-right">
+        <a href="/noticias">Noticias</a>
+        <a href="/quienes-somos">Quienes Somos</a>
+        <a href="/contacto">Contacto</a>
+      </div>
     </nav>
-    <a href="/" class="logo">My Light Gallery Art</a>
   </div>
 </header>
 
 <style>
   .site-header {
     background: white;
-    padding: 1rem 0;
+    padding: 1.5rem 0;
     border-bottom: 1px solid #eee;
   }
 
   .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 0 2rem;
+  }
+
+  .main-nav {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .nav-left,
+  .nav-right {
+    display: flex;
+    gap: 2.5rem;
+    flex: 1;
+  }
+
+  .nav-left {
+    justify-content: flex-end;
+  }
+
+  .nav-right {
+    justify-content: flex-start;
   }
 
   .logo {
@@ -35,29 +57,50 @@
     color: #000;
     text-decoration: none;
     text-align: center;
+    white-space: nowrap;
+    padding: 0 2rem;
   }
 
-  .main-nav {
-    display: flex;
-    gap: 2rem;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .main-nav a {
+  .main-nav a:not(.logo) {
     color: #333;
     text-decoration: none;
     font-size: 0.95rem;
     transition: color 0.3s;
+    white-space: nowrap;
   }
 
-  .main-nav a:hover {
+  .main-nav a:not(.logo):hover {
     color: #000;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     .main-nav {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .nav-left,
+    .nav-right {
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      order: -1;
+      padding: 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .nav-left,
+    .nav-right {
       gap: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .logo {
+      font-size: 1.2rem;
     }
   }
 </style>
