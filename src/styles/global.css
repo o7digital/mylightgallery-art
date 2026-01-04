@@ -20,3 +20,97 @@ img {
   max-width: 100%;
   display: block;
 }
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Header */
+.site-header {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  z-index: 100;
+}
+
+.site-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 72px;
+}
+
+.logo {
+  font-weight: 600;
+  text-decoration: none;
+  color: #111;
+}
+
+.main-nav a {
+  margin-left: 24px;
+  text-decoration: none;
+  color: #111;
+  font-size: 0.95rem;
+}
+
+/* Hero */
+.hero {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+}
+
+.hero-content {
+  max-width: 600px;
+  padding: 80px;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.btn-primary {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 12px 28px;
+  background: #111;
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Sections */
+.section {
+  padding: 100px 0;
+}
+
+/* Footer */
+.site-footer {
+  background: #111;
+  color: #ccc;
+  padding: 60px 0 20px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 40px;
+}
+
+.site-footer a {
+  color: #ccc;
+  display: block;
+  margin-bottom: 8px;
+  text-decoration: none;
+}
+
+.footer-bottom {
+  text-align: center;
+  font-size: 0.85rem;
+  margin-top: 40px;
+  color: #777;
+}

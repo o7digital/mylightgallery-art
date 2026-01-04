@@ -1,8 +1,21 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
 ---
 
-<BaseLayout>
-  <h1>Astro Premium Template</h1>
-  <p>Base technique initialisée correctement.</p>
+<BaseLayout
+  title="Client Name – Premium Services"
+  description="Premium services and expertise for high-end clients"
+>
+  <Hero />
+
+  <section class="section">
+    <div class="container">
+      <h2>Our Expertise</h2>
+      <p>
+        We provide strategic and creative solutions for premium brands,
+        institutions and private clients.
+      </p>
+    </div>
+  </section>
 </BaseLayout>
