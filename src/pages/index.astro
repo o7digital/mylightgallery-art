@@ -113,7 +113,6 @@ import Hero from '../components/Hero.astro';
           <p>
             Su trayectoria artística ha sido enriquecida por una formación continua en pintura, dibujo, figura humana, expresión creativa y técnicas mixtas, desarrollada tanto en México como en Estados Unidos. Esta diversidad de experiencias se refleja en una obra expresiva, vibrante y profundamente conectada con la experiencia humana.
           </p>
-          <a href="/layla" class="btn-secondary">Conocer Más</a>
         </div>
         <div class="about-image" style="background: #d9cfc5;"></div>
       </div>
@@ -364,23 +363,30 @@ import Hero from '../components/Hero.astro';
   }
 
   .about-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: center;
+    display: block;
+    max-width: 100%;
+  }
+
+  .about-text {
+    max-width: 100%;
+    margin-bottom: 3rem;
   }
 
   .about-text p {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     line-height: 1.8;
     color: #555;
     margin-bottom: 1.5rem;
     text-align: left;
+    column-count: 2;
+    column-gap: 4rem;
   }
 
   .about-image {
     width: 100%;
     height: 400px;
+    max-width: 600px;
+    margin: 0 auto;
   }
 
   @media (max-width: 768px) {
@@ -393,6 +399,10 @@ import Hero from '../components/Hero.astro';
     .about-content {
       grid-template-columns: 1fr;
       gap: 2rem;
+    }
+
+    .about-text p {
+      column-count: 1;
     }
 
     .about-image {
