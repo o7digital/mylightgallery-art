@@ -1,8 +1,26 @@
 <section class="hero">
   <div class="slider">
-    <div class="slide active" style="background-image: url('/slider/Gemini_Generated_Image_4yfwxa4yfwxa4yfw.png')"></div>
-    <div class="slide" style="background-image: url('/slider/Gemini_Generated_Image_bqvhvabqvhvabqvh.png')"></div>
-    <div class="slide" style="background-image: url('/slider/Gemini_Generated_Image_i8ewx3i8ewx3i8ew.png')"></div>
+    <div class="slide active" style="background-image: url('/slider/Gemini_Generated_Image_4yfwxa4yfwxa4yfw.png')">
+      <div class="slide-content">
+        <p class="slide-artist">ARTE CONTEMPORÁNEO</p>
+        <h2 class="slide-title">OBRAS MAESTRAS MODERNAS</h2>
+        <a href="/colecciones/contemporaneo" class="slide-btn">See More</a>
+      </div>
+    </div>
+    <div class="slide" style="background-image: url('/slider/Gemini_Generated_Image_bqvhvabqvhvabqvh.png')">
+      <div class="slide-content">
+        <p class="slide-artist">COLECCIÓN CLÁSICA</p>
+        <h2 class="slide-title">PINTURAS DEL SIGLO XIX Y XX</h2>
+        <a href="/colecciones/clasico" class="slide-btn">See More</a>
+      </div>
+    </div>
+    <div class="slide" style="background-image: url('/slider/Gemini_Generated_Image_i8ewx3i8ewx3i8ew.png')">
+      <div class="slide-content">
+        <p class="slide-artist">EXPOSICIÓN ESPECIAL</p>
+        <h2 class="slide-title">ESCULTURA Y ARTE ABSTRACTO</h2>
+        <a href="/eventos" class="slide-btn">See More</a>
+      </div>
+    </div>
   </div>
   
   <button class="slider-nav prev" aria-label="Previous slide">
@@ -16,21 +34,8 @@
     </svg>
   </button>
 
-  <div class="hero-content">
-    <h1>Galeria de Arte en el Corazon de Irving, Texas</h1>
-    <p class="subtitle">ESTABLECIDA 2026</p>
-    <p>Una galería familiar especializada en obras de arte contemporáneo y clásico de la más alta calidad.</p>
-  </div>
   <div class="hero-newsletter">
     <a href="/newsletter" class="newsletter-link">Suscribe nuestra newsletter</a>
-  </div>
-  <div class="hero-scroll">
-    <a href="#colecciones" class="scroll-link">
-      <span class="scroll-text">See More</span>
-      <svg class="scroll-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 5v14M19 12l-7 7-7-7"/>
-      </svg>
-    </a>
   </div>
 </section>
 
@@ -100,6 +105,58 @@
     opacity: 1;
   }
 
+  .slide-content {
+    position: absolute;
+    bottom: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 10;
+    max-width: 900px;
+    width: 100%;
+    padding: 0 2rem;
+  }
+
+  .slide-artist {
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    color: white;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .slide-title {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: white;
+    margin-bottom: 2rem;
+    line-height: 1.2;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2rem 3rem;
+    backdrop-filter: blur(5px);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .slide-btn {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    border: 2px solid white;
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    transition: all 0.3s;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(5px);
+  }
+
+  .slide-btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+    color: #000;
+  }
+
   .slider-nav {
     position: absolute;
     top: 50%;
@@ -131,6 +188,7 @@
     z-index: 5;
     color: white;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    display: none;
   }
 
   h1 {
@@ -217,10 +275,12 @@
   .scroll-text {
     font-size: 0.9rem;
     letter-spacing: 0.05em;
+    display: none;
   }
 
   .scroll-arrow {
     animation: bounce 2s infinite;
+    display: none;
   }
 
   @keyframes bounce {
