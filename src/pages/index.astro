@@ -4,18 +4,43 @@ import Hero from '../components/Hero.astro';
 ---
 
 <BaseLayout
-  title="Client Name – Premium Services"
-  description="Premium services and expertise for high-end clients"
+  title="Client Name – Galería de Arte"
+  description="Galería de arte especializada en obras de la más alta calidad"
 >
   <Hero />
 
   <section class="section">
     <div class="container">
-      <h2>Our Expertise</h2>
+      <h2>Nuestra Experiencia</h2>
       <p>
-        We provide strategic and creative solutions for premium brands,
-        institutions and private clients.
+        Somos una galería familiar ubicada en el corazón del mundo del arte. Durante generaciones hemos tratado con pinturas de la más alta calidad, que datan del siglo XVII al XXI. Formar una colección de pinturas es una experiencia de lo más interesante y gratificante. Sin embargo, el arte debe seleccionarse sabiamente con asesoramiento profesional. Ayudamos a los clientes a construir colecciones que expresen su propia individualidad, proporcionando la procedencia y el trasfondo académico de cada pintura, y asesorando sobre enmarcado, colgado y todos los demás aspectos de la colección.
       </p>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .section {
+    padding: 4rem 2rem;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #555;
+    text-align: center;
+  }
+</style>
