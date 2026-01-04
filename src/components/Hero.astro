@@ -19,7 +19,8 @@
 
 <style>
   .hero {
-    min-height: 60vh;
+    min-height: 100vh;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -131,6 +132,11 @@
   }
 
   @media (max-width: 768px) {
+    .hero {
+      min-height: 100vh;
+      height: auto;
+    }
+
     .hero-newsletter,
     .hero-scroll {
       position: static;
