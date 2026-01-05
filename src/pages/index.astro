@@ -17,62 +17,62 @@ import Hero from '../components/Hero.astro';
       </p>
       
       <div class="paintings-carousel">
-        <button class="carousel-nav carousel-prev" aria-label="Previous painting">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M15 18l-6-6 6-6"/>
-          </svg>
-        </button>
-        
         <div class="carousel-container">
           <div class="carousel-track">
-            <a href="/pinturas/atardecer" class="painting-card">
+            <a href="#!" class="painting-card">
               <img src="/pinturas/preview/atardecer.webp" alt="Atardecer" />
               <h3>Atardecer</h3>
             </a>
-            <a href="/pinturas/curiosidad" class="painting-card">
+            <a href="#!" class="painting-card">
               <img src="/pinturas/preview/curiosidad.webp" alt="Curiosidad" />
               <h3>Curiosidad</h3>
             </a>
-            <a href="/pinturas/mujer" class="painting-card">
+            <a href="#!" class="painting-card">
+              <img src="/pinturas/preview/botellas.webp" alt="Botellas" />
+              <h3>Botellas</h3>
+            </a>
+            <a href="#!" class="painting-card">
               <img src="/pinturas/preview/mujer36x36.webp" alt="Mujer" />
               <h3>Mujer</h3>
             </a>
-            <a href="/pinturas/mujer-pensante" class="painting-card">
-              <img src="/pinturas/preview/mujer pensante.webp" alt="Mujer Pensante" />
+            <a href="#!" class="painting-card">
+              <img src="/pinturas/preview/mujer%20pensante.webp" alt="Mujer Pensante" />
               <h3>Mujer Pensante</h3>
             </a>
-            <a href="/pinturas/bipolaridad" class="painting-card">
+            <a href="#!" class="painting-card">
               <img src="/pinturas/preview/bipolaridad.webp" alt="Bipolaridad" />
               <h3>Bipolaridad</h3>
             </a>
-            <a href="/pinturas/contrastes" class="painting-card">
+            <a href="#!" class="painting-card">
               <img src="/pinturas/preview/contrastes.webp" alt="Contrastes" />
               <h3>Contrastes</h3>
             </a>
-            <a href="/pinturas/tormenta" class="painting-card">
+            <a href="#!" class="painting-card">
               <img src="/pinturas/preview/tormenta.webp" alt="Tormenta" />
               <h3>Tormenta</h3>
             </a>
-            <a href="/pinturas/espirales" class="painting-card">
+            <a href="#!" class="painting-card">
               <img src="/pinturas/preview/espirales.webp" alt="Espirales" />
               <h3>Espirales</h3>
             </a>
-            <a href="/pinturas/pareja" class="painting-card">
+            <a href="#!" class="painting-card">
               <img src="/pinturas/preview/pareja36x36.webp" alt="Pareja" />
               <h3>Pareja</h3>
             </a>
-            <a href="/pinturas/danza" class="painting-card">
+            <a href="#!" class="painting-card">
               <img src="/pinturas/preview/danza36x36.webp" alt="Danza" />
               <h3>Danza</h3>
             </a>
           </div>
         </div>
-        
-        <button class="carousel-nav carousel-next" aria-label="Next painting">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 18l6-6-6-6"/>
-          </svg>
-        </button>
+        <div class="lightbox" id="lightbox" aria-hidden="true">
+          <div class="lightbox-backdrop"></div>
+          <div class="lightbox-content" role="dialog" aria-modal="true">
+            <button class="lightbox-close" aria-label="Fermer la vue détaillée">×</button>
+            <img id="lightbox-img" alt="" />
+            <p class="lightbox-caption"></p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -214,25 +214,23 @@ import Hero from '../components/Hero.astro';
 
   /* Paintings Carousel */
   .paintings-carousel {
-    position: relative;
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem 0;
   }
 
   .carousel-container {
-    overflow: hidden;
-    position: relative;
+    flex: 1;
+    overflow: visible;
   }
 
   .carousel-track {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 2rem;
-    transition: transform 0.5s ease;
   }
 
   .painting-card {
-    flex: 0 0 calc(33.333% - 1.333rem);
     text-decoration: none;
     color: inherit;
     transition: transform 0.3s;
@@ -257,38 +255,91 @@ import Hero from '../components/Hero.astro';
     color: #333;
   }
 
-  .carousel-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.9);
-    border: 2px solid #000;
+  .carousel-btn {
+    flex-shrink: 0;
     width: 50px;
     height: 50px;
     border-radius: 50%;
+    background: white;
+    border: 2px solid #000;
     cursor: pointer;
-    z-index: 10;
-    transition: all 0.3s;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.3s;
+    z-index: 10;
   }
 
-  .carousel-nav:hover {
+  .carousel-btn:hover {
     background: #000;
-    color: white;
   }
 
-  .carousel-nav:hover svg {
+  .carousel-btn:hover svg {
     stroke: white;
   }
 
-  .carousel-prev {
-    left: -25px;
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
   }
 
-  .carousel-next {
-    right: -25px;
+  .lightbox.is-open {
+    display: flex;
+  }
+
+  .lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+  }
+
+  .lightbox-content {
+    position: relative;
+    max-width: min(90vw, 1200px);
+    max-height: 90vh;
+    padding: 1.5rem;
+    background: #fff;
+    box-shadow: 0 20px 80px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    z-index: 1;
+  }
+
+  .lightbox-content img {
+    max-height: 70vh;
+    object-fit: contain;
+    width: 100%;
+  }
+
+  .lightbox-caption {
+    text-align: center;
+    font-size: 1rem;
+    color: #333;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: #000;
+    color: #fff;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .categories-grid {
@@ -470,6 +521,7 @@ import Hero from '../components/Hero.astro';
     font-size: 0.95rem;
   }
 
+
   .news-link:hover {
     opacity: 0.7;
   }
@@ -510,21 +562,9 @@ import Hero from '../components/Hero.astro';
       padding: 2rem 1rem;
     }
 
-    .carousel-nav {
-      width: 40px;
-      height: 40px;
-    }
-
-    .carousel-prev {
-      left: 0;
-    }
-
-    .carousel-next {
-      right: 0;
-    }
-
     .painting-card {
       flex: 0 0 calc(50% - 1rem);
+      min-width: calc(50% - 1rem);
     }
 
     .section {
@@ -559,16 +599,17 @@ import Hero from '../components/Hero.astro';
       padding: 0 0.5rem;
     }
 
+    .paintings-carousel {
+      padding: 1.5rem 0.5rem;
+    }
+
     .painting-card {
       flex: 0 0 100%;
+      min-width: 100%;
     }
 
     .painting-card img {
       height: 280px;
-    }
-
-    .carousel-track {
-      gap: 1rem;
     }
 
     .events-grid {
@@ -605,16 +646,6 @@ import Hero from '../components/Hero.astro';
       height: 250px;
     }
 
-    .carousel-nav {
-      width: 35px;
-      height: 35px;
-    }
-
-    .carousel-nav svg {
-      width: 20px;
-      height: 20px;
-    }
-
     .event-image {
       height: 300px;
     }
@@ -631,88 +662,47 @@ import Hero from '../components/Hero.astro';
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const track = document.querySelector('.carousel-track');
-    const prevBtn = document.querySelector('.carousel-prev');
-    const nextBtn = document.querySelector('.carousel-next');
     const cards = document.querySelectorAll('.painting-card');
-    
-    let currentIndex = 0;
-    const totalCards = cards.length;
-    
-    function getCardsToShow() {
-      if (window.innerWidth <= 768) return 1;
-      if (window.innerWidth <= 1024) return 2;
-      return 3;
-    }
-    
-    function updateCarousel() {
-      if (!cards[0]) return;
-      const cardWidth = cards[0].offsetWidth;
-      const gap = window.innerWidth <= 768 ? 16 : 32;
-      const offset = -(currentIndex * (cardWidth + gap));
-      track.style.transform = `translateX(${offset}px)`;
-    }
-    
-    function nextSlide() {
-      const cardsToShow = getCardsToShow();
-      const maxIndex = totalCards - cardsToShow;
-      currentIndex++;
-      if (currentIndex > maxIndex) {
-        currentIndex = 0;
+    const lightbox = document.getElementById('lightbox');
+    const imgTarget = document.getElementById('lightbox-img') as HTMLImageElement | null;
+    const captionTarget = document.querySelector('.lightbox-caption') as HTMLElement | null;
+    const closeBtn = document.querySelector('.lightbox-close');
+    const backdrop = document.querySelector('.lightbox-backdrop');
+
+    if (!lightbox || !imgTarget || !captionTarget || !closeBtn || !backdrop) return;
+
+    const open = (img: HTMLImageElement, caption: string) => {
+      imgTarget.src = img.src;
+      imgTarget.alt = img.alt;
+      captionTarget.textContent = caption;
+      lightbox.classList.add('is-open');
+      lightbox.setAttribute('aria-hidden', 'false');
+    };
+
+    const close = () => {
+      lightbox.classList.remove('is-open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      imgTarget.src = '';
+      captionTarget.textContent = '';
+    };
+
+    cards.forEach(card => {
+      card.addEventListener('click', event => {
+        event.preventDefault();
+        const img = card.querySelector('img');
+        const caption = card.querySelector('h3')?.textContent || '';
+        if (img instanceof HTMLImageElement) {
+          open(img, caption);
+        }
+      });
+    });
+
+    closeBtn.addEventListener('click', close);
+    backdrop.addEventListener('click', close);
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        close();
       }
-      updateCarousel();
-    }
-    
-    function prevSlide() {
-      const cardsToShow = getCardsToShow();
-      const maxIndex = totalCards - cardsToShow;
-      currentIndex--;
-      if (currentIndex < 0) {
-        currentIndex = maxIndex;
-      }
-      updateCarousel();
-    }
-    
-    // Auto-play toutes les 5 secondes
-    let autoplayInterval = setInterval(nextSlide, 5000);
-    
-    // Reset l'intervalle quand on clique manuellement
-    function resetAutoplay() {
-      clearInterval(autoplayInterval);
-      autoplayInterval = setInterval(nextSlide, 5000);
-    }
-    
-    nextBtn?.addEventListener('click', () => {
-      nextSlide();
-      resetAutoplay();
     });
-    
-    prevBtn?.addEventListener('click', () => {
-      prevSlide();
-      resetAutoplay();
-    });
-    
-    // Pause l'autoplay au survol
-    const carousel = document.querySelector('.paintings-carousel');
-    carousel?.addEventListener('mouseenter', () => {
-      clearInterval(autoplayInterval);
-    });
-    
-    carousel?.addEventListener('mouseleave', () => {
-      autoplayInterval = setInterval(nextSlide, 5000);
-    });
-    
-    // Update au resize
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        currentIndex = 0;
-        updateCarousel();
-      }, 250);
-    });
-    
-    // Init
-    updateCarousel();
   });
 </script>
