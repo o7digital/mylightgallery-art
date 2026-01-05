@@ -6,8 +6,22 @@
         <span></span>
         <span></span>
       </button>
-      
-      <a href="/" class="logo">My Light Art Gallery</a>
+
+      <div class="nav-menu">
+        <div class="nav-left">
+          <a href="/#colecciones">Colecciones</a>
+          <a href="/#compra">Compra</a>
+          <a href="/#eventos">Eventos</a>
+        </div>
+        
+        <a href="/" class="logo">My Light Art Gallery</a>
+        
+        <div class="nav-right">
+          <a href="/#noticias">Noticias</a>
+          <a href="/#layla">Layla</a>
+          <a href="/contacto">Contacto</a>
+        </div>
+      </div>
       
       <div class="nav-icons">
         <button class="icon-btn" aria-label="Search">
@@ -29,19 +43,6 @@
             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
           </svg>
         </a>
-      </div>
-
-      <div class="nav-menu">
-        <div class="nav-left">
-          <a href="/#colecciones">Colecciones</a>
-          <a href="/#compra">Compra</a>
-          <a href="/#eventos">Eventos</a>
-        </div>
-        <div class="nav-right">
-          <a href="/#noticias">Noticias</a>
-          <a href="/#layla">Layla</a>
-          <a href="/contacto">Contacto</a>
-        </div>
       </div>
     </nav>
   </div>
@@ -108,6 +109,7 @@
     display: flex;
     gap: 2rem;
     flex: 1;
+    align-items: center;
     justify-content: center;
   }
 
@@ -115,6 +117,15 @@
   .nav-right {
     display: flex;
     gap: 2.5rem;
+    flex: 1;
+  }
+
+  .nav-left {
+    justify-content: flex-end;
+  }
+
+  .nav-right {
+    justify-content: flex-start;
   }
 
   .logo {
