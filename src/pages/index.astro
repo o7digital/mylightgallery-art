@@ -363,10 +363,15 @@ import Hero from '../components/Hero.astro';
     background: #f9f7f5;
   }
 
+  .section-about .container {
+    max-width: 1400px;
+    padding: 0 1rem;
+  }
+
   .about-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 3rem;
     align-items: center;
   }
 
@@ -379,8 +384,9 @@ import Hero from '../components/Hero.astro';
   }
 
   .about-image {
-    width: 100%;
-    height: 400px;
+    width: calc(100% + 3cm);
+    height: calc(400px + 3cm);
+    margin-right: -3cm;
   }
 
   @media (max-width: 768px) {
