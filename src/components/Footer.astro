@@ -1,26 +1,61 @@
+---
+const { lang = 'es' } = Astro.props;
+
+const infoLinks =
+  lang === 'en'
+    ? [
+        { href: '/en/#collections', label: 'Collections' },
+        { href: '/en/#events', label: 'Events' },
+        { href: '/en/#layla', label: 'Layla' },
+        { href: '/en/#buy', label: 'Buy' },
+        { href: '/en/contact', label: 'Contact' },
+        { href: '/en/privacy', label: 'Privacy Notice' },
+      ]
+    : [
+        { href: '/#colecciones', label: 'Colecciones' },
+        { href: '/#eventos', label: 'Eventos' },
+        { href: '/#layla', label: 'Layla' },
+        { href: '/#compra', label: 'Compra' },
+        { href: '/contacto', label: 'Contacto' },
+        { href: '/aviso-privacidad', label: 'Aviso de Privacidad' },
+      ];
+const contactTitle = lang === 'en' ? 'Contact' : 'Contacto';
+const infoTitle = lang === 'en' ? 'Information' : 'Información';
+const visitorTitle = lang === 'en' ? 'Visitor Information' : 'Información del Visitante';
+const hoursTitle = lang === 'en' ? 'Contact Hours' : 'Horarios de Contacto';
+const locationTitle = lang === 'en' ? 'Location' : 'Ubicación';
+const madeByText = 'made by o7Digital';
+const copyright =
+  lang === 'en'
+    ? '© 2026 My Light Gallery Art. All rights reserved.'
+    : '© 2026 My Light Gallery Art. Todos los derechos reservados.';
+const hours =
+  lang === 'en'
+    ? ['Monday - Friday: 10:00 - 18:00', 'Saturday: By appointment']
+    : ['Lunes - Viernes: 10:00 - 18:00', 'Sábado: Con cita previa'];
+---
+
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
-      <strong>Información</strong>
-      <p><a href="/#colecciones">Colecciones</a></p>
-      <p><a href="/#eventos">Eventos</a></p>
-      <p><a href="/#layla">Layla</a></p>
-      <p><a href="/#compra">Compra</a></p>
-      <p><a href="/contacto">Contacto</a></p>
-      <p><a href="/aviso-privacidad">Aviso de Privacidad</a></p>
+      <strong>{infoTitle}</strong>
+      {infoLinks.map((link) => (
+        <p><a href={link.href}>{link.label}</a></p>
+      ))}
     </div>
 
     <div>
-      <strong>Información del Visitante</strong>
-      <p><strong>Horarios de Contacto</strong></p>
-      <p>Lunes - Viernes: 10:00 - 18:00</p>
-      <p>Sábado: Con cita previa</p>
-      <p style="margin-top: 1rem;"><strong>Ubicación</strong></p>
+      <strong>{visitorTitle}</strong>
+      <p><strong>{hoursTitle}</strong></p>
+      {hours.map((h) => (
+        <p>{h}</p>
+      ))}
+      <p style="margin-top: 1rem;"><strong>{locationTitle}</strong></p>
       <p>Irving, Texas</p>
     </div>
 
     <div>
-      <strong>Contacto</strong>
+      <strong>{contactTitle}</strong>
       <p>Email: Layla@mylightartgallery.com</p>
       <p>Tel: +1 (214) 537-6953</p>
       <div class="social-icons">
@@ -44,8 +79,8 @@
   </div>
 
   <div class="footer-bottom">
-    <span>© 2026 My Light Gallery Art. Todos los derechos reservados.</span>
-    <a href="https://www.o7digital.com" target="_blank" class="made-by">made by o7Digital</a>
+    <span>{copyright}</span>
+    <a href="https://www.o7digital.com" target="_blank" class="made-by">{madeByText}</a>
   </div>
 </footer>
 

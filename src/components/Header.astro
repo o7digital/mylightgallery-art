@@ -1,3 +1,37 @@
+---
+const { lang = 'es' } = Astro.props;
+
+const navLeft =
+  lang === 'en'
+    ? [
+        { href: '/en/#collections', label: 'Collections' },
+        { href: '/en/#collections', label: 'Buy' },
+        { href: '/en/#events', label: 'Events' },
+      ]
+    : [
+        { href: '/#colecciones', label: 'Colecciones' },
+        { href: '/#colecciones', label: 'Compra' },
+        { href: '/#eventos', label: 'Eventos' },
+      ];
+
+const navRight =
+  lang === 'en'
+    ? [
+        { href: '/en/#news', label: 'News' },
+        { href: '/en/#layla', label: 'Layla' },
+        { href: '/en/contact', label: 'Contact' },
+      ]
+    : [
+        { href: '/#noticias', label: 'Noticias' },
+        { href: '/#layla', label: 'Layla' },
+        { href: '/contacto', label: 'Contacto' },
+      ];
+
+const logoHref = lang === 'en' ? '/en/' : '/';
+const logoLabel = 'My Light Art Gallery';
+const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', label: 'EN' };
+---
+
 <header class="site-header">
   <div class="container">
     <nav class="main-nav">
@@ -9,21 +43,22 @@
 
       <div class="nav-menu">
         <div class="nav-left">
-          <a href="/#colecciones">Colecciones</a>
-          <a href="/#compra">Compra</a>
-          <a href="/#eventos">Eventos</a>
+          {navLeft.map((item) => (
+            <a href={item.href}>{item.label}</a>
+          ))}
         </div>
         
-        <a href="/" class="logo">My Light Art Gallery</a>
+        <a href={logoHref} class="logo">{logoLabel}</a>
         
         <div class="nav-right">
-          <a href="/#noticias">Noticias</a>
-          <a href="/#layla">Layla</a>
-          <a href="/contacto">Contacto</a>
+          {navRight.map((item) => (
+            <a href={item.href}>{item.label}</a>
+          ))}
         </div>
       </div>
       
       <div class="nav-icons">
+        <a class="lang-switch" href={switchLang.href}>{switchLang.label}</a>
         <button class="icon-btn" aria-label="Search">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8"/>
@@ -156,7 +191,7 @@
 
   .nav-icons {
     display: flex;
-    gap: 1.5rem;
+    gap: 1rem;
     align-items: center;
   }
 
@@ -174,6 +209,26 @@
 
   .icon-btn:hover {
     color: #ccc;
+  }
+
+  .lang-switch {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid #fff;
+    border-radius: 999px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    transition: all 0.3s;
+    text-transform: uppercase;
+  }
+
+  .lang-switch:hover {
+    background: #fff;
+    color: #000;
   }
 
   @media (max-width: 1024px) {
@@ -202,6 +257,7 @@
     .nav-right {
       flex-direction: column;
       gap: 1.5rem;
+      align-items: center;
     }
 
     .logo {
@@ -214,7 +270,7 @@
     }
 
     .nav-icons {
-      gap: 1rem;
+      gap: 0.8rem;
     }
 
     .icon-btn svg {

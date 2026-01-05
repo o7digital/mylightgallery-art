@@ -1,41 +1,78 @@
+---
+const { lang = 'es' } = Astro.props;
+
+const slides =
+  lang === 'en'
+    ? [
+        {
+          title: 'Modern Masterpieces',
+          label: 'Contemporary Art',
+          href: '/en/#collections',
+          bg: '/slider/Gemini_Generated_Image_4yfwxa4yfwxa4yfw.webp',
+        },
+        {
+          title: '21st Century Paintings',
+          label: 'Classic Collection',
+          href: '/en/#collections',
+          bg: '/slider/Gemini_Generated_Image_bqvhvabqvhvabqvh.webp',
+        },
+        {
+          title: 'Sculpture & Abstract Art',
+          label: 'Special Exhibition',
+          href: '/en/#events',
+          bg: '/slider/Gemini_Generated_Image_i8ewx3i8ewx3i8ew.webp',
+        },
+      ]
+    : [
+        {
+          title: 'OBRAS MAESTRAS MODERNAS',
+          label: 'ARTE CONTEMPORÁNEO',
+          href: '/#colecciones',
+          bg: '/slider/Gemini_Generated_Image_4yfwxa4yfwxa4yfw.webp',
+        },
+        {
+          title: 'PINTURAS DEL SIGLO 21',
+          label: 'COLECCIÓN CLÁSICA',
+          href: '/#colecciones',
+          bg: '/slider/Gemini_Generated_Image_bqvhvabqvhvabqvh.webp',
+        },
+        {
+          title: 'ESCULTURA Y ARTE ABSTRACTO',
+          label: 'EXPOSICIÓN ESPECIAL',
+          href: '/#eventos',
+          bg: '/slider/Gemini_Generated_Image_i8ewx3i8ewx3i8ew.webp',
+        },
+      ];
+
+const newsletterText = lang === 'en' ? 'Subscribe to our newsletter' : 'Suscribe nuestra newsletter';
+---
+
 <section class="hero">
   <div class="slider">
-    <div class="slide active" style="background-image: url('/slider/Gemini_Generated_Image_4yfwxa4yfwxa4yfw.webp')">
-      <div class="slide-content">
-        <p class="slide-artist">ARTE CONTEMPORÁNEO</p>
-        <h2 class="slide-title">OBRAS MAESTRAS MODERNAS</h2>
-        <a href="/colecciones/contemporaneo" class="slide-btn">See More</a>
+    {slides.map((slide, index) => (
+      <div class={`slide ${index === 0 ? 'active' : ''}`} style={`background-image: url('${slide.bg}')`}>
+        <div class="slide-content">
+          <p class="slide-artist">{slide.label}</p>
+          <h2 class="slide-title">{slide.title}</h2>
+          <a href={slide.href} class="slide-btn">{lang === 'en' ? 'See More' : 'Ver más'}</a>
+        </div>
       </div>
-    </div>
-    <div class="slide" style="background-image: url('/slider/Gemini_Generated_Image_bqvhvabqvhvabqvh.webp')">
-      <div class="slide-content">
-        <p class="slide-artist">COLECCIÓN CLÁSICA</p>
-        <h2 class="slide-title">PINTURAS DEL SIGLO 21</h2>
-        <a href="/colecciones/clasico" class="slide-btn">See More</a>
-      </div>
-    </div>
-    <div class="slide" style="background-image: url('/slider/Gemini_Generated_Image_i8ewx3i8ewx3i8ew.webp')">
-      <div class="slide-content">
-        <p class="slide-artist">EXPOSICIÓN ESPECIAL</p>
-        <h2 class="slide-title">ESCULTURA Y ARTE ABSTRACTO</h2>
-        <a href="/eventos" class="slide-btn">See More</a>
-      </div>
-    </div>
+    ))}
   </div>
   
-  <button class="slider-nav prev" aria-label="Previous slide">
+  <button class="slider-nav prev" aria-label={lang === 'en' ? 'Previous slide' : 'Slide anterior'}>
     <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M15 18l-6-6 6-6"/>
     </svg>
   </button>
-  <button class="slider-nav next" aria-label="Next slide">
+  <button class="slider-nav next" aria-label={lang === 'en' ? 'Next slide' : 'Siguiente slide'}>
     <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M9 18l6-6-6-6"/>
     </svg>
   </button>
 
   <div class="hero-newsletter">
-    <a href="/newsletter" class="newsletter-link">Suscribe nuestra newsletter</a>
+    <a href={lang === 'en' ? '/en/newsletter' : '/newsletter'} class="newsletter-link">{newsletterText}</a>
   </div>
 </section>
 
@@ -45,7 +82,7 @@
   const nextBtn = document.querySelector('.slider-nav.next');
   let currentSlide = 0;
 
-  function showSlide(index: number) {
+  function showSlide(index) {
     slides.forEach(slide => slide.classList.remove('active'));
     slides[index].classList.add('active');
   }
@@ -63,7 +100,6 @@
   nextBtn?.addEventListener('click', nextSlide);
   prevBtn?.addEventListener('click', prevSlide);
 
-  // Auto-play
   setInterval(nextSlide, 5000);
 </script>
 
@@ -182,52 +218,6 @@
     right: 2rem;
   }
 
-  .hero-content {
-    max-width: 800px;
-    text-align: center;
-    z-index: 5;
-    color: white;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    display: none;
-  }
-
-  h1 {
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    font-weight: 300;
-    letter-spacing: 0.05em;
-    margin-bottom: 1.5rem;
-    line-height: 1.2;
-    color: white;
-  }
-
-  .subtitle {
-    font-size: 1.2rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    margin-bottom: 2rem;
-    color: white;
-  }
-
-  p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 2rem;
-    color: white;
-  }
-
-  .btn-primary {
-    display: inline-block;
-    padding: 1rem 2rem;
-    background: #000;
-    color: white;
-    text-decoration: none;
-    transition: background 0.3s;
-  }
-
-  .btn-primary:hover {
-    background: #333;
-  }
-
   .hero-newsletter {
     position: absolute;
     bottom: 2rem;
@@ -249,158 +239,27 @@
     opacity: 0.8;
   }
 
-  .hero-scroll {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 5;
-  }
-
-  .scroll-link {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    color: white;
-    text-decoration: none;
-    transition: opacity 0.3s;
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-  }
-
-  .scroll-link:hover {
-    opacity: 0.8;
-  }
-
-  .scroll-text {
-    font-size: 0.9rem;
-    letter-spacing: 0.05em;
-    display: none;
-  }
-
-  .scroll-arrow {
-    animation: bounce 2s infinite;
-    display: none;
-  }
-
-  @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-      transform: translateY(0);
-    }
-    40% {
-      transform: translateY(-10px);
-    }
-    60% {
-      transform: translateY(-5px);
-    }
-  }
-
-  @media (max-width: 1024px) {
-    .slide-content {
-      padding: 3rem 2rem;
-    }
-
-    .slide-title {
-      font-size: 2.5rem;
-    }
-
-    .slider-nav {
-      padding: 0.75rem;
-    }
-  }
-
   @media (max-width: 768px) {
     .hero {
-      min-height: 60vh;
+      min-height: 100vh;
       height: auto;
-    }
-
-    .slide-content {
-      padding: 2rem 1.5rem;
-    }
-
-    .slide-artist {
-      font-size: 0.75rem;
-    }
-
-    .slide-title {
-      font-size: 1.8rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .slide-btn {
-      padding: 0.75rem 1.5rem;
-      font-size: 0.9rem;
     }
 
     .slider-nav {
       padding: 0.5rem;
     }
 
-    .slider-nav svg {
-      width: 20px;
-      height: 20px;
-    }
-
     .slider-nav.prev {
-      left: 0.5rem;
-    }
-
-    .slider-nav.next {
-      right: 0.5rem;
-    }
-
-    .hero-newsletter {
-      bottom: 1rem;
       left: 1rem;
     }
 
-    .newsletter-link {
-      font-size: 0.85rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .hero {
-      min-height: 50vh;
-    }
-
-    .slide-content {
-      padding: 1.5rem 1rem;
-    }
-
-    .slide-artist {
-      font-size: 0.7rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .slide-title {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .slide-btn {
-      padding: 0.6rem 1.2rem;
-      font-size: 0.85rem;
-    }
-
-    .slider-nav {
-      width: 35px;
-      height: 35px;
-      padding: 0.4rem;
-    }
-
-    .slider-nav svg {
-      width: 18px;
-      height: 18px;
+    .slider-nav.next {
+      right: 1rem;
     }
 
     .hero-newsletter {
-      position: relative;
-      bottom: auto;
-      left: auto;
-      padding: 1rem;
-      text-align: center;
+      position: static;
+      margin-top: 2rem;
     }
   }
 </style>

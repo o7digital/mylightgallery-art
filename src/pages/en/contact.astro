@@ -1,0 +1,148 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  lang="en"
+  title="Contact – My Light Art Gallery"
+  description="Get in touch with My Light Art Gallery"
+>
+  <section class="contact">
+    <div class="container">
+      <div class="intro">
+        <h1>Contact</h1>
+        <p>
+          Questions about artworks, events or collaborations? Send us a message and we’ll get back to you shortly.
+        </p>
+        <div class="details">
+          <p><strong>Tel:</strong> +1 (972) 444-4553</p>
+          <p><strong>Email:</strong> info@mylightartgallery.com</p>
+          <p><strong>Address:</strong> 5215 N. O&apos;Connor Rd. Ste 1725, Irving, TX 75039, USA</p>
+        </div>
+      </div>
+
+      <form class="form" action="https://formspree.io/f/mgovdlag" method="POST">
+        <label>
+          Full name
+          <input type="text" name="name" placeholder="Your name" required />
+        </label>
+        <label>
+          Email
+          <input type="email" name="email" placeholder="you@email.com" required />
+        </label>
+        <label>
+          Phone
+          <input type="tel" name="phone" placeholder="+1 (___) ___-____" />
+        </label>
+        <label>
+          Subject
+          <input type="text" name="subject" placeholder="What is this about?" />
+        </label>
+        <label>
+          Message
+          <textarea name="message" rows="5" placeholder="Tell us more..." required></textarea>
+        </label>
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact {
+    padding: 5rem 1.5rem;
+    background: #faf8f6;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  h1 {
+    font-size: 2.3rem;
+    margin-bottom: 1rem;
+    letter-spacing: 0.04em;
+  }
+
+  .intro p {
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .details p {
+    margin: 0.35rem 0;
+    color: #333;
+  }
+
+  .form {
+    background: #fff;
+    padding: 1.75rem;
+    border: 1px solid #e8e5e0;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    display: grid;
+    gap: 1rem;
+  }
+
+  label {
+    display: grid;
+    gap: 0.35rem;
+    font-weight: 600;
+    color: #222;
+    font-size: 0.95rem;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #dcd7d0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #fff;
+    color: #222;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 140px;
+  }
+
+  input:focus,
+  textarea:focus {
+    outline: 2px solid #111;
+    border-color: #111;
+  }
+
+  button {
+    padding: 0.9rem 1.2rem;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: background 0.25s ease;
+  }
+
+  button:hover {
+    background: #333;
+  }
+
+  @media (max-width: 900px) {
+    .container {
+      grid-template-columns: 1fr;
+    }
+
+    .form {
+      padding: 1.4rem;
+    }
+  }
+</style>
