@@ -15,26 +15,64 @@ import Hero from '../components/Hero.astro';
       <p class="section-intro">
         Somos una galería familiar ubicada en el corazón del mundo del arte. Durante generaciones hemos tratado con pinturas de la más alta calidad, que datan del siglo XVII al XXI. Formar una colección de pinturas es una experiencia de lo más interesante y gratificante.
       </p>
-      <div class="categories-grid">
-        <a href="/colecciones/arte-contemporaneo" class="category-card">
-          <div class="category-image" style="background: #d4c5b9;"></div>
-          <h3>Arte Contemporáneo</h3>
-        </a>
-        <a href="/colecciones/arte-clasico" class="category-card">
-          <div class="category-image" style="background: #b8a89a;"></div>
-          <h3>Arte Clásico</h3>
-        </a>
-        <a href="/colecciones/escultura" class="category-card">
-          <div class="category-image" style="background: #9e8b7b;"></div>
-          <h3>Escultura</h3>
-        </a>
-        <a href="/colecciones/fotografia" class="category-card">
-          <div class="category-image" style="background: #c9b8a8;"></div>
-          <h3>Fotografía</h3>
-        </a>
-      </div>
-      <div class="section-footer">
-        <a href="/colecciones" class="btn-secondary">Ver Todas las Colecciones</a>
+      
+      <div class="paintings-carousel">
+        <button class="carousel-nav carousel-prev" aria-label="Previous painting">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+        
+        <div class="carousel-container">
+          <div class="carousel-track">
+            <a href="/pinturas/atardecer" class="painting-card">
+              <img src="/pinturas/preview/Atardecer.jpg" alt="Atardecer" />
+              <h3>Atardecer</h3>
+            </a>
+            <a href="/pinturas/curiosidad" class="painting-card">
+              <img src="/pinturas/preview/Curiosidad.jpg" alt="Curiosidad" />
+              <h3>Curiosidad</h3>
+            </a>
+            <a href="/pinturas/mujer" class="painting-card">
+              <img src="/pinturas/preview/Mujer.jpg" alt="Mujer" />
+              <h3>Mujer</h3>
+            </a>
+            <a href="/pinturas/mujer-pensante" class="painting-card">
+              <img src="/pinturas/preview/Mujer-Pensante.jpg" alt="Mujer Pensante" />
+              <h3>Mujer Pensante</h3>
+            </a>
+            <a href="/pinturas/bipolaridad" class="painting-card">
+              <img src="/pinturas/preview/Bipolaridad.jpg" alt="Bipolaridad" />
+              <h3>Bipolaridad</h3>
+            </a>
+            <a href="/pinturas/contrastes" class="painting-card">
+              <img src="/pinturas/preview/Contrastes.jpg" alt="Contrastes" />
+              <h3>Contrastes</h3>
+            </a>
+            <a href="/pinturas/tormenta" class="painting-card">
+              <img src="/pinturas/preview/Tormenta.jpg" alt="Tormenta" />
+              <h3>Tormenta</h3>
+            </a>
+            <a href="/pinturas/espirales" class="painting-card">
+              <img src="/pinturas/preview/Espirales.jpg" alt="Espirales" />
+              <h3>Espirales</h3>
+            </a>
+            <a href="/pinturas/pareja" class="painting-card">
+              <img src="/pinturas/preview/Pareja.jpg" alt="Pareja" />
+              <h3>Pareja</h3>
+            </a>
+            <a href="/pinturas/danza" class="painting-card">
+              <img src="/pinturas/preview/Danza.jpg" alt="Danza" />
+              <h3>Danza</h3>
+            </a>
+          </div>
+        </div>
+        
+        <button class="carousel-nav carousel-next" aria-label="Next painting">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </button>
       </div>
     </div>
   </section>
@@ -102,10 +140,16 @@ import Hero from '../components/Hero.astro';
       <div class="about-content">
         <div class="about-text">
           <p>
-            Somos una galería familiar ubicada en el corazón del mundo del arte. Durante generaciones hemos tratado con pinturas de la más alta calidad, que datan del siglo XVII al XXI. Formar una colección de pinturas es una experiencia de lo más interesante y gratificante.
+            Layla González Camarena Soutou es una artista visual multidisciplinaria cuya obra nace de una profunda afinidad con el color, la luz y la expresión creativa libre. Con formación académica en Diseño Gráfico, Historia del Arte y Publicidad y Mercadotecnia, Layla combina el conocimiento teórico con una sensibilidad intuitiva para desarrollar un lenguaje artístico propio y auténtico.
           </p>
           <p>
-            Para mí, pintar es una necesidad esencial y la forma más auténtica de expresarme. A través del color y la libertad creativa, logro comunicar emociones y sentimientos que no siempre pueden expresarse con palabras. La pintura se convierte en mi lenguaje natural, un espacio íntimo donde fluye mi sensibilidad y mi conexión con la vida.
+            Su práctica artística se centra principalmente en el arte abstracto. Se siente especialmente atraída por los colores vivos y luminosos, así como por composiciones dinámicas que transmiten vida, alegría y emoción. Trabaja con acrílico, óleo, técnicas mixtas, dibujo, tintas, pasteles y ceras calientes y frías, permitiendo que cada obra evolucione de manera orgánica, sin reglas rígidas ni estructuras predefinidas.
+          </p>
+          <p>
+            Para Layla, pintar es esencial: es su forma más profunda y hermosa de expresarse. A través de la pintura comunica emociones, energía y estados interiores que van más allá de las palabras. El lienzo se convierte en un espacio de libertad, exploración y verdad, donde el color y el movimiento dialogan directamente con el espectador.
+          </p>
+          <p>
+            Su trayectoria artística ha sido enriquecida por una formación continua en pintura, dibujo, figura humana, expresión creativa y técnicas mixtas, desarrollada tanto en México como en Estados Unidos. Esta diversidad de experiencias se refleja en una obra expresiva, vibrante y profundamente conectada con la experiencia humana.
           </p>
         </div>
         <div class="about-image" style="background: #d9cfc5;"></div>
@@ -166,6 +210,85 @@ import Hero from '../components/Hero.astro';
   /* Colecciones Section */
   .section-colecciones {
     background: white;
+  }
+
+  /* Paintings Carousel */
+  .paintings-carousel {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 0;
+  }
+
+  .carousel-container {
+    overflow: hidden;
+    position: relative;
+  }
+
+  .carousel-track {
+    display: flex;
+    gap: 2rem;
+    transition: transform 0.5s ease;
+  }
+
+  .painting-card {
+    flex: 0 0 calc(33.333% - 1.333rem);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s;
+  }
+
+  .painting-card:hover {
+    transform: translateY(-10px);
+  }
+
+  .painting-card img {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .painting-card h3 {
+    font-size: 1.2rem;
+    font-weight: 400;
+    text-align: center;
+    color: #333;
+  }
+
+  .carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #000;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .carousel-nav:hover {
+    background: #000;
+    color: white;
+  }
+
+  .carousel-nav:hover svg {
+    stroke: white;
+  }
+
+  .carousel-prev {
+    left: -25px;
+  }
+
+  .carousel-next {
+    right: -25px;
   }
 
   .categories-grid {
