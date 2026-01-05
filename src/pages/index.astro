@@ -505,6 +505,33 @@ import Hero from '../components/Hero.astro';
     margin-right: -3cm;
   }
 
+  @media (max-width: 1024px) {
+    .paintings-carousel {
+      padding: 2rem 1rem;
+    }
+
+    .carousel-nav {
+      width: 40px;
+      height: 40px;
+    }
+
+    .carousel-prev {
+      left: 0;
+    }
+
+    .carousel-next {
+      right: 0;
+    }
+
+    .painting-card {
+      flex: 0 0 calc(50% - 1rem);
+    }
+
+    .section {
+      padding: 3rem 1rem;
+    }
+  }
+
   @media (max-width: 768px) {
     .categories-grid,
     .events-grid,
@@ -519,10 +546,85 @@ import Hero from '../components/Hero.astro';
 
     .about-image {
       height: 300px;
+      width: 100%;
+      margin-right: 0;
     }
 
     h2 {
       font-size: 2rem;
+    }
+
+    .section-intro {
+      font-size: 1rem;
+      padding: 0 0.5rem;
+    }
+
+    .painting-card {
+      flex: 0 0 100%;
+    }
+
+    .painting-card img {
+      height: 280px;
+    }
+
+    .carousel-track {
+      gap: 1rem;
+    }
+
+    .events-grid {
+      gap: 2rem;
+    }
+
+    .event-card {
+      padding: 0;
+    }
+
+    .event-content {
+      padding: 0 1rem 2rem 0;
+    }
+
+    .news-grid {
+      gap: 2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .section {
+      padding: 2rem 0.5rem;
+    }
+
+    .container {
+      padding: 0 1rem;
+    }
+
+    h2 {
+      font-size: 1.75rem;
+    }
+
+    .painting-card img {
+      height: 250px;
+    }
+
+    .carousel-nav {
+      width: 35px;
+      height: 35px;
+    }
+
+    .carousel-nav svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .event-image {
+      height: 300px;
+    }
+
+    .event-card h3 {
+      font-size: 1.4rem;
+    }
+
+    .news-image {
+      height: 200px;
     }
   }
 </style>
@@ -535,18 +637,25 @@ import Hero from '../components/Hero.astro';
     const cards = document.querySelectorAll('.painting-card');
     
     let currentIndex = 0;
-    const cardsToShow = 3;
     const totalCards = cards.length;
-    const maxIndex = totalCards - cardsToShow;
+    
+    function getCardsToShow() {
+      if (window.innerWidth <= 768) return 1;
+      if (window.innerWidth <= 1024) return 2;
+      return 3;
+    }
     
     function updateCarousel() {
+      if (!cards[0]) return;
       const cardWidth = cards[0].offsetWidth;
-      const gap = 32; // 2rem = 32px
+      const gap = window.innerWidth <= 768 ? 16 : 32;
       const offset = -(currentIndex * (cardWidth + gap));
       track.style.transform = `translateX(${offset}px)`;
     }
     
     function nextSlide() {
+      const cardsToShow = getCardsToShow();
+      const maxIndex = totalCards - cardsToShow;
       currentIndex++;
       if (currentIndex > maxIndex) {
         currentIndex = 0;
@@ -555,6 +664,8 @@ import Hero from '../components/Hero.astro';
     }
     
     function prevSlide() {
+      const cardsToShow = getCardsToShow();
+      const maxIndex = totalCards - cardsToShow;
       currentIndex--;
       if (currentIndex < 0) {
         currentIndex = maxIndex;
@@ -571,27 +682,37 @@ import Hero from '../components/Hero.astro';
       autoplayInterval = setInterval(nextSlide, 5000);
     }
     
-    nextBtn.addEventListener('click', () => {
+    nextBtn?.addEventListener('click', () => {
       nextSlide();
       resetAutoplay();
     });
     
-    prevBtn.addEventListener('click', () => {
+    prevBtn?.addEventListener('click', () => {
       prevSlide();
       resetAutoplay();
     });
     
     // Pause l'autoplay au survol
     const carousel = document.querySelector('.paintings-carousel');
-    carousel.addEventListener('mouseenter', () => {
+    carousel?.addEventListener('mouseenter', () => {
       clearInterval(autoplayInterval);
     });
     
-    carousel.addEventListener('mouseleave', () => {
+    carousel?.addEventListener('mouseleave', () => {
       autoplayInterval = setInterval(nextSlide, 5000);
     });
     
     // Update au resize
-    window.addEventListener('resize', updateCarousel);
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        currentIndex = 0;
+        updateCarousel();
+      }, 250);
+    });
+    
+    // Init
+    updateCarousel();
   });
 </script>
