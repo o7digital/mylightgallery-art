@@ -1,0 +1,169 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Aviso de Privacidad – My Light Art Gallery"
+  description="Aviso de privacidad para MyLightArtGallery.com"
+>
+  <section class="privacy">
+    <div class="container">
+      <h1>Aviso de Privacidad</h1>
+      <p class="lead">
+        Este Aviso aplica al sitio MyLightArtGallery.com y a los servicios prestados por LATCOM,
+        5215 N. O&apos;Connor Rd. Ste 1725, Irving, TX 75039, Estados Unidos. Tel: +1 (972) 444-4553.
+      </p>
+
+      <div class="card">
+        <h2>Responsable</h2>
+        <p><strong>Razón social:</strong> LATCOM</p>
+        <p><strong>Domicilio:</strong> 5215 N. O&apos;Connor Rd. Ste 1725, Irving, TX 75039, Estados Unidos.</p>
+        <p><strong>Teléfono:</strong> +1 (972) 444-4553</p>
+        <p><strong>Sitio:</strong> https://www.mylightartgallery.com</p>
+        <p><strong>Contacto privacidad:</strong> privacy@mylightartgallery.com</p>
+      </div>
+
+      <div class="card">
+        <h2>Datos personales que recabamos</h2>
+        <ul>
+          <li>Identificación y contacto: nombre, correo electrónico, teléfono.</li>
+          <li>Navegación/uso del sitio: IP, identificadores de dispositivo, cookies, analítica.</li>
+          <li>Transacciones: pedidos, método de pago (procesado por terceros), historial de compra.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Finalidades</h2>
+        <ul>
+          <li>Operación y prestación de servicios (gestión de cuentas, pedidos, entregas).</li>
+          <li>Atención al cliente y comunicaciones (consultas, newsletter con tu consentimiento).</li>
+          <li>Seguridad y prevención de fraude.</li>
+          <li>Analítica y mejora del sitio (cookies/tecnologías similares).</li>
+          <li>Marketing con consentimiento cuando aplique.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Bases legales (RGPD)</h2>
+        <ul>
+          <li>Ejecución de contrato o medidas precontractuales.</li>
+          <li>Interés legítimo (seguridad, prevención de fraude, mejora del servicio).</li>
+          <li>Consentimiento (cookies no esenciales y marketing).</li>
+          <li>Obligación legal (retención fiscal/contable).</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Transferencias y terceros</h2>
+        <ul>
+          <li>Proveedores de pago, hosting, analítica y marketing bajo obligaciones de confidencialidad y seguridad.</li>
+          <li>Transferencias internacionales: aplicamos salvaguardas adecuadas (p. ej. cláusulas contractuales tipo) al transferir datos desde el EEE/México a EE. UU.</li>
+          <li>No vendemos datos personales en el sentido de leyes de privacidad estatales de EE. UU. (p. ej., CCPA/CPRA).</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Derechos de los titulares</h2>
+        <ul>
+          <li>Acceso, rectificación, cancelación, oposición, limitación y portabilidad (según aplique RGPD/LFPDPPP).</li>
+          <li>Retiro del consentimiento y oposición al marketing.</li>
+          <li>Opt-out de cookies no esenciales y, cuando aplique, opt-out de “venta/compartir” de datos en EE. UU.</li>
+        </ul>
+        <p>Para ejercer derechos: escribe a <strong>privacy@mylightartgallery.com</strong> o al domicilio indicado, incluyendo identificación y solicitud concreta.</p>
+      </div>
+
+      <div class="card">
+        <h2>Plazos de conservación</h2>
+        <p>Conservamos los datos mientras sean necesarios para las finalidades declaradas o para cumplir obligaciones legales (fiscal, contable, defensa de reclamaciones).</p>
+      </div>
+
+      <div class="card">
+        <h2>Cookies y tecnologías similares</h2>
+        <p>Usamos cookies técnicas (esenciales) y, con tu consentimiento, analíticas/marketing. Puedes gestionarlas desde tu navegador o mediante el banner de consentimiento, cuando aplique.</p>
+      </div>
+
+      <div class="card">
+        <h2>Seguridad</h2>
+        <p>Implementamos medidas técnicas y organizativas razonables para proteger los datos frente a acceso, uso o divulgación no autorizados.</p>
+      </div>
+
+      <div class="card">
+        <h2>Menores</h2>
+        <p>El servicio no está dirigido a menores de 16 años. Si detectamos datos de menores, los eliminaremos.</p>
+      </div>
+
+      <div class="card">
+        <h2>Actualizaciones</h2>
+        <p>Publicaremos cualquier cambio en este Aviso en https://www.mylightartgallery.com/aviso-privacidad con la fecha de última modificación.</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .privacy {
+    padding: 5rem 1.5rem;
+    background: #faf8f6;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  h1 {
+    font-size: 2.4rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.04em;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.03em;
+  }
+
+  .lead {
+    text-align: center;
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+
+  .card {
+    background: #fff;
+    padding: 1.5rem;
+    border: 1px solid #e8e5e0;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  ul {
+    padding-left: 1.2rem;
+    margin: 0.5rem 0 0;
+  }
+
+  li {
+    margin-bottom: 0.3rem;
+  }
+
+  strong {
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .card {
+      padding: 1.25rem;
+    }
+  }
+</style>
