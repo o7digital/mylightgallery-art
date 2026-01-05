@@ -26,43 +26,43 @@ import Hero from '../components/Hero.astro';
         <div class="carousel-container">
           <div class="carousel-track">
             <a href="/pinturas/atardecer" class="painting-card">
-              <img src="/pinturas/preview/Atardecer.jpg" alt="Atardecer" />
+              <img src="/pinturas/preview/atardecer.png" alt="Atardecer" />
               <h3>Atardecer</h3>
             </a>
             <a href="/pinturas/curiosidad" class="painting-card">
-              <img src="/pinturas/preview/Curiosidad.jpg" alt="Curiosidad" />
+              <img src="/pinturas/preview/curiosidad.png" alt="Curiosidad" />
               <h3>Curiosidad</h3>
             </a>
             <a href="/pinturas/mujer" class="painting-card">
-              <img src="/pinturas/preview/Mujer.jpg" alt="Mujer" />
+              <img src="/pinturas/preview/mujer36x36.png" alt="Mujer" />
               <h3>Mujer</h3>
             </a>
             <a href="/pinturas/mujer-pensante" class="painting-card">
-              <img src="/pinturas/preview/Mujer-Pensante.jpg" alt="Mujer Pensante" />
+              <img src="/pinturas/preview/mujer pensante.png" alt="Mujer Pensante" />
               <h3>Mujer Pensante</h3>
             </a>
             <a href="/pinturas/bipolaridad" class="painting-card">
-              <img src="/pinturas/preview/Bipolaridad.jpg" alt="Bipolaridad" />
+              <img src="/pinturas/preview/bipolaridad.png" alt="Bipolaridad" />
               <h3>Bipolaridad</h3>
             </a>
             <a href="/pinturas/contrastes" class="painting-card">
-              <img src="/pinturas/preview/Contrastes.jpg" alt="Contrastes" />
+              <img src="/pinturas/preview/contrastes.png" alt="Contrastes" />
               <h3>Contrastes</h3>
             </a>
             <a href="/pinturas/tormenta" class="painting-card">
-              <img src="/pinturas/preview/Tormenta.jpg" alt="Tormenta" />
+              <img src="/pinturas/preview/tormenta.png" alt="Tormenta" />
               <h3>Tormenta</h3>
             </a>
             <a href="/pinturas/espirales" class="painting-card">
-              <img src="/pinturas/preview/Espirales.jpg" alt="Espirales" />
+              <img src="/pinturas/preview/espirales.png" alt="Espirales" />
               <h3>Espirales</h3>
             </a>
             <a href="/pinturas/pareja" class="painting-card">
-              <img src="/pinturas/preview/Pareja.jpg" alt="Pareja" />
+              <img src="/pinturas/preview/pareja36x36.png" alt="Pareja" />
               <h3>Pareja</h3>
             </a>
             <a href="/pinturas/danza" class="painting-card">
-              <img src="/pinturas/preview/Danza.jpg" alt="Danza" />
+              <img src="/pinturas/preview/danza36x36.png" alt="Danza" />
               <h3>Danza</h3>
             </a>
           </div>
@@ -526,3 +526,72 @@ import Hero from '../components/Hero.astro';
     }
   }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const track = document.querySelector('.carousel-track');
+    const prevBtn = document.querySelector('.carousel-prev');
+    const nextBtn = document.querySelector('.carousel-next');
+    const cards = document.querySelectorAll('.painting-card');
+    
+    let currentIndex = 0;
+    const cardsToShow = 3;
+    const totalCards = cards.length;
+    const maxIndex = totalCards - cardsToShow;
+    
+    function updateCarousel() {
+      const cardWidth = cards[0].offsetWidth;
+      const gap = 32; // 2rem = 32px
+      const offset = -(currentIndex * (cardWidth + gap));
+      track.style.transform = `translateX(${offset}px)`;
+    }
+    
+    function nextSlide() {
+      currentIndex++;
+      if (currentIndex > maxIndex) {
+        currentIndex = 0;
+      }
+      updateCarousel();
+    }
+    
+    function prevSlide() {
+      currentIndex--;
+      if (currentIndex < 0) {
+        currentIndex = maxIndex;
+      }
+      updateCarousel();
+    }
+    
+    // Auto-play toutes les 5 secondes
+    let autoplayInterval = setInterval(nextSlide, 5000);
+    
+    // Reset l'intervalle quand on clique manuellement
+    function resetAutoplay() {
+      clearInterval(autoplayInterval);
+      autoplayInterval = setInterval(nextSlide, 5000);
+    }
+    
+    nextBtn.addEventListener('click', () => {
+      nextSlide();
+      resetAutoplay();
+    });
+    
+    prevBtn.addEventListener('click', () => {
+      prevSlide();
+      resetAutoplay();
+    });
+    
+    // Pause l'autoplay au survol
+    const carousel = document.querySelector('.paintings-carousel');
+    carousel.addEventListener('mouseenter', () => {
+      clearInterval(autoplayInterval);
+    });
+    
+    carousel.addEventListener('mouseleave', () => {
+      autoplayInterval = setInterval(nextSlide, 5000);
+    });
+    
+    // Update au resize
+    window.addEventListener('resize', updateCarousel);
+  });
+</script>
