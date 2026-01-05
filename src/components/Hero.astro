@@ -220,9 +220,10 @@ const newsletterText = lang === 'en' ? 'Subscribe to our newsletter' : 'Suscribe
 
   .hero-newsletter {
     position: absolute;
-    bottom: 2rem;
-    left: 2rem;
+    bottom: 1rem;
+    left: 1rem;
     z-index: 5;
+    pointer-events: auto;
   }
 
   .newsletter-link {
@@ -258,8 +259,10 @@ const newsletterText = lang === 'en' ? 'Subscribe to our newsletter' : 'Suscribe
     }
 
     .hero-newsletter {
-      position: static;
-      margin-top: 2rem;
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      margin-top: 0;
     }
   }
 </style>
