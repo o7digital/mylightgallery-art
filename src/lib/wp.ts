@@ -1,4 +1,5 @@
 import { Buffer } from 'node:buffer';
+import { getEnvValue } from './env';
 
 type ProductCard = {
   id: number;
@@ -10,9 +11,10 @@ type ProductCard = {
   dimensions?: string | null;
 };
 
-const baseUrl = (import.meta.env.WP_API_BASE as string | undefined)?.replace(/\/$/, '') || '';
-const username = import.meta.env.WP_USERNAME as string | undefined;
-const appPassword = import.meta.env.WP_APP_PASSWORD as string | undefined;
+const baseUrl =
+  (getEnvValue(['WP_API_BASE', 'PUBLIC_WP_API_BASE']) ?? '').replace(/\/$/, '') || '';
+const username = getEnvValue(['WP_USERNAME']);
+const appPassword = getEnvValue(['WP_APP_PASSWORD']);
 
 const authHeader =
   username && appPassword

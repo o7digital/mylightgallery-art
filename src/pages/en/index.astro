@@ -3,8 +3,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import { getProducts } from '../../lib/wp';
 import { fallbackPaintings } from '../../lib/fallbackPaintings';
+import { getBooleanEnv } from '../../lib/env';
 
-const showEventsNews = import.meta.env.SHOW_EVENTS_NEWS !== 'false';
+const showEventsNews = getBooleanEnv(['PUBLIC_SHOW_EVENTS_NEWS', 'SHOW_EVENTS_NEWS'], true);
 const paintingsFromWp = (await getProducts(12)).filter(painting => painting.image);
 const paintings =
   paintingsFromWp.length > 0
