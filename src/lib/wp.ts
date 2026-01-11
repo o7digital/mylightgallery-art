@@ -83,7 +83,13 @@ const deriveDimensions = (
   return null;
 };
 
-export const getProducts = async (limit = 12): Promise<ProductCard[]> => {
+const extractFirstImageSrc = (html?: string | null) => {
+  if (!html) return null;
+  const match = html.match(/<img[^>]+src\s*=\s*['"]([^'">]+)['"]/i);
+  return normalizeImage(match?.[1]);
+};
+
+export const getProducts = async (limit = 100): Promise<ProductCard[]> => {
   if (!baseUrl) return [];
 
   const url = new URL(`${baseUrl}/wc/v3/products`);
@@ -92,7 +98,7 @@ export const getProducts = async (limit = 12): Promise<ProductCard[]> => {
   url.searchParams.set('orderby', 'date');
   url.searchParams.set(
     '_fields',
-    'id,name,slug,permalink,images,price,regular_price,dimensions'
+    'id,name,slug,permalink,images,price,regular_price,dimensions,description'
   );
 
   try {
@@ -107,7 +113,9 @@ export const getProducts = async (limit = 12): Promise<ProductCard[]> => {
         const title = stripTags(item.name);
         const dimensions = deriveDimensions(title, item.dimensions);
         const priceText = formatPrice(item.price, item.regular_price);
-        const image = normalizeImage(item.images?.[0]?.src);
+        const image =
+          normalizeImage(item.images?.[0]?.src) ||
+          extractFirstImageSrc(item.description);
         return {
           id: item.id,
           title,
