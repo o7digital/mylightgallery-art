@@ -15,8 +15,8 @@ const paintings =
 
 <BaseLayout
   lang="en"
-  title="My Light Gallery Art – Art Gallery"
-  description="Art gallery focused on high-quality contemporary and classic works"
+  title="Contemporary Art Gallery in Irving, TX | My Light Art Gallery"
+  description="My Light Art Gallery is a contemporary art gallery in Irving, TX, showcasing modern and abstract artworks by emerging and established artists."
   showEventsNews={showEventsNews}
 >
   <Hero lang="en" showEventsNews={showEventsNews} />
@@ -44,12 +44,17 @@ const paintings =
                   data-full={painting.image ?? ''}
                   data-caption={captionParts.join(' • ')}
                 >
-                  <img
-                    src={painting.image}
-                    alt={painting.title}
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  {(() => {
+                    const altText = `Contemporary painting "${painting.title}" by Layla at My Light Art Gallery in Irving, TX${painting.dimensions ? ` (${painting.dimensions})` : ''}`;
+                    return (
+                      <img
+                        src={painting.image}
+                        alt={altText}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    );
+                  })()}
                   <h3>{painting.title}</h3>
                   <p class="painting-meta">
                     {painting.dimensions && <span>{painting.dimensions}</span>}
@@ -159,6 +164,14 @@ const paintings =
         </div>
         <div class="about-image"></div>
       </div>
+    </div>
+  </section>
+
+  <section class="section section-local-seo">
+    <div class="container">
+      <p>
+        My Light Art Gallery is a contemporary art gallery based in Irving, TX, serving the Dallas–Fort Worth community. We feature modern and abstract artworks by emerging and established artists, offering a curated experience for collectors and art enthusiasts.
+      </p>
     </div>
   </section>
 </BaseLayout>
@@ -541,6 +554,14 @@ const paintings =
     background:
       url('/layla.webp') center/contain no-repeat,
       url('/layla.jpeg') center/contain no-repeat;
+  }
+
+  .section-local-seo {
+    padding-top: 0;
+    padding-bottom: 3rem;
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.7;
   }
 
   @media (max-width: 1024px) {

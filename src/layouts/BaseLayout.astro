@@ -17,6 +17,30 @@ const siteName = 'My Light Art Gallery';
 const ogImage = site
   ? new URL('/slider/Gemini_Generated_Image_4yfwxa4yfwxa4yfw.webp', site).href
   : '/slider/Gemini_Generated_Image_4yfwxa4yfwxa4yfw.webp';
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'ArtGallery',
+  name: siteName,
+  url: site ? site.href : 'https://www.mylightartgallery.com',
+  image: ogImage,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: "5215 N. O'Connor Rd. Ste 1725",
+    addressLocality: 'Irving',
+    addressRegion: 'TX',
+    postalCode: '75039',
+    addressCountry: 'US',
+  },
+  telephone: '+1-972-444-4553',
+  areaServed: {
+    '@type': 'AdministrativeArea',
+    name: 'Irving, TX',
+  },
+  sameAs: [
+    'https://instagram.com/mylightgalleryart',
+    'https://facebook.com/mylightgalleryart',
+  ],
+};
 ---
 
 <!DOCTYPE html>
@@ -45,6 +69,9 @@ const ogImage = site
         <link rel="alternate" href={new URL('/en/', site).href} hreflang="en" />
       </>
     )}
+    <script type="application/ld+json">
+      {JSON.stringify(structuredData)}
+    </script>
   </head>
   <body>
     <Header lang={lang} showEventsNews={showEventsNews} />

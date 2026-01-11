@@ -14,8 +14,8 @@ const paintings =
 ---
 
 <BaseLayout
-  title="My Light Gallery Art – Galería de Arte"
-  description="Galería de arte especializada en obras de la más alta calidad"
+  title="Galería de Arte Contemporáneo en Irving, TX | My Light Art Gallery"
+  description="My Light Art Gallery es una galería de arte contemporáneo en Irving, TX, con obras modernas y abstractas de artistas emergentes y consolidados."
   showEventsNews={showEventsNews}
 >
   <Hero showEventsNews={showEventsNews} />
@@ -43,12 +43,17 @@ const paintings =
                   data-full={painting.image ?? ''}
                   data-caption={captionParts.join(' • ')}
                 >
-                  <img
-                    src={painting.image}
-                    alt={painting.title}
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  {(() => {
+                    const altText = `Obra de arte "${painting.title}" de Layla en My Light Art Gallery, Irving, TX${painting.dimensions ? ` (${painting.dimensions})` : ''}`;
+                    return (
+                      <img
+                        src={painting.image}
+                        alt={altText}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    );
+                  })()}
                   <h3>{painting.title}</h3>
                   <p class="painting-meta">
                     {painting.dimensions && <span>{painting.dimensions}</span>}
@@ -158,6 +163,14 @@ const paintings =
         </div>
         <div class="about-image"></div>
       </div>
+    </div>
+  </section>
+
+  <section class="section section-local-seo">
+    <div class="container">
+      <p>
+        My Light Art Gallery es una galería de arte contemporáneo ubicada en Irving, TX, que sirve al área de Dallas–Fort Worth. Exhibimos pintura moderna y arte abstracto de artistas emergentes y consolidados, ofreciendo una experiencia curada para coleccionistas y amantes del arte.
+      </p>
     </div>
   </section>
 </BaseLayout>
@@ -595,6 +608,14 @@ const paintings =
     background:
       url('/layla.webp') center/contain no-repeat,
       url('/layla.jpeg') center/contain no-repeat;
+  }
+
+  .section-local-seo {
+    padding-top: 0;
+    padding-bottom: 3rem;
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.7;
   }
 
   @media (max-width: 1024px) {
