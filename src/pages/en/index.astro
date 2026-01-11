@@ -42,6 +42,15 @@ const paintings =
                   decoding="async"
                 />
                 <h3>{painting.title}</h3>
+                <p class="painting-meta">
+                  {painting.dimensions && <span>{painting.dimensions}</span>}
+                  {painting.priceText && (
+                    <span class="painting-price">
+                      {painting.dimensions ? ' • ' : ''}
+                      {painting.priceText}
+                    </span>
+                  )}
+                </p>
               </a>
             ))}
             {paintings.length === 0 && (
@@ -235,6 +244,17 @@ const paintings =
     font-weight: 400;
     text-align: center;
     color: #333;
+  }
+
+  .painting-meta {
+    margin-top: 0.35rem;
+    font-size: 0.95rem;
+    color: #555;
+    text-align: center;
+  }
+
+  .painting-price {
+    font-weight: 600;
   }
 
   .paintings-empty {

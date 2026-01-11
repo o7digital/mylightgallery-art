@@ -6,6 +6,8 @@ type ProductCard = {
   slug: string;
   link: string;
   image?: string | null;
+  priceText?: string | null;
+  dimensions?: string | null;
 };
 
 const baseUrl = (import.meta.env.WP_API_BASE as string | undefined)?.replace(/\/$/, '') || '';
@@ -37,25 +39,61 @@ const fetchFromWP = async (path: string, init?: RequestInit) => {
   return fetch(buildUrl(path), { ...init, headers });
 };
 
-const extractFirstImageSrc = (html?: string | null) => {
-  if (!html) return null;
-  const match = html.match(/<img[^>]+src\s*=\s*['"]([^'">]+)['"]/i);
-  if (!match?.[1]) return null;
-  // Force https to éviter les warnings mixtes.
-  return match[1].replace('http://', 'https://');
-};
-
 const stripTags = (value?: string | null) =>
   (value || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+
+const normalizeImage = (src?: string | null) => {
+  if (!src) return null;
+  return src.replace('http://', 'https://');
+};
+
+const formatPrice = (price?: string | null, regular?: string | null) => {
+  const numeric = price && !Number.isNaN(Number(price)) ? Number(price) : null;
+  const regularNumeric =
+    regular && !Number.isNaN(Number(regular)) ? Number(regular) : null;
+
+  if (numeric !== null) {
+    return `$${numeric.toLocaleString('en-US', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    })} USD`;
+  }
+  if (regularNumeric !== null) {
+    return `$${regularNumeric.toLocaleString('en-US', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    })} USD`;
+  }
+  return 'Price on request';
+};
+
+const deriveDimensions = (
+  name: string,
+  dimensions?: { width?: string; height?: string; length?: string }
+) => {
+  if (dimensions?.width && dimensions?.height) {
+    return `${dimensions.width} x ${dimensions.height} in`;
+  }
+
+  const match = name.match(/(\d{2,3})\s*[xX]\s*(\d{2,3})/);
+  if (match) {
+    return `${match[1]} x ${match[2]} in`;
+  }
+
+  return null;
+};
 
 export const getProducts = async (limit = 12): Promise<ProductCard[]> => {
   if (!baseUrl) return [];
 
-  const url = new URL(`${baseUrl}/wp/v2/product`);
+  const url = new URL(`${baseUrl}/wc/v3/products`);
   url.searchParams.set('per_page', String(limit));
   url.searchParams.set('order', 'desc');
   url.searchParams.set('orderby', 'date');
-  url.searchParams.set('_fields', 'id,slug,title,link,content');
+  url.searchParams.set(
+    '_fields',
+    'id,name,slug,permalink,images,price,regular_price,dimensions'
+  );
 
   try {
     const res = await fetchFromWP(url.toString());
@@ -63,18 +101,24 @@ export const getProducts = async (limit = 12): Promise<ProductCard[]> => {
       console.warn('WP products fetch failed', res.status, res.statusText);
       return [];
     }
-    const items = (await res.json()) as Array<Record<string, unknown>>;
-    return items.map(item => {
-      const title = stripTags((item.title as { rendered?: string })?.rendered);
-      const content = (item.content as { rendered?: string })?.rendered;
-      return {
-        id: item.id as number,
-        title,
-        slug: item.slug as string,
-        link: item.link as string,
-        image: extractFirstImageSrc(content),
-      };
-    });
+    const items = (await res.json()) as Array<Record<string, any>>;
+    return items
+      .map(item => {
+        const title = stripTags(item.name);
+        const dimensions = deriveDimensions(title, item.dimensions);
+        const priceText = formatPrice(item.price, item.regular_price);
+        const image = normalizeImage(item.images?.[0]?.src);
+        return {
+          id: item.id,
+          title,
+          slug: item.slug,
+          link: item.permalink,
+          image,
+          priceText,
+          dimensions,
+        };
+      })
+      .filter(item => item.image);
   } catch (error) {
     console.warn('WP products fetch error', error);
     return [];
