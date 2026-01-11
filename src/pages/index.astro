@@ -1,6 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
+import { getProducts } from '../lib/wp';
+import { fallbackPaintings } from '../lib/fallbackPaintings';
+
+const paintingsFromWp = (await getProducts(12)).filter(painting => painting.image);
+const paintings =
+  paintingsFromWp.length > 0
+    ? paintingsFromWp
+    : fallbackPaintings.map(item => ({ ...item, link: '#!' }));
 ---
 
 <BaseLayout
@@ -19,50 +27,25 @@ import Hero from '../components/Hero.astro';
       <div class="paintings-carousel">
         <div class="carousel-container">
           <div class="carousel-track">
-            <a href="#!" class="painting-card">
-              <img src="/pinturas/preview/atardecer.webp" alt="Atardecer" loading="lazy" decoding="async" />
-              <h3>Atardecer</h3>
-            </a>
-            <a href="#!" class="painting-card">
-              <img src="/pinturas/preview/curiosidad.webp" alt="Curiosidad" loading="lazy" decoding="async" />
-              <h3>Curiosidad</h3>
-            </a>
-            <a href="#!" class="painting-card">
-              <img src="/pinturas/preview/botellas.webp" alt="Botellas" loading="lazy" decoding="async" />
-              <h3>Botellas</h3>
-            </a>
-            <a href="#!" class="painting-card">
-              <img src="/pinturas/preview/mujer36x36.webp" alt="Mujer" loading="lazy" decoding="async" />
-              <h3>Mujer</h3>
-            </a>
-            <a href="#!" class="painting-card">
-              <img src="/pinturas/preview/mujer%20pensante.webp" alt="Mujer Pensante" loading="lazy" decoding="async" />
-              <h3>Mujer Pensante</h3>
-            </a>
-            <a href="#!" class="painting-card">
-              <img src="/pinturas/preview/bipolaridad.webp" alt="Bipolaridad" loading="lazy" decoding="async" />
-              <h3>Bipolaridad</h3>
-            </a>
-            <a href="#!" class="painting-card">
-              <img src="/pinturas/preview/contrastes.webp" alt="Contrastes" loading="lazy" decoding="async" />
-              <h3>Contrastes</h3>
-            </a>
-            <a href="#!" class="painting-card">
-              <img src="/pinturas/preview/tormenta.webp" alt="Tormenta" loading="lazy" decoding="async" />
-              <h3>Tormenta</h3>
-            </a>
-            <a href="#!" class="painting-card">
-              <img src="/pinturas/preview/espirales.webp" alt="Espirales" loading="lazy" decoding="async" />
-              <h3>Espirales</h3>
-            </a>
-            <a href="#!" class="painting-card">
-              <img src="/pinturas/preview/pareja36x36.webp" alt="Pareja" loading="lazy" decoding="async" />
-              <h3>Pareja</h3>
-            </a>
-            <a href="#!" class="painting-card">
-              <img src="/pinturas/preview/danza36x36.webp" alt="Danza" loading="lazy" decoding="async" />
-              <h3>Danza</h3>
-            </a>
+            {paintings.map(painting => (
+              <a
+                href={painting.link ?? '#!'}
+                class="painting-card"
+                target={painting.link ? '_blank' : undefined}
+                rel={painting.link ? 'noreferrer' : undefined}
+              >
+                <img
+                  src={painting.image}
+                  alt={painting.title}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <h3>{painting.title}</h3>
+              </a>
+            ))}
+            {paintings.length === 0 && (
+              <p class="paintings-empty">Pronto añadiremos las obras.</p>
+            )}
           </div>
         </div>
         <div class="lightbox" id="lightbox" aria-hidden="true">
@@ -253,6 +236,13 @@ import Hero from '../components/Hero.astro';
     font-weight: 400;
     text-align: center;
     color: #333;
+  }
+
+  .paintings-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #666;
+    margin: 1rem 0;
   }
 
   .carousel-btn {
