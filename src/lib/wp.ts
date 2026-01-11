@@ -64,7 +64,7 @@ const formatPrice = (price?: string | null, regular?: string | null) => {
       maximumFractionDigits: 2,
     })} USD`;
   }
-  return 'Price on request';
+  return 'NO SELL';
 };
 
 const deriveDimensions = (
@@ -81,6 +81,21 @@ const deriveDimensions = (
   }
 
   return null;
+};
+
+const stripDimensionsFromTitle = (title: string, dimensions?: string | null) => {
+  const dimensionPattern = /\b\d{2,3}\s*[xX]\s*\d{2,3}\b(?:\s*in\.?)?/;
+  const cleaned = title
+    .replace(dimensionPattern, '')
+    .replace(/[()\-–—]+/g, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+
+  if (cleaned) return cleaned;
+  if (dimensions) {
+    return title.replace(dimensions, '').replace(/\s{2,}/g, ' ').trim() || title;
+  }
+  return title;
 };
 
 const extractFirstImageSrc = (html?: string | null) => {
@@ -110,8 +125,9 @@ export const getProducts = async (limit = 100): Promise<ProductCard[]> => {
     const items = (await res.json()) as Array<Record<string, any>>;
     return items
       .map(item => {
-        const title = stripTags(item.name);
-        const dimensions = deriveDimensions(title, item.dimensions);
+        const rawTitle = stripTags(item.name);
+        const dimensions = deriveDimensions(rawTitle, item.dimensions);
+        const title = stripDimensionsFromTitle(rawTitle, dimensions);
         const priceText = formatPrice(item.price, item.regular_price);
         const image =
           normalizeImage(item.images?.[0]?.src) ||
