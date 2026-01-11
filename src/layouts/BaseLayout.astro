@@ -9,6 +9,14 @@ const {
   lang = 'es',
   showEventsNews = true,
 } = Astro.props;
+const site = Astro.site;
+const currentUrl = Astro.url;
+const canonicalUrl = site ? new URL(currentUrl.pathname, site).href : currentUrl.href;
+const locale = lang === 'en' ? 'en_US' : 'es_ES';
+const siteName = 'My Light Art Gallery';
+const ogImage = site
+  ? new URL('/slider/Gemini_Generated_Image_4yfwxa4yfwxa4yfw.webp', site).href
+  : '/slider/Gemini_Generated_Image_4yfwxa4yfwxa4yfw.webp';
 ---
 
 <!DOCTYPE html>
@@ -18,6 +26,25 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content={locale} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    {site && (
+      <>
+        <link rel="alternate" href={new URL('/', site).href} hreflang="es" />
+        <link rel="alternate" href={new URL('/en/', site).href} hreflang="en" />
+      </>
+    )}
   </head>
   <body>
     <Header lang={lang} showEventsNews={showEventsNews} />
