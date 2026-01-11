@@ -4,6 +4,7 @@ import Hero from '../components/Hero.astro';
 import { getProducts } from '../lib/wp';
 import { fallbackPaintings } from '../lib/fallbackPaintings';
 
+const showEventsNews = import.meta.env.SHOW_EVENTS_NEWS !== 'false';
 const paintingsFromWp = (await getProducts(12)).filter(painting => painting.image);
 const paintings =
   paintingsFromWp.length > 0
@@ -14,8 +15,9 @@ const paintings =
 <BaseLayout
   title="My Light Gallery Art – Galería de Arte"
   description="Galería de arte especializada en obras de la más alta calidad"
+  showEventsNews={showEventsNews}
 >
-  <Hero />
+  <Hero showEventsNews={showEventsNews} />
 
   <section id="colecciones" class="section section-colecciones">
     <div class="container">
@@ -74,62 +76,66 @@ const paintings =
     </div>
   </section>
 
-  <section id="eventos" class="section section-eventos">
-    <div class="container">
-      <div class="section-header">
-        <h2>EVENTOS</h2>
-        <a href="/eventos" class="see-more-link">See More →</a>
-      </div>
-      <div class="events-grid">
-        <div class="event-card">
-          <div class="event-badge">AHORA</div>
-          <div class="event-image" style="background: #e5dcd3;"></div>
-          <div class="event-content">
-            <h3>Exposición de Invierno 2026</h3>
-            <p>Una selección exclusiva de obras contemporáneas y clásicas</p>
-            <a href="/eventos/exposicion-invierno" class="event-link">Más información</a>
+  {showEventsNews && (
+    <section id="eventos" class="section section-eventos">
+      <div class="container">
+        <div class="section-header">
+          <h2>EVENTOS</h2>
+          <a href="/eventos" class="see-more-link">See More →</a>
+        </div>
+        <div class="events-grid">
+          <div class="event-card">
+            <div class="event-badge">AHORA</div>
+            <div class="event-image" style="background: #e5dcd3;"></div>
+            <div class="event-content">
+              <h3>Exposición de Invierno 2026</h3>
+              <p>Una selección exclusiva de obras contemporáneas y clásicas</p>
+              <a href="/eventos/exposicion-invierno" class="event-link">Más información</a>
+            </div>
+          </div>
+          <div class="event-card">
+            <div class="event-badge">PRÓXIMO</div>
+            <div class="event-image" style="background: #d8cec3;"></div>
+            <div class="event-content">
+              <h3>Art Fair Texas 2026</h3>
+              <p class="event-location">DALLAS, TX</p>
+              <p>15-23 FEBRERO 2026 STAND B3</p>
+              <a href="/eventos/art-fair-texas" class="event-link">Más información</a>
+            </div>
           </div>
         </div>
-        <div class="event-card">
-          <div class="event-badge">PRÓXIMO</div>
-          <div class="event-image" style="background: #d8cec3;"></div>
-          <div class="event-content">
-            <h3>Art Fair Texas 2026</h3>
-            <p class="event-location">DALLAS, TX</p>
-            <p>15-23 FEBRERO 2026 STAND B3</p>
-            <a href="/eventos/art-fair-texas" class="event-link">Más información</a>
-          </div>
-        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  )}
 
-  <section id="noticias" class="section section-noticias">
-    <div class="container">
-      <h2>NOTICIAS</h2>
-      <div class="news-grid">
-        <article class="news-card">
-          <div class="news-image" style="background: #cfc5ba;"></div>
-          <div class="news-content">
-            <h3>Nueva Adquisición: Obra del Siglo XIX</h3>
-            <p>My Light Gallery Art se complace en anunciar la adquisición de una obra excepcional del siglo XIX...</p>
-            <a href="/noticias/nueva-adquisicion" class="news-link">Leer más</a>
-          </div>
-        </article>
-        <article class="news-card">
-          <div class="news-image" style="background: #bfb5aa;"></div>
-          <div class="news-content">
-            <h3>Artista Destacado: Exposición Individual</h3>
-            <p>Descubra la última exposición de uno de los artistas contemporáneos más prometedores...</p>
-            <a href="/noticias/artista-destacado" class="news-link">Leer más</a>
-          </div>
-        </article>
+  {showEventsNews && (
+    <section id="noticias" class="section section-noticias">
+      <div class="container">
+        <h2>NOTICIAS</h2>
+        <div class="news-grid">
+          <article class="news-card">
+            <div class="news-image" style="background: #cfc5ba;"></div>
+            <div class="news-content">
+              <h3>Nueva Adquisición: Obra del Siglo XIX</h3>
+              <p>My Light Gallery Art se complace en anunciar la adquisición de una obra excepcional del siglo XIX...</p>
+              <a href="/noticias/nueva-adquisicion" class="news-link">Leer más</a>
+            </div>
+          </article>
+          <article class="news-card">
+            <div class="news-image" style="background: #bfb5aa;"></div>
+            <div class="news-content">
+              <h3>Artista Destacado: Exposición Individual</h3>
+              <p>Descubra la última exposición de uno de los artistas contemporáneos más prometedores...</p>
+              <a href="/noticias/artista-destacado" class="news-link">Leer más</a>
+            </div>
+          </article>
+        </div>
+        <div class="section-footer">
+          <a href="/noticias" class="btn-secondary">Últimas Noticias</a>
+        </div>
       </div>
-      <div class="section-footer">
-        <a href="/noticias" class="btn-secondary">Últimas Noticias</a>
-      </div>
-    </div>
-  </section>
+    </section>
+  )}
 
   <section id="layla" class="section section-about">
     <div class="container">

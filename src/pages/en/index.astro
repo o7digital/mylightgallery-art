@@ -4,6 +4,7 @@ import Hero from '../../components/Hero.astro';
 import { getProducts } from '../../lib/wp';
 import { fallbackPaintings } from '../../lib/fallbackPaintings';
 
+const showEventsNews = import.meta.env.SHOW_EVENTS_NEWS !== 'false';
 const paintingsFromWp = (await getProducts(12)).filter(painting => painting.image);
 const paintings =
   paintingsFromWp.length > 0
@@ -15,8 +16,9 @@ const paintings =
   lang="en"
   title="My Light Gallery Art – Art Gallery"
   description="Art gallery focused on high-quality contemporary and classic works"
+  showEventsNews={showEventsNews}
 >
-  <Hero lang="en" />
+  <Hero lang="en" showEventsNews={showEventsNews} />
 
   <section id="collections" class="section section-colecciones">
     <div class="container">
@@ -75,62 +77,66 @@ const paintings =
     </div>
   </section>
 
-  <section id="events" class="section section-eventos">
-    <div class="container">
-      <div class="section-header">
-        <h2>Events</h2>
-        <a href="/en/#events" class="see-more-link">See More →</a>
-      </div>
-      <div class="events-grid">
-        <div class="event-card">
-          <div class="event-badge">NOW</div>
-          <div class="event-image" style="background: #e5dcd3;"></div>
-          <div class="event-content">
-            <h3>Winter Exhibition 2026</h3>
-            <p>An exclusive selection of contemporary and classic works</p>
-            <a href="/en/#events" class="event-link">More info</a>
+  {showEventsNews && (
+    <section id="events" class="section section-eventos">
+      <div class="container">
+        <div class="section-header">
+          <h2>Events</h2>
+          <a href="/en/#events" class="see-more-link">See More →</a>
+        </div>
+        <div class="events-grid">
+          <div class="event-card">
+            <div class="event-badge">NOW</div>
+            <div class="event-image" style="background: #e5dcd3;"></div>
+            <div class="event-content">
+              <h3>Winter Exhibition 2026</h3>
+              <p>An exclusive selection of contemporary and classic works</p>
+              <a href="/en/#events" class="event-link">More info</a>
+            </div>
+          </div>
+          <div class="event-card">
+            <div class="event-badge">UPCOMING</div>
+            <div class="event-image" style="background: #d8cec3;"></div>
+            <div class="event-content">
+              <h3>Art Fair Texas 2026</h3>
+              <p class="event-location">DALLAS, TX</p>
+              <p>FEB 15–23, 2026 STAND B3</p>
+              <a href="/en/#events" class="event-link">More info</a>
+            </div>
           </div>
         </div>
-        <div class="event-card">
-          <div class="event-badge">UPCOMING</div>
-          <div class="event-image" style="background: #d8cec3;"></div>
-          <div class="event-content">
-            <h3>Art Fair Texas 2026</h3>
-            <p class="event-location">DALLAS, TX</p>
-            <p>FEB 15–23, 2026 STAND B3</p>
-            <a href="/en/#events" class="event-link">More info</a>
-          </div>
-        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  )}
 
-  <section id="news" class="section section-noticias">
-    <div class="container">
-      <h2>News</h2>
-      <div class="news-grid">
-        <article class="news-card">
-          <div class="news-image" style="background: #cfc5ba;"></div>
-          <div class="news-content">
-            <h3>New Acquisition: 19th Century Work</h3>
-            <p>We are pleased to announce the acquisition of an exceptional 19th-century piece...</p>
-            <a href="/en/#news" class="news-link">Read more</a>
-          </div>
-        </article>
-        <article class="news-card">
-          <div class="news-image" style="background: #bfb5aa;"></div>
-          <div class="news-content">
-            <h3>Featured Artist: Solo Exhibition</h3>
-            <p>Discover the latest exhibition from one of the most promising contemporary artists...</p>
-            <a href="/en/#news" class="news-link">Read more</a>
-          </div>
-        </article>
+  {showEventsNews && (
+    <section id="news" class="section section-noticias">
+      <div class="container">
+        <h2>News</h2>
+        <div class="news-grid">
+          <article class="news-card">
+            <div class="news-image" style="background: #cfc5ba;"></div>
+            <div class="news-content">
+              <h3>New Acquisition: 19th Century Work</h3>
+              <p>We are pleased to announce the acquisition of an exceptional 19th-century piece...</p>
+              <a href="/en/#news" class="news-link">Read more</a>
+            </div>
+          </article>
+          <article class="news-card">
+            <div class="news-image" style="background: #bfb5aa;"></div>
+            <div class="news-content">
+              <h3>Featured Artist: Solo Exhibition</h3>
+              <p>Discover the latest exhibition from one of the most promising contemporary artists...</p>
+              <a href="/en/#news" class="news-link">Read more</a>
+            </div>
+          </article>
+        </div>
+        <div class="section-footer">
+          <a href="/en/#news" class="btn-secondary">Latest News</a>
+        </div>
       </div>
-      <div class="section-footer">
-        <a href="/en/#news" class="btn-secondary">Latest News</a>
-      </div>
-    </div>
-  </section>
+    </section>
+  )}
 
   <section id="layla" class="section section-about">
     <div class="container">

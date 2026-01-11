@@ -1,5 +1,5 @@
 ---
-const { lang = 'es' } = Astro.props;
+const { lang = 'es', showEventsNews = true } = Astro.props;
 
 const slides =
   lang === 'en'
@@ -45,11 +45,21 @@ const slides =
       ];
 
 const newsletterText = lang === 'en' ? 'Subscribe to our newsletter' : 'Suscribe nuestra newsletter';
+const safeSlides = showEventsNews
+  ? slides
+  : slides.map((slide, index) =>
+      index === 2
+        ? {
+            ...slide,
+            href: lang === 'en' ? '/en/#collections' : '/#colecciones',
+          }
+        : slide
+    );
 ---
 
 <section class="hero">
   <div class="slider">
-    {slides.map((slide, index) => (
+    {safeSlides.map((slide, index) => (
       <div class={`slide ${index === 0 ? 'active' : ''}`} style={`background-image: url('${slide.bg}')`}>
         <div class="slide-content">
           <p class="slide-artist">{slide.label}</p>

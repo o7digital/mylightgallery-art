@@ -3,7 +3,12 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 
-const { title = 'Site Premium', description = '', lang = 'es' } = Astro.props;
+const {
+  title = 'Site Premium',
+  description = '',
+  lang = 'es',
+  showEventsNews = true,
+} = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -15,10 +20,10 @@ const { title = 'Site Premium', description = '', lang = 'es' } = Astro.props;
     <meta name="description" content={description} />
   </head>
   <body>
-    <Header lang={lang} />
+    <Header lang={lang} showEventsNews={showEventsNews} />
     <main>
       <slot />
     </main>
-    <Footer lang={lang} />
+    <Footer lang={lang} showEventsNews={showEventsNews} />
   </body>
 </html>
