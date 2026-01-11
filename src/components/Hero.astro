@@ -55,6 +55,7 @@ const safeSlides = showEventsNews
           }
         : slide
     );
+const heroCtaHref = 'https://www.mylightartgallery.com/#colecciones';
 ---
 
 <section class="hero">
@@ -64,7 +65,7 @@ const safeSlides = showEventsNews
         <div class="slide-content">
           <p class="slide-artist">{slide.label}</p>
           <h2 class="slide-title">{slide.title}</h2>
-          <a href={slide.href} class="slide-btn">{lang === 'en' ? 'See More' : 'Ver más'}</a>
+          <a href={heroCtaHref} class="slide-btn">{lang === 'en' ? 'See More' : 'Ver más'}</a>
         </div>
       </div>
     ))}
