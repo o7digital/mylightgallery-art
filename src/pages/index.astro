@@ -8,7 +8,7 @@ import { getBooleanEnv } from '../lib/env';
 export const prerender = false;
 
 const showEventsNews = getBooleanEnv(['PUBLIC_SHOW_EVENTS_NEWS', 'SHOW_EVENTS_NEWS'], true);
-const paintingsFromWp = (await getProducts(12)).filter(painting => painting.image);
+const paintingsFromWp = (await getProducts(60)).filter(painting => painting.image);
 const paintings =
   paintingsFromWp.length > 0
     ? paintingsFromWp
