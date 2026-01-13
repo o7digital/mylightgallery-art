@@ -1,15 +1,17 @@
 ---
 const { lang = 'es', showEventsNews = true } = Astro.props;
+const path = Astro.url?.pathname ?? '';
+const resolvedLang = path.startsWith('/en/') ? 'en' : path.startsWith('/es/') ? 'es' : lang;
+const isEn = resolvedLang === 'en';
 
 const infoLinks =
-  lang === 'en'
+  isEn
     ? [
         { href: '/en/#collections', label: 'Collections' },
         ...(showEventsNews ? [{ href: '/en/#events', label: 'Events' }] : []),
         { href: '/en/#layla', label: 'Layla' },
         { href: '/en/#buy', label: 'Buy' },
         { href: '/en/contact', label: 'Contact' },
-        { href: '/en/privacy', label: 'Privacy Notice' },
       ]
     : [
         { href: '/#colecciones', label: 'Colecciones' },
@@ -17,20 +19,36 @@ const infoLinks =
         { href: '/#layla', label: 'Layla' },
         { href: '/#compra', label: 'Compra' },
         { href: '/contacto', label: 'Contacto' },
+      ];
+const legalLinks =
+  isEn
+    ? [
+        { href: '/en/terms-and-conditions/', label: 'Terms and Conditions of Use' },
+        { href: '/en/return-policy/', label: 'Return Policy' },
+        { href: '/en/warranties-and-authenticity/', label: 'Warranties and Authenticity' },
+        { href: '/en/texas-taxes/', label: 'Taxes – Texas' },
+        { href: '/en/privacy', label: 'Privacy Notice' },
+      ]
+    : [
+        { href: '/es/condiciones-generales-de-uso/', label: 'Condiciones Generales de Uso' },
+        { href: '/es/politica-de-devoluciones/', label: 'Política de Devoluciones' },
+        { href: '/es/garantias-y-autenticidad/', label: 'Garantías y Autenticidad' },
+        { href: '/es/impuestos-texas/', label: 'Impuestos – Texas' },
         { href: '/aviso-privacidad', label: 'Aviso de Privacidad' },
       ];
-const contactTitle = lang === 'en' ? 'Contact' : 'Contacto';
-const infoTitle = lang === 'en' ? 'Information' : 'Información';
-const visitorTitle = lang === 'en' ? 'Visitor Information' : 'Información del Visitante';
-const hoursTitle = lang === 'en' ? 'Contact Hours' : 'Horarios de Contacto';
-const locationTitle = lang === 'en' ? 'Location' : 'Ubicación';
-const madeByText = 'made by o7Digital';
+const contactTitle = isEn ? 'Contact' : 'Contacto';
+const infoTitle = isEn ? 'Information' : 'Información';
+const visitorTitle = isEn ? 'Visitor Information' : 'Información del Visitante';
+const hoursTitle = isEn ? 'Contact Hours' : 'Horarios de Contacto';
+const locationTitle = isEn ? 'Location' : 'Ubicación';
+const legalTitle = isEn ? 'Legal' : 'Avisos legales';
+const madeByText = isEn ? 'made by o7Digital' : 'hecho por o7Digital';
 const copyright =
-  lang === 'en'
+  isEn
     ? '© 2026 My Light Gallery Art. All rights reserved.'
     : '© 2026 My Light Gallery Art. Todos los derechos reservados.';
 const hours =
-  lang === 'en'
+  isEn
     ? ['Monday - Friday: 10:00 - 18:00', 'Saturday: By appointment']
     : ['Lunes - Viernes: 10:00 - 18:00', 'Sábado: Con cita previa'];
 ---
@@ -40,6 +58,13 @@ const hours =
     <div>
       <strong>{infoTitle}</strong>
       {infoLinks.map((link) => (
+        <p><a href={link.href}>{link.label}</a></p>
+      ))}
+    </div>
+
+    <div>
+      <strong>{legalTitle}</strong>
+      {legalLinks.map((link) => (
         <p><a href={link.href}>{link.label}</a></p>
       ))}
     </div>

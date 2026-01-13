@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  lang="es"
+  title="Política de Devoluciones – My Light Art Gallery"
+  description="Política de devoluciones para compras realizadas en My Light Art Gallery."
+>
+  <section class="legal">
+    <div class="container">
+      <h1>Política de Devoluciones</h1>
+      <p class="lead">
+        Las obras vendidas en este sitio son <strong>obras de arte originales y únicas</strong>.
+      </p>
+      <p>
+        Por esta razón, <strong>no se aceptan devoluciones ni cambios</strong>, salvo en los siguientes
+        casos:
+      </p>
+      <ul>
+        <li>Daño comprobado durante el transporte</li>
+        <li>Diferencia significativa entre la obra recibida y su descripción</li>
+      </ul>
+
+      <div class="card">
+        <h2>Daños durante el envío</h2>
+        <p>
+          El comprador deberá notificar el daño dentro de las <strong>48 horas</strong> posteriores a la
+          recepción y proporcionar fotografías claras del embalaje y de la obra dañada.
+        </p>
+        <p>
+          Una vez confirmado el daño, se gestionará la solución correspondiente.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal {
+    padding: 5rem 1.5rem;
+    background: #faf8f6;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  h1 {
+    font-size: 2.4rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.04em;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.03em;
+  }
+
+  .lead {
+    text-align: center;
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+
+  .card {
+    background: #fff;
+    padding: 1.5rem;
+    border: 1px solid #e8e5e0;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  ul {
+    padding-left: 1.2rem;
+    margin: 0;
+  }
+
+  li {
+    margin-bottom: 0.3rem;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .card {
+      padding: 1.25rem;
+    }
+  }
+</style>

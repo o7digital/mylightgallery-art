@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  lang="en"
+  title="Warranties and Authenticity – My Light Art Gallery"
+  description="Warranties, authenticity, and Certificate of Authenticity details for My Light Art Gallery."
+>
+  <section class="legal">
+    <div class="container">
+      <h1>Warranties and Authenticity</h1>
+      <p class="lead">
+        All artworks sold on this website are <strong>original creations by the artist Layla Lastra</strong>.
+      </p>
+
+      <p>Each artwork is delivered with:</p>
+      <ul>
+        <li>A signed <strong>Certificate of Authenticity (COA)</strong></li>
+        <li>A <strong>unique identification number</strong></li>
+      </ul>
+
+      <p>
+        The purchase of an artwork <strong>does not transfer copyright ownership</strong>. All rights remain
+        exclusively with the artist.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal {
+    padding: 5rem 1.5rem;
+    background: #faf8f6;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  h1 {
+    font-size: 2.4rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.04em;
+  }
+
+  .lead {
+    text-align: center;
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+
+  ul {
+    padding-left: 1.2rem;
+    margin: 0;
+  }
+
+  li {
+    margin-bottom: 0.3rem;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+  }
+</style>

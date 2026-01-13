@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  lang="en"
+  title="Terms and Conditions of Use – My Light Art Gallery"
+  description="Terms and conditions of use for the My Light Art Gallery website."
+>
+  <section class="legal">
+    <div class="container">
+      <h1>Terms and Conditions of Use</h1>
+      <p class="lead">
+        This website is dedicated to the presentation and online sale of original artworks created by
+        the artist Layla Lastra.
+      </p>
+      <p>
+        Accessing and using this website implies full acceptance of these Terms and Conditions.
+      </p>
+
+      <div class="card">
+        <h2>Use of the website</h2>
+        <p>
+          Users agree to use this website lawfully and respectfully. Any illegal or harmful use is
+          strictly prohibited.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Intellectual property</h2>
+        <p>
+          All artworks, images, texts, and content are the exclusive property of Layla Lastra. Any
+          reproduction or use without written permission is prohibited.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Liability</h2>
+        <p>
+          Information is provided in good faith. Layla Lastra does not guarantee the absence of errors.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Modifications</h2>
+        <p>
+          Layla Lastra reserves the right to modify these terms at any time.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal {
+    padding: 5rem 1.5rem;
+    background: #faf8f6;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  h1 {
+    font-size: 2.4rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.04em;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.03em;
+  }
+
+  .lead {
+    text-align: center;
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+
+  .card {
+    background: #fff;
+    padding: 1.5rem;
+    border: 1px solid #e8e5e0;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .card {
+      padding: 1.25rem;
+    }
+  }
+</style>

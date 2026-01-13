@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  lang="en"
+  title="Return Policy – My Light Art Gallery"
+  description="Return policy for purchases made through My Light Art Gallery."
+>
+  <section class="legal">
+    <div class="container">
+      <h1>Return Policy</h1>
+      <p class="lead">
+        All artworks sold on this website are <strong>original, one-of-a-kind creations</strong>.
+      </p>
+      <p>
+        Returns or exchanges are <strong>not accepted</strong>, except in the following cases:
+      </p>
+      <ul>
+        <li>Proven damage during shipping</li>
+        <li>Significant discrepancy between the artwork received and its description</li>
+      </ul>
+
+      <div class="card">
+        <h2>Shipping damage</h2>
+        <p>
+          Buyers must notify within <strong>48 hours</strong> of delivery and provide clear photographs of the
+          damaged artwork and packaging.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal {
+    padding: 5rem 1.5rem;
+    background: #faf8f6;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  h1 {
+    font-size: 2.4rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.04em;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.03em;
+  }
+
+  .lead {
+    text-align: center;
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+
+  .card {
+    background: #fff;
+    padding: 1.5rem;
+    border: 1px solid #e8e5e0;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  ul {
+    padding-left: 1.2rem;
+    margin: 0;
+  }
+
+  li {
+    margin-bottom: 0.3rem;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .card {
+      padding: 1.25rem;
+    }
+  }
+</style>

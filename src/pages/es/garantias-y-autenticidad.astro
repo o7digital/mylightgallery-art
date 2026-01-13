@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  lang="es"
+  title="Garantías y Autenticidad – My Light Art Gallery"
+  description="Garantías, autenticidad y Certificado de Autenticidad de las obras de My Light Art Gallery."
+>
+  <section class="legal">
+    <div class="container">
+      <h1>Garantías y Autenticidad</h1>
+      <p class="lead">
+        Todas las obras vendidas en este sitio son <strong>creaciones originales de la artista Layla
+        Lastra</strong>.
+      </p>
+
+      <p>Cada obra se entrega con:</p>
+      <ul>
+        <li>Un <strong>Certificado de Autenticidad (COA)</strong> firmado</li>
+        <li>Un <strong>número único de identificación</strong></li>
+      </ul>
+
+      <p>
+        La compra de una obra <strong>no implica la cesión de derechos de autor</strong>. Todos los derechos
+        de reproducción e imagen permanecen en propiedad exclusiva de la artista.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal {
+    padding: 5rem 1.5rem;
+    background: #faf8f6;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  h1 {
+    font-size: 2.4rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.04em;
+  }
+
+  .lead {
+    text-align: center;
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+
+  ul {
+    padding-left: 1.2rem;
+    margin: 0;
+  }
+
+  li {
+    margin-bottom: 0.3rem;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+  }
+</style>
