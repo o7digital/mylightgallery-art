@@ -2,6 +2,7 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
+import { getEnvValue } from '../lib/env';
 
 const {
   title = 'Site Premium',
@@ -9,6 +10,9 @@ const {
   lang = 'es',
   showEventsNews = true,
 } = Astro.props;
+const gaMeasurementId =
+  getEnvValue(['PUBLIC_GA_MEASUREMENT_ID', 'GA_MEASUREMENT_ID']) ?? 'G-5F4G9JJ05G';
+const enableGa = Boolean(gaMeasurementId);
 const site = Astro.site;
 const currentUrl = Astro.url;
 const canonicalUrl = site ? new URL(currentUrl.pathname, site).href : currentUrl.href;
@@ -63,6 +67,17 @@ const structuredData = {
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    {enableGa && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}></script>
+        <script is:inline>
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${gaMeasurementId}');`}
+        </script>
+      </>
+    )}
     {site && (
       <>
         <link rel="alternate" href={new URL('/', site).href} hreflang="es" />
