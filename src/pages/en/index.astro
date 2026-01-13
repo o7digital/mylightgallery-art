@@ -39,28 +39,43 @@ const paintings =
                 painting.dimensions,
                 painting.priceText,
               ].filter(Boolean);
+              const purchaseUrl =
+                painting.id && painting.link
+                  ? `${painting.link}?add-to-cart=${painting.id}`
+                  : painting.link ?? null;
+              const hasPurchaseLink = Boolean(purchaseUrl && purchaseUrl !== '#!');
               return (
-                <a
-                  href={painting.image ?? '#!'}
-                  class="painting-card"
-                  data-full={painting.image ?? ''}
-                  data-caption={captionParts.join(' • ')}
-                >
-                  <img
-                    src={painting.image}
-                    alt={painting.title}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <h3>{painting.title}</h3>
-                  <p class="painting-meta">
-                    {painting.dimensions && <span>{painting.dimensions}</span>}
-                    <span class="painting-price">
-                      {painting.dimensions ? ' • ' : ''}
-                      {painting.priceText ?? 'NO SELL'}
-                    </span>
-                  </p>
-                </a>
+                <div class="painting-card-wrapper">
+                  <a
+                    href={painting.image ?? '#!'}
+                    class="painting-card"
+                    data-full={painting.image ?? ''}
+                    data-caption={captionParts.join(' • ')}
+                  >
+                    <img
+                      src={painting.image}
+                      alt={painting.title}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <h3>{painting.title}</h3>
+                    <p class="painting-meta">
+                      {painting.dimensions && <span>{painting.dimensions}</span>}
+                      <span class="painting-price">
+                        {painting.dimensions ? ' • ' : ''}
+                        {painting.priceText ?? 'NOT FOR SALE'}
+                      </span>
+                    </p>
+                  </a>
+                  <a
+                    class={`painting-purchase-btn${hasPurchaseLink ? '' : ' is-disabled'}`}
+                    href={hasPurchaseLink ? purchaseUrl : '#!'}
+                    aria-disabled={hasPurchaseLink ? undefined : 'true'}
+                    tabindex={hasPurchaseLink ? undefined : -1}
+                  >
+                    Purchase
+                  </a>
+                </div>
               );
             })}
             {paintings.length === 0 && (
@@ -236,6 +251,13 @@ const paintings =
     align-items: start;
   }
 
+  .painting-card-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    height: 100%;
+  }
+
   .painting-card {
     text-decoration: none;
     color: inherit;
@@ -249,6 +271,8 @@ const paintings =
     background: #faf8f5;
     height: 100%;
     cursor: zoom-in;
+    width: 100%;
+    flex: 1;
   }
 
   .painting-card:hover {
@@ -283,6 +307,33 @@ const paintings =
   .painting-price {
     font-weight: 600;
     color: #1d1d1d;
+  }
+
+  .painting-purchase-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.65rem 1.25rem;
+    background: #111;
+    color: #fff;
+    border: 1px solid #111;
+    text-decoration: none;
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
+    transition: all 0.25s ease;
+    width: fit-content;
+  }
+
+  .painting-purchase-btn:hover {
+    background: transparent;
+    color: #111;
+  }
+
+  .painting-purchase-btn.is-disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
   }
 
   .paintings-empty {
