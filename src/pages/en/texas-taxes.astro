@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  lang="en"
+  title="Taxes – Texas – My Light Art Gallery"
+  description="Tax information for purchases in Texas."
+>
+  <section class="legal">
+    <div class="container">
+      <h1>Taxes – Texas</h1>
+      <p class="lead">
+        Layla Lastra resides and sells artworks from the state of Texas, USA.
+      </p>
+      <p>According to applicable law:</p>
+      <ul>
+        <li><strong>Texas sales tax (6.25 % + local taxes)</strong> applies to orders delivered within Texas.</li>
+        <li>This tax is calculated automatically at checkout.</li>
+      </ul>
+
+      <div class="card">
+        <h2>Orders outside Texas or international orders</h2>
+        <ul>
+          <li>No Texas sales tax applies to orders shipped outside the state.</li>
+          <li>Import duties or taxes, if applicable, are the responsibility of the buyer.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal {
+    padding: 5rem 1.5rem;
+    background: #faf8f6;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  h1 {
+    font-size: 2.4rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.04em;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.03em;
+  }
+
+  .lead {
+    text-align: center;
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+
+  .card {
+    background: #fff;
+    padding: 1.5rem;
+    border: 1px solid #e8e5e0;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  ul {
+    padding-left: 1.2rem;
+    margin: 0;
+  }
+
+  li {
+    margin-bottom: 0.3rem;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .card {
+      padding: 1.25rem;
+    }
+  }
+</style>
