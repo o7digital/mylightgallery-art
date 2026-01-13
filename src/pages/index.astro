@@ -36,33 +36,45 @@ const paintings =
                 painting.dimensions,
                 painting.priceText,
               ].filter(Boolean);
+              const purchaseUrl =
+                painting.id && painting.link
+                  ? `${painting.link}?add-to-cart=${painting.id}`
+                  : painting.link;
+              const hasPurchaseLink = purchaseUrl && purchaseUrl !== '#!';
               return (
-                <a
-                  href={painting.image ?? '#!'}
-                  class="painting-card"
-                  data-full={painting.image ?? ''}
-                  data-caption={captionParts.join(' • ')}
-                >
-                  {(() => {
-                    const altText = `Obra de arte "${painting.title}" de Layla en My Light Art Gallery, Irving, TX${painting.dimensions ? ` (${painting.dimensions})` : ''}`;
-                    return (
-                      <img
-                        src={painting.image}
-                        alt={altText}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    );
-                  })()}
-                  <h3>{painting.title}</h3>
-                  <p class="painting-meta">
-                    {painting.dimensions && <span>{painting.dimensions}</span>}
-                    <span class="painting-price">
-                      {painting.dimensions ? ' • ' : ''}
-                      {painting.priceText ?? 'NO SE VENDE'}
-                    </span>
-                  </p>
-                </a>
+                <div class="painting-card-wrapper">
+                  <a
+                    href={painting.image ?? '#!'}
+                    class="painting-card"
+                    data-full={painting.image ?? ''}
+                    data-caption={captionParts.join(' • ')}
+                  >
+                    {(() => {
+                      const altText = `Obra de arte "${painting.title}" de Layla en My Light Art Gallery, Irving, TX${painting.dimensions ? ` (${painting.dimensions})` : ''}`;
+                      return (
+                        <img
+                          src={painting.image}
+                          alt={altText}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      );
+                    })()}
+                    <h3>{painting.title}</h3>
+                    <p class="painting-meta">
+                      {painting.dimensions && <span>{painting.dimensions}</span>}
+                      <span class="painting-price">
+                        {painting.dimensions ? ' • ' : ''}
+                        {painting.priceText ?? 'NO SE VENDE'}
+                      </span>
+                    </p>
+                  </a>
+                  {hasPurchaseLink && (
+                    <a class="painting-purchase-btn" href={purchaseUrl}>
+                      Comprar
+                    </a>
+                  )}
+                </div>
               );
             })}
             {paintings.length === 0 && (
@@ -248,6 +260,13 @@ const paintings =
     align-items: start;
   }
 
+  .painting-card-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    height: 100%;
+  }
+
   .painting-card {
     text-decoration: none;
     color: inherit;
@@ -295,6 +314,24 @@ const paintings =
   .painting-price {
     font-weight: 600;
     color: #1d1d1d;
+  }
+
+  .painting-purchase-btn {
+    display: inline-block;
+    text-align: center;
+    padding: 0.65rem 1rem;
+    border: 1px solid #000;
+    background: #000;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+    transition: all 0.2s ease;
+  }
+
+  .painting-purchase-btn:hover {
+    background: #fff;
+    color: #000;
   }
 
   .paintings-empty {
