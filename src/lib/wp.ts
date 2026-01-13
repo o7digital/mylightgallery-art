@@ -16,10 +16,22 @@ const baseUrl =
 const username = getEnvValue(['WP_USERNAME']);
 const appPassword = getEnvValue(['WP_APP_PASSWORD']);
 
+const DEFAULT_CACHE_TTL_MS = 5 * 60 * 1000;
+const cacheTtlMs = (() => {
+  const rawTtl = getEnvValue(['WP_CACHE_TTL_MS', 'WP_CACHE_TTL']);
+  if (!rawTtl) return DEFAULT_CACHE_TTL_MS;
+  const parsed = Number(rawTtl);
+  if (!Number.isFinite(parsed)) return DEFAULT_CACHE_TTL_MS;
+  return Math.max(0, parsed);
+})();
+
 const authHeader =
   username && appPassword
     ? `Basic ${Buffer.from(`${username}:${appPassword}`).toString('base64')}`
     : '';
+
+type CacheEntry = { items: ProductCard[]; limit: number; expiresAt: number };
+let productsCache: CacheEntry | null = null;
 
 const buildUrl = (path: string) => {
   if (!baseUrl) {
@@ -106,9 +118,36 @@ const extractFirstImageSrc = (html?: string | null) => {
   return normalizeImage(match?.[1]);
 };
 
+const getCachedProducts = (limit: number) => {
+  if (!productsCache) return null;
+  const { expiresAt, items, limit: cachedLimit } = productsCache;
+  if (cachedLimit < limit) return null;
+
+  const isFresh = cacheTtlMs > 0 && expiresAt > Date.now();
+  return isFresh ? items.slice(0, limit) : null;
+};
+
+const getStaleProducts = (limit: number) => {
+  if (!productsCache) return null;
+  if (productsCache.limit < limit) return null;
+  return productsCache.items.slice(0, limit);
+};
+
+const setCache = (items: ProductCard[], limit: number) => {
+  productsCache = {
+    items,
+    limit,
+    expiresAt: Date.now() + cacheTtlMs,
+  };
+};
+
 export const getProducts = async (limit = 100): Promise<ProductCard[]> => {
   if (!baseUrl) return [];
 
+  const cached = getCachedProducts(limit);
+  if (cached) return cached;
+
+  const stale = getStaleProducts(limit);
   const url = new URL(`${baseUrl}/wc/v3/products`);
   url.searchParams.set('per_page', String(limit));
   url.searchParams.set('order', 'desc');
@@ -122,10 +161,10 @@ export const getProducts = async (limit = 100): Promise<ProductCard[]> => {
     const res = await fetchFromWP(url.toString());
     if (!res.ok) {
       console.warn('WP products fetch failed', res.status, res.statusText);
-      return [];
+      return stale ?? [];
     }
     const items = (await res.json()) as Array<Record<string, any>>;
-    return items
+    const products = items
       .map(item => {
         const rawTitle = stripTags(item.name);
         const dimensions = deriveDimensions(rawTitle, item.dimensions);
@@ -145,8 +184,11 @@ export const getProducts = async (limit = 100): Promise<ProductCard[]> => {
         };
       })
       .filter(item => item.image);
+
+    setCache(products, limit);
+    return products;
   } catch (error) {
     console.warn('WP products fetch error', error);
-    return [];
+    return stale ?? [];
   }
 };
