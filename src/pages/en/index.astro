@@ -5,8 +5,10 @@ import { getProducts } from '../../lib/wp';
 import { fallbackPaintings } from '../../lib/fallbackPaintings';
 import { getBooleanEnv } from '../../lib/env';
 
+export const prerender = false;
+
 const showEventsNews = getBooleanEnv(['PUBLIC_SHOW_EVENTS_NEWS', 'SHOW_EVENTS_NEWS'], true);
-const paintingsFromWp = (await getProducts(12)).filter(painting => painting.image);
+const paintingsFromWp = (await getProducts(60)).filter(painting => painting.image);
 const paintings =
   paintingsFromWp.length > 0
     ? paintingsFromWp
@@ -15,8 +17,8 @@ const paintings =
 
 <BaseLayout
   lang="en"
-  title="Contemporary Art Gallery in Irving, TX | My Light Art Gallery"
-  description="My Light Art Gallery is a contemporary art gallery in Irving, TX, showcasing modern and abstract artworks by emerging and established artists."
+  title="My Light Gallery Art – Art Gallery"
+  description="Art gallery focused on high-quality contemporary and classic works"
   showEventsNews={showEventsNews}
 >
   <Hero lang="en" showEventsNews={showEventsNews} />
@@ -40,8 +42,8 @@ const paintings =
               const purchaseUrl =
                 painting.id && painting.link
                   ? `${painting.link}?add-to-cart=${painting.id}`
-                  : painting.link;
-              const hasPurchaseLink = purchaseUrl && purchaseUrl !== '#!';
+                  : painting.link ?? null;
+              const hasPurchaseLink = Boolean(purchaseUrl && purchaseUrl !== '#!');
               return (
                 <div class="painting-card-wrapper">
                   <a
@@ -50,17 +52,12 @@ const paintings =
                     data-full={painting.image ?? ''}
                     data-caption={captionParts.join(' • ')}
                   >
-                    {(() => {
-                      const altText = `Contemporary painting "${painting.title}" by Layla at My Light Art Gallery in Irving, TX${painting.dimensions ? ` (${painting.dimensions})` : ''}`;
-                      return (
-                        <img
-                          src={painting.image}
-                          alt={altText}
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      );
-                    })()}
+                    <img
+                      src={painting.image}
+                      alt={painting.title}
+                      loading="lazy"
+                      decoding="async"
+                    />
                     <h3>{painting.title}</h3>
                     <p class="painting-meta">
                       {painting.dimensions && <span>{painting.dimensions}</span>}
@@ -70,11 +67,14 @@ const paintings =
                       </span>
                     </p>
                   </a>
-                  {hasPurchaseLink && (
-                    <a class="painting-purchase-btn" href={purchaseUrl}>
-                      Purchase
-                    </a>
-                  )}
+                  <a
+                    class={`painting-purchase-btn${hasPurchaseLink ? '' : ' is-disabled'}`}
+                    href={hasPurchaseLink ? purchaseUrl : '#!'}
+                    aria-disabled={hasPurchaseLink ? undefined : 'true'}
+                    tabindex={hasPurchaseLink ? undefined : -1}
+                  >
+                    Purchase
+                  </a>
                 </div>
               );
             })}
@@ -178,14 +178,6 @@ const paintings =
       </div>
     </div>
   </section>
-
-  <section class="section section-local-seo">
-    <div class="container">
-      <p>
-        My Light Art Gallery is a contemporary art gallery based in Irving, TX, serving the Dallas–Fort Worth community. We feature modern and abstract artworks by emerging and established artists, offering a curated experience for collectors and art enthusiasts.
-      </p>
-    </div>
-  </section>
 </BaseLayout>
 
 <style>
@@ -279,6 +271,8 @@ const paintings =
     background: #faf8f5;
     height: 100%;
     cursor: zoom-in;
+    width: 100%;
+    flex: 1;
   }
 
   .painting-card:hover {
@@ -316,21 +310,30 @@ const paintings =
   }
 
   .painting-purchase-btn {
-    display: inline-block;
-    text-align: center;
-    padding: 0.65rem 1rem;
-    border: 1px solid #000;
-    background: #000;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.65rem 1.25rem;
+    background: #111;
     color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    font-weight: 700;
-    transition: all 0.2s ease;
+    border: 1px solid #111;
+    text-decoration: none;
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
+    transition: all 0.25s ease;
+    width: fit-content;
   }
 
   .painting-purchase-btn:hover {
-    background: #fff;
-    color: #000;
+    background: transparent;
+    color: #111;
+  }
+
+  .painting-purchase-btn.is-disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
   }
 
   .paintings-empty {
@@ -591,14 +594,6 @@ const paintings =
     background:
       url('/layla.webp') center/contain no-repeat,
       url('/layla.jpeg') center/contain no-repeat;
-  }
-
-  .section-local-seo {
-    padding-top: 0;
-    padding-bottom: 3rem;
-    color: #555;
-    font-size: 0.95rem;
-    line-height: 1.7;
   }
 
   @media (max-width: 1024px) {
