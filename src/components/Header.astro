@@ -48,7 +48,9 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
           ))}
         </div>
         
-        <a href={logoHref} class="logo">{logoLabel}</a>
+        <a href={logoHref} class="logo" aria-label={logoLabel}>
+          <img src="/logo/MY%20LIGHT%20ART%20GALLERY%20BlancLOGO.png" alt={logoLabel} />
+        </a>
         
         <div class="nav-right">
           {navRight.map((item) => (
@@ -164,15 +166,17 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
   }
 
   .logo {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-decoration: none;
-    text-align: center;
-    white-space: nowrap;
-    background: rgba(255, 255, 255, 0.95);
-    color: #000;
-    padding: 0.5rem 2rem;
+    padding: 0;
+  }
+
+  .logo img {
+    height: 156px;
+    width: auto;
+    display: block;
   }
 
   .main-nav a:not(.logo) {
@@ -261,8 +265,11 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
     }
 
     .logo {
-      font-size: 1.2rem;
-      padding: 0.4rem 1.5rem;
+      padding: 0;
+    }
+
+    .logo img {
+      height: 132px;
     }
 
     .container {
@@ -281,8 +288,11 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
 
   @media (max-width: 480px) {
     .logo {
-      font-size: 1rem;
-      padding: 0.3rem 1rem;
+      padding: 0;
+    }
+
+    .logo img {
+      height: 108px;
     }
 
     .main-nav a:not(.logo) {
