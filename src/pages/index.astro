@@ -8,6 +8,10 @@ import { getBooleanEnv } from '../lib/env';
 export const prerender = false;
 
 const showEventsNews = getBooleanEnv(['PUBLIC_SHOW_EVENTS_NEWS', 'SHOW_EVENTS_NEWS'], true);
+const showPurchaseButtons = getBooleanEnv(
+  ['PUBLIC_SHOW_PURCHASE_BUTTONS', 'SHOW_PURCHASE_BUTTONS'],
+  false
+);
 const paintingsFromWp = (await getProducts(60)).filter(painting => painting.image);
 const paintings =
   paintingsFromWp.length > 0
@@ -66,14 +70,16 @@ const paintings =
                       </span>
                     </p>
                   </a>
-                  <a
-                    class={`painting-purchase-btn${hasPurchaseLink ? '' : ' is-disabled'}`}
-                    href={hasPurchaseLink ? purchaseUrl : '#!'}
-                    aria-disabled={hasPurchaseLink ? undefined : 'true'}
-                    tabindex={hasPurchaseLink ? undefined : -1}
-                  >
-                    Comprar
-                  </a>
+                  {showPurchaseButtons && (
+                    <a
+                      class={`painting-purchase-btn${hasPurchaseLink ? '' : ' is-disabled'}`}
+                      href={hasPurchaseLink ? purchaseUrl : '#!'}
+                      aria-disabled={hasPurchaseLink ? undefined : 'true'}
+                      tabindex={hasPurchaseLink ? undefined : -1}
+                    >
+                      Comprar
+                    </a>
+                  )}
                 </div>
               );
             })}
