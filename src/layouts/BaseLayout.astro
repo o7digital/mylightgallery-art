@@ -76,7 +76,7 @@ const structuredData = {
     {enableGa && (
       <>
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}></script>
-        <script is:inline>{gaInlineScript}</script>
+        <script is:inline set:html={gaInlineScript}></script>
       </>
     )}
     {site && (
@@ -85,9 +85,7 @@ const structuredData = {
         <link rel="alternate" href={new URL('/en/', site).href} hreflang="en" />
       </>
     )}
-    <script type="application/ld+json">
-      {JSON.stringify(structuredData)}
-    </script>
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)}></script>
   </head>
   <body>
     <Header lang={lang} showEventsNews={showEventsNews} />
