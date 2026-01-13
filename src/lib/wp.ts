@@ -66,7 +66,7 @@ const formatPrice = (price?: string | null, regular?: string | null) => {
       maximumFractionDigits: 2,
     })} USD`;
   }
-  return 'NO SELL';
+  return 'NOT FOR SALE';
 };
 
 const deriveDimensions = (
