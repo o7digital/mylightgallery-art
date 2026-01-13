@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  lang="en"
+  title="Newsletter – My Light Art Gallery"
+  description="Get updates, exhibitions, and new collections delivered to your inbox."
+>
+  <section class="newsletter">
+    <div class="container">
+      <div class="intro">
+        <h1>Subscribe to our newsletter</h1>
+        <p>Get updates, exhibitions, and new collections delivered straight to your inbox.</p>
+        <p class="note">No spam. Unsubscribe at any time.</p>
+      </div>
+
+      <form class="form" action="https://formspree.io/f/mgovdlag" method="POST">
+        <input type="hidden" name="form" value="newsletter" />
+        <label>
+          Name
+          <input type="text" name="name" placeholder="Your name" autocomplete="name" />
+        </label>
+        <label>
+          Email
+          <input type="email" name="email" placeholder="you@email.com" autocomplete="email" required />
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" name="consent" value="yes" required />
+          <span>I want to receive updates and promotions by email.</span>
+        </label>
+        <button type="submit">Subscribe</button>
+        <p class="privacy">
+          By subscribing you accept our <a href="/en/privacy">Privacy Notice</a>.
+        </p>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .newsletter {
+    padding: 5rem 1.5rem;
+    background: #faf8f6;
+  }
+
+  .container {
+    max-width: 1050px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  h1 {
+    font-size: 2.3rem;
+    margin-bottom: 1rem;
+    letter-spacing: 0.04em;
+  }
+
+  .intro p {
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .note {
+    font-size: 0.95rem;
+    color: #666;
+  }
+
+  .form {
+    background: #fff;
+    padding: 1.75rem;
+    border: 1px solid #e8e5e0;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    display: grid;
+    gap: 1rem;
+  }
+
+  label {
+    display: grid;
+    gap: 0.35rem;
+    font-weight: 600;
+    color: #222;
+    font-size: 0.95rem;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #dcd7d0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #fff;
+    color: #222;
+  }
+
+  input:focus {
+    outline: 2px solid #111;
+    border-color: #111;
+  }
+
+  .checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 500;
+  }
+
+  .checkbox input {
+    width: auto;
+    margin: 0;
+  }
+
+  .checkbox span {
+    font-size: 0.95rem;
+    color: #333;
+  }
+
+  button {
+    padding: 0.9rem 1.2rem;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: background 0.25s ease;
+  }
+
+  button:hover {
+    background: #333;
+  }
+
+  .privacy {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #555;
+  }
+
+  .privacy a {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 900px) {
+    .container {
+      grid-template-columns: 1fr;
+    }
+
+    .form {
+      padding: 1.4rem;
+    }
+  }
+</style>
