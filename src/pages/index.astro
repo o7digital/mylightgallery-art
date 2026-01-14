@@ -18,7 +18,7 @@ const paintings =
     ? paintingsFromWp
     : fallbackPaintings.map(item => ({ ...item, link: '#!' }));
 const orderedPaintings = [...paintings].reverse();
-const featuredPainting = paintings.find(painting => painting.image);
+const featuredPainting = orderedPaintings.find(painting => painting.image);
 const whatsOnPaintings = orderedPaintings.filter(painting => painting.image).slice(0, 2);
 const exhibitionsHref = '/exhibitions';
 ---
