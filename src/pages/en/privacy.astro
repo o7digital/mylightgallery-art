@@ -8,6 +8,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   description="Privacy Notice for https://www.mylightartgallery.com"
 >
   <section class="privacy">
+    <div class="privacy-scroll-fade" aria-hidden="true"></div>
     <div class="container">
       <h1>Privacy Notice</h1>
       <p class="lead">
@@ -101,10 +102,62 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   </section>
 </BaseLayout>
 
+<script>
+  const privacySection = document.querySelector('.privacy');
+  const header = document.querySelector('.site-header');
+  const setHeaderOffset = () => {
+    if (!privacySection || !header) return;
+    privacySection.style.setProperty('--header-offset', `${header.offsetHeight}px`);
+  };
+
+  const handleScroll = () => {
+    if (!privacySection) return;
+    privacySection.classList.toggle('is-scrolled', window.scrollY > 40);
+  };
+
+  setHeaderOffset();
+  handleScroll();
+  window.addEventListener('resize', setHeaderOffset);
+  window.addEventListener('scroll', handleScroll, { passive: true });
+</script>
+
 <style>
   .privacy {
-    padding: 5rem 1.5rem;
-    background: #faf8f6;
+    padding: 7rem 1.5rem 6rem;
+    background: #e9e8e5;
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  .privacy::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url('/logo/MY%20LIGHT%20ART%20GALLERY%20noirLOGO.png');
+    background-repeat: no-repeat;
+    background-position: center 26%;
+    background-size: clamp(320px, 110vw, 1200px);
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .privacy-scroll-fade {
+    position: fixed;
+    top: var(--header-offset, 140px);
+    left: 0;
+    right: 0;
+    height: 210px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+  }
+
+  .privacy.is-scrolled .privacy-scroll-fade {
+    opacity: 1;
   }
 
   .container {
@@ -113,36 +166,47 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    position: relative;
+    z-index: 2;
   }
 
   h1 {
-    font-size: 2.4rem;
+    font-size: 2.8rem;
     text-align: center;
     margin-bottom: 0.5rem;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   h2 {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     margin-bottom: 0.5rem;
     letter-spacing: 0.03em;
+    text-transform: uppercase;
   }
 
   .lead {
     text-align: center;
-    color: #444;
-    line-height: 1.6;
+    color: #3a3631;
+    line-height: 1.75;
     margin-bottom: 0.5rem;
+    font-size: 1.05rem;
   }
 
   .card {
-    background: #fff;
-    padding: 1.5rem;
-    border: 1px solid #e8e5e0;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
-    border-radius: 10px;
-    color: #333;
-    line-height: 1.6;
+    background: transparent;
+    padding: 1.75rem 0 0;
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.18);
+    box-shadow: none;
+    border-radius: 0;
+    color: #2f2b27;
+    line-height: 1.7;
+  }
+
+  .card:first-of-type {
+    border-top: none;
+    padding-top: 0;
   }
 
   ul {
@@ -160,11 +224,17 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
   @media (max-width: 768px) {
     h1 {
-      font-size: 2rem;
+      font-size: 2.2rem;
+    }
+
+    .privacy::before {
+      background-position: center 20%;
+      background-size: clamp(280px, 140vw, 900px);
+      opacity: 0.14;
     }
 
     .card {
-      padding: 1.25rem;
+      padding-top: 1.4rem;
     }
   }
 </style>

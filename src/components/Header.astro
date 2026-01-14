@@ -1,5 +1,7 @@
 ---
 const { lang = 'es', showEventsNews = true } = Astro.props;
+const rawPath = Astro.url?.pathname ?? '/';
+const normalizedPath = rawPath !== '/' && rawPath.endsWith('/') ? rawPath.slice(0, -1) : rawPath;
 
 const navLeft =
   lang === 'en'
@@ -29,7 +31,34 @@ const navRight =
 
 const logoHref = lang === 'en' ? '/en/' : '/';
 const logoLabel = 'My Light Art Gallery';
-const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', label: 'EN' };
+const langPathMap = {
+  '/': '/en/',
+  '/en': '/',
+  '/aviso-privacidad': '/en/privacy',
+  '/en/privacy': '/aviso-privacidad',
+  '/contacto': '/en/contact',
+  '/en/contact': '/contacto',
+  '/newsletter': '/en/newsletter',
+  '/en/newsletter': '/newsletter',
+  '/es/condiciones-generales-de-uso': '/en/terms-and-conditions',
+  '/en/terms-and-conditions': '/es/condiciones-generales-de-uso',
+  '/es/politica-de-devoluciones': '/en/return-policy',
+  '/en/return-policy': '/es/politica-de-devoluciones',
+  '/es/garantias-y-autenticidad': '/en/warranties-and-authenticity',
+  '/en/warranties-and-authenticity': '/es/garantias-y-autenticidad',
+  '/es/impuestos-texas': '/en/texas-taxes',
+  '/en/texas-taxes': '/es/impuestos-texas',
+};
+const fallbackSwitch =
+  lang === 'en'
+    ? normalizedPath === '/en'
+      ? '/'
+      : normalizedPath.replace(/^\/en/, '') || '/'
+    : normalizedPath === '/'
+      ? '/en/'
+      : `/en${normalizedPath}`;
+const switchHref = langPathMap[normalizedPath] ?? fallbackSwitch;
+const switchLang = lang === 'en' ? { href: switchHref, label: 'ES' } : { href: switchHref, label: 'EN' };
 ---
 
 <header class="site-header">
@@ -107,8 +136,9 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
   .main-nav {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: 2rem;
+    position: relative;
   }
 
   .mobile-menu-toggle {
@@ -145,16 +175,15 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
   .nav-menu {
     display: flex;
     gap: 2rem;
-    flex: 1;
     align-items: center;
     justify-content: center;
+    margin: 0 auto;
   }
 
   .nav-left,
   .nav-right {
     display: flex;
-    gap: 2.5rem;
-    flex: 1;
+    gap: 2rem;
   }
 
   .nav-left {
@@ -197,6 +226,23 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
     display: flex;
     gap: 1rem;
     align-items: center;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  @media (min-width: 1280px) {
+    .main-nav {
+      padding-right: 5cm;
+    }
+  }
+
+  @media (max-width: 1400px) {
+    .main-nav a:not(.logo) {
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+    }
   }
 
   .icon-btn {
@@ -236,6 +282,11 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
   }
 
   @media (max-width: 1024px) {
+    .main-nav {
+      justify-content: space-between;
+      padding-right: 0;
+    }
+
     .mobile-menu-toggle {
       display: flex;
     }
@@ -251,6 +302,7 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
       padding: 5rem 2rem 2rem;
       transition: left 0.3s ease;
       overflow-y: auto;
+      display: flex;
     }
 
     .nav-menu.active {
@@ -278,6 +330,8 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
 
     .nav-icons {
       gap: 0.8rem;
+      position: static;
+      transform: none;
     }
 
     .icon-btn svg {
