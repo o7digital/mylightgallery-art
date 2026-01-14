@@ -23,79 +23,80 @@ const paintings =
 >
   <Hero lang="en" showEventsNews={showEventsNews} />
 
-  <section id="collections" class="section section-colecciones">
-    <div class="container">
-      <h2>Collections</h2>
-      <p class="section-intro">
-        Painting is my essential need and my most authentic way to express myself. Through color and creative freedom, I communicate emotions and feelings that words can’t fully convey. Painting is my natural language, an intimate space where my sensitivity flows.
-      </p>
-      
-      <div class="paintings-carousel">
-        <div class="carousel-container">
-          <div class="carousel-track">
-            {paintings.map(painting => {
-              const captionParts = [
-                painting.title,
-                painting.dimensions,
-                painting.priceText,
-              ].filter(Boolean);
-              const purchaseUrl =
-                painting.id && painting.link
-                  ? `${painting.link}?add-to-cart=${painting.id}`
-                  : painting.link ?? null;
-              const hasPurchaseLink = Boolean(purchaseUrl && purchaseUrl !== '#!');
-              return (
-                <div class="painting-card-wrapper">
-                  <a
-                    href={painting.image ?? '#!'}
-                    class="painting-card"
-                    data-full={painting.image ?? ''}
-                    data-caption={captionParts.join(' • ')}
-                  >
-                    <img
-                      src={painting.image}
-                      alt={painting.title}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <h3>{painting.title}</h3>
-                    <p class="painting-meta">
-                      {painting.dimensions && <span>{painting.dimensions}</span>}
-                      <span class="painting-price">
-                        {painting.dimensions ? ' • ' : ''}
-                        {painting.priceText ?? 'NOT FOR SALE'}
-                      </span>
-                    </p>
-                  </a>
-                  <a
-                    class={`painting-purchase-btn${hasPurchaseLink ? '' : ' is-disabled'}`}
-                    href={hasPurchaseLink ? purchaseUrl : '#!'}
-                    aria-disabled={hasPurchaseLink ? undefined : 'true'}
-                    tabindex={hasPurchaseLink ? undefined : -1}
-                  >
-                    Purchase
-                  </a>
-                </div>
-              );
-            })}
-            {paintings.length === 0 && (
-              <p class="paintings-empty">New works coming soon.</p>
-            )}
+  <div class="pattern-surface">
+    <section id="collections" class="section section-colecciones">
+      <div class="container">
+        <h2>Collections</h2>
+        <p class="section-intro">
+          Painting is my essential need and my most authentic way to express myself. Through color and creative freedom, I communicate emotions and feelings that words can’t fully convey. Painting is my natural language, an intimate space where my sensitivity flows.
+        </p>
+        
+        <div class="paintings-carousel">
+          <div class="carousel-container">
+            <div class="carousel-track">
+              {paintings.map(painting => {
+                const captionParts = [
+                  painting.title,
+                  painting.dimensions,
+                  painting.priceText,
+                ].filter(Boolean);
+                const purchaseUrl =
+                  painting.id && painting.link
+                    ? `${painting.link}?add-to-cart=${painting.id}`
+                    : painting.link ?? null;
+                const hasPurchaseLink = Boolean(purchaseUrl && purchaseUrl !== '#!');
+                return (
+                  <div class="painting-card-wrapper">
+                    <a
+                      href={painting.image ?? '#!'}
+                      class="painting-card"
+                      data-full={painting.image ?? ''}
+                      data-caption={captionParts.join(' • ')}
+                    >
+                      <img
+                        src={painting.image}
+                        alt={painting.title}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <h3>{painting.title}</h3>
+                      <p class="painting-meta">
+                        {painting.dimensions && <span>{painting.dimensions}</span>}
+                        <span class="painting-price">
+                          {painting.dimensions ? ' • ' : ''}
+                          {painting.priceText ?? 'NOT FOR SALE'}
+                        </span>
+                      </p>
+                    </a>
+                    <a
+                      class={`painting-purchase-btn${hasPurchaseLink ? '' : ' is-disabled'}`}
+                      href={hasPurchaseLink ? purchaseUrl : '#!'}
+                      aria-disabled={hasPurchaseLink ? undefined : 'true'}
+                      tabindex={hasPurchaseLink ? undefined : -1}
+                    >
+                      Purchase
+                    </a>
+                  </div>
+                );
+              })}
+              {paintings.length === 0 && (
+                <p class="paintings-empty">New works coming soon.</p>
+              )}
+            </div>
           </div>
-        </div>
-        <div class="lightbox" id="lightbox" aria-hidden="true">
-          <div class="lightbox-backdrop"></div>
-          <div class="lightbox-content" role="dialog" aria-modal="true">
-            <button class="lightbox-close" aria-label="Close detailed view">×</button>
-            <img id="lightbox-img" alt="" />
-            <p class="lightbox-caption"></p>
+          <div class="lightbox" id="lightbox" aria-hidden="true">
+            <div class="lightbox-backdrop"></div>
+            <div class="lightbox-content" role="dialog" aria-modal="true">
+              <button class="lightbox-close" aria-label="Close detailed view">×</button>
+              <img id="lightbox-img" alt="" />
+              <p class="lightbox-caption"></p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  {showEventsNews && (
+    {showEventsNews && (
     <section id="events" class="section section-eventos">
       <div class="container">
         <div class="section-header">
@@ -125,9 +126,9 @@ const paintings =
         </div>
       </div>
     </section>
-  )}
+    )}
 
-  {showEventsNews && (
+    {showEventsNews && (
     <section id="news" class="section section-noticias">
       <div class="container">
         <h2>News</h2>
@@ -154,30 +155,31 @@ const paintings =
         </div>
       </div>
     </section>
-  )}
+    )}
 
-  <section id="layla" class="section section-about">
-    <div class="container">
-      <h2>Layla</h2>
-      <div class="about-content">
-        <div class="about-text">
-          <p>
-            Layla González Camarena Soutou is a multidisciplinary visual artist whose work springs from a deep affinity with color, light, and free creative expression. With academic training in Graphic Design, Art History, and Advertising & Marketing, she combines theoretical knowledge with intuitive sensitivity to develop an authentic artistic language.
-          </p>
-          <p>
-            Her practice focuses mainly on abstract art. She is especially drawn to vivid, luminous colors and dynamic compositions that convey life, joy, and emotion. She works with acrylic, oil, mixed media, drawing, inks, pastels, and hot/cold wax, allowing each piece to evolve organically without rigid rules.
-          </p>
-          <p>
-            For Layla, painting is essential: it is her deepest and most beautiful way of expressing herself. Through painting, she communicates emotions, energy, and inner states beyond words. The canvas becomes a space of freedom, exploration, and truth, where color and movement speak directly to the viewer.
-          </p>
-          <p>
-            Her artistic journey is enriched by continuous training in painting, drawing, human figure, creative expression, and mixed techniques, developed in Mexico and the United States. This diversity of experiences is reflected in expressive, vibrant work deeply connected to human experience.
-          </p>
+    <section id="layla" class="section section-about">
+      <div class="container">
+        <h2>Layla</h2>
+        <div class="about-content">
+          <div class="about-text">
+            <p>
+              Layla González Camarena Soutou is a multidisciplinary visual artist whose work springs from a deep affinity with color, light, and free creative expression. With academic training in Graphic Design, Art History, and Advertising & Marketing, she combines theoretical knowledge with intuitive sensitivity to develop an authentic artistic language.
+            </p>
+            <p>
+              Her practice focuses mainly on abstract art. She is especially drawn to vivid, luminous colors and dynamic compositions that convey life, joy, and emotion. She works with acrylic, oil, mixed media, drawing, inks, pastels, and hot/cold wax, allowing each piece to evolve organically without rigid rules.
+            </p>
+            <p>
+              For Layla, painting is essential: it is her deepest and most beautiful way of expressing herself. Through painting, she communicates emotions, energy, and inner states beyond words. The canvas becomes a space of freedom, exploration, and truth, where color and movement speak directly to the viewer.
+            </p>
+            <p>
+              Her artistic journey is enriched by continuous training in painting, drawing, human figure, creative expression, and mixed techniques, developed in Mexico and the United States. This diversity of experiences is reflected in expressive, vibrant work deeply connected to human experience.
+            </p>
+          </div>
+          <div class="about-image"></div>
         </div>
-        <div class="about-image"></div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </BaseLayout>
 
 <style>
@@ -199,13 +201,34 @@ const paintings =
     text-transform: uppercase;
   }
 
+  .pattern-surface {
+    position: relative;
+    --motif-url: url('/motifs/paint-blotches.svg');
+    background-color: #fbf8f4;
+    background-image:
+      radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.9), transparent 60%),
+      radial-gradient(circle at 85% 10%, rgba(255, 255, 255, 0.6), transparent 55%),
+      var(--motif-url),
+      linear-gradient(150deg, rgba(255, 255, 255, 0.96), rgba(241, 234, 226, 0.92));
+    background-size: 180% 180%, 180% 180%, 150% auto, 100% 100%;
+    background-position: 10% 0%, 90% 0%, center 30%, center;
+    background-repeat: no-repeat;
+    background-attachment: scroll, scroll, fixed, scroll;
+  }
+
   .section-intro {
     font-size: 1.1rem;
     line-height: 1.8;
-    color: #555;
+    color: #4b433a;
     text-align: center;
-    max-width: 900px;
+    max-width: 960px;
     margin: 0 auto 3rem;
+    padding: 2.4rem 3.25rem;
+    border-radius: 14px;
+    border: 1px solid rgba(214, 204, 192, 0.5);
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow: 0 18px 45px rgba(22, 16, 10, 0.12);
+    backdrop-filter: blur(6px);
   }
 
   .section-footer {
@@ -230,7 +253,7 @@ const paintings =
   }
 
   .section-colecciones {
-    background: white;
+    background: transparent;
   }
 
   .paintings-carousel {
@@ -410,8 +433,9 @@ const paintings =
 
   /* Events */
   .section-eventos {
-    background: #1a1a1a;
+    background: rgba(26, 26, 26, 0.92);
     color: #fff;
+    backdrop-filter: blur(6px);
   }
 
   .section-eventos h2 {
@@ -515,7 +539,7 @@ const paintings =
 
   /* News */
   .section-noticias {
-    background: white;
+    background: transparent;
   }
 
   .news-grid {
@@ -564,7 +588,8 @@ const paintings =
 
   /* About */
   .section-about {
-    background: #f9f7f5;
+    background: rgba(249, 247, 245, 0.72);
+    backdrop-filter: blur(4px);
   }
 
   .section-about .container {
@@ -630,7 +655,12 @@ const paintings =
 
     .section-intro {
       font-size: 1rem;
-      padding: 0 0.5rem;
+      padding: 1.8rem 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .pattern-surface {
+      background-attachment: scroll, scroll, scroll, scroll;
     }
 
     .painting-card img {

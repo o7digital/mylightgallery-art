@@ -22,79 +22,80 @@ const paintings =
 >
   <Hero showEventsNews={showEventsNews} />
 
-  <section id="colecciones" class="section section-colecciones">
-    <div class="container">
-      <h2>COLECCIONES</h2>
-      <p class="section-intro">
-        Para mí, pintar es una necesidad esencial y la forma más auténtica de expresarme. A través del color y la libertad creativa, logro comunicar emociones y sentimientos que no siempre pueden expresarse con palabras. La pintura se convierte en mi lenguaje natural, un espacio íntimo donde fluye mi sensibilidad y mi conexión con la vida.
-      </p>
-      
-      <div class="paintings-carousel">
-        <div class="carousel-container">
-          <div class="carousel-track">
-            {paintings.map(painting => {
-              const captionParts = [
-                painting.title,
-                painting.dimensions,
-                painting.priceText,
-              ].filter(Boolean);
-              const purchaseUrl =
-                painting.id && painting.link
-                  ? `${painting.link}?add-to-cart=${painting.id}`
-                  : painting.link ?? null;
-              const hasPurchaseLink = Boolean(purchaseUrl && purchaseUrl !== '#!');
-              return (
-                <div class="painting-card-wrapper">
-                  <a
-                    href={painting.image ?? '#!'}
-                    class="painting-card"
-                    data-full={painting.image ?? ''}
-                    data-caption={captionParts.join(' • ')}
-                  >
-                    <img
-                      src={painting.image}
-                      alt={painting.title}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <h3>{painting.title}</h3>
-                    <p class="painting-meta">
-                      {painting.dimensions && <span>{painting.dimensions}</span>}
-                      <span class="painting-price">
-                        {painting.dimensions ? ' • ' : ''}
-                        {painting.priceText ?? 'NO SE VENDE'}
-                      </span>
-                    </p>
-                  </a>
-                  <a
-                    class={`painting-purchase-btn${hasPurchaseLink ? '' : ' is-disabled'}`}
-                    href={hasPurchaseLink ? purchaseUrl : '#!'}
-                    aria-disabled={hasPurchaseLink ? undefined : 'true'}
-                    tabindex={hasPurchaseLink ? undefined : -1}
-                  >
-                    Comprar
-                  </a>
-                </div>
-              );
-            })}
-            {paintings.length === 0 && (
-              <p class="paintings-empty">Pronto añadiremos las obras.</p>
-            )}
+  <div class="pattern-surface">
+    <section id="colecciones" class="section section-colecciones">
+      <div class="container">
+        <h2>COLECCIONES</h2>
+        <p class="section-intro">
+          Para mí, pintar es una necesidad esencial y la forma más auténtica de expresarme. A través del color y la libertad creativa, logro comunicar emociones y sentimientos que no siempre pueden expresarse con palabras. La pintura se convierte en mi lenguaje natural, un espacio íntimo donde fluye mi sensibilidad y mi conexión con la vida.
+        </p>
+        
+        <div class="paintings-carousel">
+          <div class="carousel-container">
+            <div class="carousel-track">
+              {paintings.map(painting => {
+                const captionParts = [
+                  painting.title,
+                  painting.dimensions,
+                  painting.priceText,
+                ].filter(Boolean);
+                const purchaseUrl =
+                  painting.id && painting.link
+                    ? `${painting.link}?add-to-cart=${painting.id}`
+                    : painting.link ?? null;
+                const hasPurchaseLink = Boolean(purchaseUrl && purchaseUrl !== '#!');
+                return (
+                  <div class="painting-card-wrapper">
+                    <a
+                      href={painting.image ?? '#!'}
+                      class="painting-card"
+                      data-full={painting.image ?? ''}
+                      data-caption={captionParts.join(' • ')}
+                    >
+                      <img
+                        src={painting.image}
+                        alt={painting.title}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <h3>{painting.title}</h3>
+                      <p class="painting-meta">
+                        {painting.dimensions && <span>{painting.dimensions}</span>}
+                        <span class="painting-price">
+                          {painting.dimensions ? ' • ' : ''}
+                          {painting.priceText ?? 'NO SE VENDE'}
+                        </span>
+                      </p>
+                    </a>
+                    <a
+                      class={`painting-purchase-btn${hasPurchaseLink ? '' : ' is-disabled'}`}
+                      href={hasPurchaseLink ? purchaseUrl : '#!'}
+                      aria-disabled={hasPurchaseLink ? undefined : 'true'}
+                      tabindex={hasPurchaseLink ? undefined : -1}
+                    >
+                      Comprar
+                    </a>
+                  </div>
+                );
+              })}
+              {paintings.length === 0 && (
+                <p class="paintings-empty">Pronto añadiremos las obras.</p>
+              )}
+            </div>
           </div>
-        </div>
-        <div class="lightbox" id="lightbox" aria-hidden="true">
-          <div class="lightbox-backdrop"></div>
-          <div class="lightbox-content" role="dialog" aria-modal="true">
-            <button class="lightbox-close" aria-label="Fermer la vue détaillée">×</button>
-            <img id="lightbox-img" alt="" />
-            <p class="lightbox-caption"></p>
+          <div class="lightbox" id="lightbox" aria-hidden="true">
+            <div class="lightbox-backdrop"></div>
+            <div class="lightbox-content" role="dialog" aria-modal="true">
+              <button class="lightbox-close" aria-label="Fermer la vue détaillée">×</button>
+              <img id="lightbox-img" alt="" />
+              <p class="lightbox-caption"></p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  {showEventsNews && (
+    {showEventsNews && (
     <section id="eventos" class="section section-eventos">
       <div class="container">
         <div class="section-header">
@@ -124,9 +125,9 @@ const paintings =
         </div>
       </div>
     </section>
-  )}
+    )}
 
-  {showEventsNews && (
+    {showEventsNews && (
     <section id="noticias" class="section section-noticias">
       <div class="container">
         <h2>NOTICIAS</h2>
@@ -153,30 +154,31 @@ const paintings =
         </div>
       </div>
     </section>
-  )}
+    )}
 
-  <section id="layla" class="section section-about">
-    <div class="container">
-      <h2>LAYLA</h2>
-      <div class="about-content">
-        <div class="about-text">
-          <p>
-            Layla González Camarena Soutou es una artista visual multidisciplinaria cuya obra nace de una profunda afinidad con el color, la luz y la expresión creativa libre. Con formación académica en Diseño Gráfico, Historia del Arte y Publicidad y Mercadotecnia, Layla combina el conocimiento teórico con una sensibilidad intuitiva para desarrollar un lenguaje artístico propio y auténtico.
-          </p>
-          <p>
-            Su práctica artística se centra principalmente en el arte abstracto. Se siente especialmente atraída por los colores vivos y luminosos, así como por composiciones dinámicas que transmiten vida, alegría y emoción. Trabaja con acrílico, óleo, técnicas mixtas, dibujo, tintas, pasteles y ceras calientes y frías, permitiendo que cada obra evolucione de manera orgánica, sin reglas rígidas ni estructuras predefinidas.
-          </p>
-          <p>
-            Para Layla, pintar es esencial: es su forma más profunda y hermosa de expresarse. A través de la pintura comunica emociones, energía y estados interiores que van más allá de las palabras. El lienzo se convierte en un espacio de libertad, exploración y verdad, donde el color y el movimiento dialogan directamente con el espectador.
-          </p>
-          <p>
-            Su trayectoria artística ha sido enriquecida por una formación continua en pintura, dibujo, figura humana, expresión creativa y técnicas mixtas, desarrollada tanto en México como en Estados Unidos. Esta diversidad de experiencias se refleja en una obra expresiva, vibrante y profundamente conectada con la experiencia humana.
-          </p>
+    <section id="layla" class="section section-about">
+      <div class="container">
+        <h2>LAYLA</h2>
+        <div class="about-content">
+          <div class="about-text">
+            <p>
+              Layla González Camarena Soutou es una artista visual multidisciplinaria cuya obra nace de una profunda afinidad con el color, la luz y la expresión creativa libre. Con formación académica en Diseño Gráfico, Historia del Arte y Publicidad y Mercadotecnia, Layla combina el conocimiento teórico con una sensibilidad intuitiva para desarrollar un lenguaje artístico propio y auténtico.
+            </p>
+            <p>
+              Su práctica artística se centra principalmente en el arte abstracto. Se siente especialmente atraída por los colores vivos y luminosos, así como por composiciones dinámicas que transmiten vida, alegría y emoción. Trabaja con acrílico, óleo, técnicas mixtas, dibujo, tintas, pasteles y ceras calientes y frías, permitiendo que cada obra evolucione de manera orgánica, sin reglas rígidas ni estructuras predefinidas.
+            </p>
+            <p>
+              Para Layla, pintar es esencial: es su forma más profunda y hermosa de expresarse. A través de la pintura comunica emociones, energía y estados interiores que van más allá de las palabras. El lienzo se convierte en un espacio de libertad, exploración y verdad, donde el color y el movimiento dialogan directamente con el espectador.
+            </p>
+            <p>
+              Su trayectoria artística ha sido enriquecida por una formación continua en pintura, dibujo, figura humana, expresión creativa y técnicas mixtas, desarrollada tanto en México como en Estados Unidos. Esta diversidad de experiencias se refleja en una obra expresiva, vibrante y profundamente conectada con la experiencia humana.
+            </p>
+          </div>
+          <div class="about-image"></div>
         </div>
-        <div class="about-image"></div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </BaseLayout>
 
 <style>
@@ -198,13 +200,34 @@ const paintings =
     text-transform: uppercase;
   }
 
+  .pattern-surface {
+    position: relative;
+    --motif-url: url('/motifs/paint-blotches.svg');
+    background-color: #fbf8f4;
+    background-image:
+      radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.9), transparent 60%),
+      radial-gradient(circle at 85% 10%, rgba(255, 255, 255, 0.6), transparent 55%),
+      var(--motif-url),
+      linear-gradient(150deg, rgba(255, 255, 255, 0.96), rgba(241, 234, 226, 0.92));
+    background-size: 180% 180%, 180% 180%, 150% auto, 100% 100%;
+    background-position: 10% 0%, 90% 0%, center 30%, center;
+    background-repeat: no-repeat;
+    background-attachment: scroll, scroll, fixed, scroll;
+  }
+
   .section-intro {
     font-size: 1.1rem;
     line-height: 1.8;
-    color: #555;
+    color: #4b433a;
     text-align: center;
-    max-width: 900px;
+    max-width: 960px;
     margin: 0 auto 3rem;
+    padding: 2.4rem 3.25rem;
+    border-radius: 14px;
+    border: 1px solid rgba(214, 204, 192, 0.5);
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow: 0 18px 45px rgba(22, 16, 10, 0.12);
+    backdrop-filter: blur(6px);
   }
 
   .section-footer {
@@ -230,7 +253,7 @@ const paintings =
 
   /* Colecciones Section */
   .section-colecciones {
-    background: white;
+    background: transparent;
   }
 
   /* Paintings Carousel */
@@ -463,8 +486,9 @@ const paintings =
 
   /* Eventos Section */
   .section-eventos {
-    background: #1a1a1a;
+    background: rgba(26, 26, 26, 0.92);
     color: #fff;
+    backdrop-filter: blur(6px);
   }
 
   .section-eventos h2 {
@@ -568,7 +592,7 @@ const paintings =
 
   /* Noticias Section */
   .section-noticias {
-    background: white;
+    background: transparent;
   }
 
   .news-grid {
@@ -618,7 +642,8 @@ const paintings =
 
   /* Quienes Somos Section */
   .section-about {
-    background: #f9f7f5;
+    background: rgba(249, 247, 245, 0.72);
+    backdrop-filter: blur(4px);
   }
 
   .section-about .container {
@@ -689,7 +714,12 @@ const paintings =
 
     .section-intro {
       font-size: 1rem;
-      padding: 0 0.5rem;
+      padding: 1.8rem 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .pattern-surface {
+      background-attachment: scroll, scroll, scroll, scroll;
     }
 
     .paintings-carousel {
