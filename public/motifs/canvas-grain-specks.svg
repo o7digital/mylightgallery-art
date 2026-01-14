@@ -1,0 +1,43 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="canvas-grain" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="11"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncR type="gamma" amplitude="0.85" exponent="1.25" offset="0"/>
+        <feFuncG type="gamma" amplitude="0.85" exponent="1.25" offset="0"/>
+        <feFuncB type="gamma" amplitude="0.85" exponent="1.25" offset="0"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="1200" height="800" fill="#1f1a16" opacity="0.06" filter="url(#canvas-grain)"/>
+  <g fill="#1f1a16" opacity="0.12">
+    <circle cx="180" cy="140" r="3"/>
+    <circle cx="260" cy="220" r="2"/>
+    <circle cx="420" cy="180" r="2.5"/>
+    <circle cx="520" cy="260" r="2"/>
+    <circle cx="690" cy="210" r="3"/>
+    <circle cx="820" cy="160" r="2"/>
+    <circle cx="960" cy="240" r="2.5"/>
+    <circle cx="1080" cy="200" r="2"/>
+    <circle cx="140" cy="360" r="2.5"/>
+    <circle cx="300" cy="420" r="2"/>
+    <circle cx="520" cy="400" r="2.5"/>
+    <circle cx="680" cy="460" r="2"/>
+    <circle cx="840" cy="420" r="3"/>
+    <circle cx="1010" cy="380" r="2"/>
+    <circle cx="220" cy="580" r="2.5"/>
+    <circle cx="360" cy="640" r="2"/>
+    <circle cx="540" cy="600" r="2.5"/>
+    <circle cx="720" cy="660" r="2"/>
+    <circle cx="900" cy="620" r="2.5"/>
+    <circle cx="1050" cy="700" r="2"/>
+  </g>
+  <g fill="#1f1a16" opacity="0.08">
+    <circle cx="600" cy="140" r="5"/>
+    <circle cx="760" cy="320" r="4"/>
+    <circle cx="340" cy="520" r="4"/>
+    <circle cx="940" cy="540" r="5"/>
+    <circle cx="460" cy="700" r="4"/>
+  </g>
+</svg>

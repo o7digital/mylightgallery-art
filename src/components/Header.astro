@@ -1,17 +1,19 @@
 ---
 const { lang = 'es', showEventsNews = true } = Astro.props;
+const rawPath = Astro.url?.pathname ?? '/';
+const normalizedPath = rawPath !== '/' && rawPath.endsWith('/') ? rawPath.slice(0, -1) : rawPath;
 
 const navLeft =
   lang === 'en'
     ? [
         { href: '/en/#collections', label: 'Collections' },
         { href: '/en/#collections', label: 'Buy' },
-        ...(showEventsNews ? [{ href: '/en/#events', label: 'Events' }] : []),
+        ...(showEventsNews ? [{ href: '/en/#events', label: "What's on" }] : []),
       ]
     : [
         { href: '/#colecciones', label: 'Colecciones' },
         { href: '/#colecciones', label: 'Compra' },
-        ...(showEventsNews ? [{ href: '/#eventos', label: 'Eventos' }] : []),
+        ...(showEventsNews ? [{ href: '/#eventos', label: 'Qué hay' }] : []),
       ];
 
 const navRight =
@@ -29,17 +31,71 @@ const navRight =
 
 const logoHref = lang === 'en' ? '/en/' : '/';
 const logoLabel = 'My Light Art Gallery';
-const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', label: 'EN' };
+const langPathMap = {
+  '/': '/en/',
+  '/en': '/',
+  '/aviso-privacidad': '/en/privacy',
+  '/en/privacy': '/aviso-privacidad',
+  '/contacto': '/en/contact',
+  '/en/contact': '/contacto',
+  '/exhibitions': '/en/exhibitions',
+  '/en/exhibitions': '/exhibitions',
+  '/newsletter': '/en/newsletter',
+  '/en/newsletter': '/newsletter',
+  '/es/condiciones-generales-de-uso': '/en/terms-and-conditions',
+  '/en/terms-and-conditions': '/es/condiciones-generales-de-uso',
+  '/es/politica-de-devoluciones': '/en/return-policy',
+  '/en/return-policy': '/es/politica-de-devoluciones',
+  '/es/garantias-y-autenticidad': '/en/warranties-and-authenticity',
+  '/en/warranties-and-authenticity': '/es/garantias-y-autenticidad',
+  '/es/impuestos-texas': '/en/texas-taxes',
+  '/en/texas-taxes': '/es/impuestos-texas',
+};
+const fallbackSwitch =
+  lang === 'en'
+    ? normalizedPath === '/en'
+      ? '/'
+      : normalizedPath.replace(/^\/en/, '') || '/'
+    : normalizedPath === '/'
+      ? '/en/'
+      : `/en${normalizedPath}`;
+const switchHref = langPathMap[normalizedPath] ?? fallbackSwitch;
+const switchLang = lang === 'en' ? { href: switchHref, label: 'ES' } : { href: switchHref, label: 'EN' };
 ---
 
 <header class="site-header">
   <div class="container">
     <nav class="main-nav">
-      <button class="mobile-menu-toggle" aria-label="Toggle menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+      <div class="nav-top">
+        <button class="mobile-menu-toggle" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <div class="nav-icons">
+          <a class="lang-switch" href={switchLang.href}>{switchLang.label}</a>
+          <button class="icon-btn" aria-label="Search">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.35-4.35"/>
+            </svg>
+          </button>
+          <a href="/login" class="icon-btn" aria-label="Login">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </a>
+          <a href="/carrito" class="icon-btn" aria-label="Carrito">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1"/>
+              <circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+          </a>
+        </div>
+      </div>
 
       <div class="nav-menu">
         <div class="nav-left">
@@ -58,29 +114,6 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
           ))}
         </div>
       </div>
-      
-      <div class="nav-icons">
-        <a class="lang-switch" href={switchLang.href}>{switchLang.label}</a>
-        <button class="icon-btn" aria-label="Search">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"/>
-            <path d="m21 21-4.35-4.35"/>
-          </svg>
-        </button>
-        <a href="/login" class="icon-btn" aria-label="Login">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
-        </a>
-        <a href="/carrito" class="icon-btn" aria-label="Carrito">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="9" cy="21" r="1"/>
-            <circle cx="20" cy="21" r="1"/>
-            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-          </svg>
-        </a>
-      </div>
     </nav>
   </div>
 </header>
@@ -89,13 +122,14 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
   .site-header {
     background: rgba(0, 0, 0, 0.75);
     backdrop-filter: blur(10px);
-    padding: 1.5rem 0;
+    padding: 0.6rem 0 0.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
+    overflow: visible;
   }
 
   .container {
@@ -104,11 +138,27 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
     padding: 0 2rem;
   }
 
+  .site-header .container {
+    display: block;
+    height: auto;
+  }
+
   .main-nav {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
+    justify-content: center;
+    gap: 0.3rem;
+    position: relative;
+    overflow: visible;
+  }
+
+  .nav-top {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
   }
 
   .mobile-menu-toggle {
@@ -143,26 +193,31 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
   }
 
   .nav-menu {
-    display: flex;
-    gap: 2rem;
-    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1.5rem;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow: visible;
   }
 
   .nav-left,
   .nav-right {
     display: flex;
-    gap: 2.5rem;
-    flex: 1;
+    gap: 1.5rem;
   }
 
   .nav-left {
     justify-content: flex-end;
+    justify-self: end;
   }
 
   .nav-right {
     justify-content: flex-start;
+    justify-self: start;
   }
 
   .logo {
@@ -174,7 +229,7 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
   }
 
   .logo img {
-    height: 156px;
+    height: 120px;
     width: auto;
     display: block;
   }
@@ -199,12 +254,19 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
     align-items: center;
   }
 
+  @media (max-width: 1400px) {
+    .main-nav a:not(.logo) {
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+    }
+  }
+
   .icon-btn {
     background: none;
     border: none;
     color: #fff;
     cursor: pointer;
-    padding: 0.5rem;
+    padding: 0.3rem;
     transition: color 0.3s;
     display: flex;
     align-items: center;
@@ -219,12 +281,12 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.4rem 0.9rem;
+    padding: 0.25rem 0.6rem;
     border: 1px solid #fff;
     border-radius: 999px;
     color: #fff;
     text-decoration: none;
-    font-size: 0.85rem;
+    font-size: 0.78rem;
     letter-spacing: 0.06em;
     transition: all 0.3s;
     text-transform: uppercase;
@@ -236,6 +298,15 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
   }
 
   @media (max-width: 1024px) {
+    .main-nav {
+      align-items: stretch;
+      padding-right: 0;
+    }
+
+    .nav-top {
+      justify-content: space-between;
+    }
+
     .mobile-menu-toggle {
       display: flex;
     }
@@ -251,6 +322,7 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
       padding: 5rem 2rem 2rem;
       transition: left 0.3s ease;
       overflow-y: auto;
+      display: flex;
     }
 
     .nav-menu.active {
@@ -266,10 +338,15 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
 
     .logo {
       padding: 0;
+      position: static;
+      width: auto;
+      height: auto;
     }
 
     .logo img {
-      height: 132px;
+      position: static;
+      transform: none;
+      height: 96px;
     }
 
     .container {
@@ -278,6 +355,8 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
 
     .nav-icons {
       gap: 0.8rem;
+      position: static;
+      transform: none;
     }
 
     .icon-btn svg {
@@ -292,7 +371,7 @@ const switchLang = lang === 'en' ? { href: '/', label: 'ES' } : { href: '/en/', 
     }
 
     .logo img {
-      height: 108px;
+      height: 78px;
     }
 
     .main-nav a:not(.logo) {

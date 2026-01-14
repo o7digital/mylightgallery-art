@@ -17,6 +17,9 @@ const paintings =
   paintingsFromWp.length > 0
     ? paintingsFromWp
     : fallbackPaintings.map(item => ({ ...item, link: '#!' }));
+const featuredPainting = paintings.find(painting => painting.image);
+const whatsOnPaintings = paintings.filter(painting => painting.image).slice(0, 2);
+const exhibitionsHref = '/exhibitions';
 ---
 
 <BaseLayout
@@ -26,113 +29,78 @@ const paintings =
 >
   <Hero showEventsNews={showEventsNews} />
 
-  <section id="colecciones" class="section section-colecciones">
-    <div class="container">
-      <h2>COLECCIONES</h2>
-      <p class="section-intro">
-        Para mí, pintar es una necesidad esencial y la forma más auténtica de expresarme. A través del color y la libertad creativa, logro comunicar emociones y sentimientos que no siempre pueden expresarse con palabras. La pintura se convierte en mi lenguaje natural, un espacio íntimo donde fluye mi sensibilidad y mi conexión con la vida.
-      </p>
-      
-      <div class="paintings-carousel">
-        <div class="carousel-container">
-          <div class="carousel-track">
-            {paintings.map(painting => {
-              const captionParts = [
-                painting.title,
-                painting.dimensions,
-                painting.priceText,
-              ].filter(Boolean);
-              const purchaseUrl =
-                painting.id && painting.link
-                  ? `${painting.link}?add-to-cart=${painting.id}`
-                  : painting.link ?? null;
-              const hasPurchaseLink = Boolean(purchaseUrl && purchaseUrl !== '#!');
-              return (
-                <div class="painting-card-wrapper">
-                  <a
-                    href={painting.image ?? '#!'}
-                    class="painting-card"
-                    data-full={painting.image ?? ''}
-                    data-caption={captionParts.join(' • ')}
-                  >
+  <div class="pattern-surface">
+    <section id="colecciones" class="section section-colecciones rg-collections">
+      <div class="container rg-collections__inner">
+        <div class="rg-collections__media">
+          {featuredPainting?.image ? (
+            <img
+              src={featuredPainting.image}
+              alt={featuredPainting.title ?? 'Colecciones'}
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <div class="rg-collections__placeholder">Colecciones</div>
+          )}
+        </div>
+        <div class="rg-collections__content">
+          <span class="rg-eyebrow">Colección</span>
+          <h2>COLECCIONES</h2>
+          <p class="section-intro">
+            Para mí, pintar es una necesidad esencial y la forma más auténtica de expresarme. A través del color y la libertad creativa, logro comunicar emociones y sentimientos que no siempre pueden expresarse con palabras. La pintura se convierte en mi lenguaje natural, un espacio íntimo donde fluye mi sensibilidad y mi conexión con la vida.
+          </p>
+          <a class="rg-link" href={exhibitionsHref}>Ver todas las obras</a>
+        </div>
+      </div>
+    </section>
+
+    {showEventsNews && (
+    <section id="eventos" class="section rg-whats-on">
+      <div class="container">
+        <article class="rg-heading">
+          <h2>QUÉ HAY</h2>
+          <div class="rg-more-link">
+            <a href={exhibitionsHref}>Ver más</a>
+            <span aria-hidden="true">→</span>
+          </div>
+        </article>
+
+        <div class="rg-exhibitions">
+          {whatsOnPaintings.map((painting, index) => {
+            const paintingHref =
+              painting.link && painting.link !== '#!' ? painting.link : exhibitionsHref;
+            const meta = [painting.dimensions, painting.priceText].filter(Boolean).join(' • ');
+            return (
+              <article class="rg-exhibition" style={`--delay: ${index * 0.12}s`}>
+                <header>{index === 0 ? 'AHORA' : 'PRÓXIMO'}</header>
+                <div class="rg-exhibition__image">
+                  <a href={paintingHref}>
                     <img
                       src={painting.image}
                       alt={painting.title}
                       loading="lazy"
                       decoding="async"
                     />
-                    <h3>{painting.title}</h3>
-                    <p class="painting-meta">
-                      {painting.dimensions && <span>{painting.dimensions}</span>}
-                      <span class="painting-price">
-                        {painting.dimensions ? ' • ' : ''}
-                        {painting.priceText ?? 'NO SE VENDE'}
-                      </span>
-                    </p>
                   </a>
-                  {showPurchaseButtons && (
-                    <a
-                      class={`painting-purchase-btn${hasPurchaseLink ? '' : ' is-disabled'}`}
-                      href={hasPurchaseLink ? purchaseUrl : '#!'}
-                      aria-disabled={hasPurchaseLink ? undefined : 'true'}
-                      tabindex={hasPurchaseLink ? undefined : -1}
-                    >
-                      Comprar
-                    </a>
-                  )}
                 </div>
-              );
-            })}
-            {paintings.length === 0 && (
-              <p class="paintings-empty">Pronto añadiremos las obras.</p>
-            )}
-          </div>
-        </div>
-        <div class="lightbox" id="lightbox" aria-hidden="true">
-          <div class="lightbox-backdrop"></div>
-          <div class="lightbox-content" role="dialog" aria-modal="true">
-            <button class="lightbox-close" aria-label="Fermer la vue détaillée">×</button>
-            <img id="lightbox-img" alt="" />
-            <p class="lightbox-caption"></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {showEventsNews && (
-    <section id="eventos" class="section section-eventos">
-      <div class="container">
-        <div class="section-header">
-          <h2>EVENTOS</h2>
-          <a href="/eventos" class="see-more-link">See More →</a>
-        </div>
-        <div class="events-grid">
-          <div class="event-card">
-            <div class="event-badge">AHORA</div>
-            <div class="event-image" style="background: #e5dcd3;"></div>
-            <div class="event-content">
-              <h3>Exposición de Invierno 2026</h3>
-              <p>Una selección exclusiva de obras contemporáneas y clásicas</p>
-              <a href="/eventos/exposicion-invierno" class="event-link">Más información</a>
-            </div>
-          </div>
-          <div class="event-card">
-            <div class="event-badge">PRÓXIMO</div>
-            <div class="event-image" style="background: #d8cec3;"></div>
-            <div class="event-content">
-              <h3>Art Fair Texas 2026</h3>
-              <p class="event-location">DALLAS, TX</p>
-              <p>15-23 FEBRERO 2026 STAND B3</p>
-              <a href="/eventos/art-fair-texas" class="event-link">Más información</a>
-            </div>
-          </div>
+                <div class="rg-exhibition__content">
+                  <h3>{painting.title}</h3>
+                  {meta && <div class="rg-exhibition__meta">{meta}</div>}
+                  <a class="rg-exhibition__button" href={paintingHref}>Más información</a>
+                </div>
+              </article>
+            );
+          })}
+          {whatsOnPaintings.length === 0 && (
+            <p class="rg-empty">Pronto añadiremos las obras.</p>
+          )}
         </div>
       </div>
     </section>
-  )}
+    )}
 
-  {showEventsNews && (
+    {showEventsNews && (
     <section id="noticias" class="section section-noticias">
       <div class="container">
         <h2>NOTICIAS</h2>
@@ -159,30 +127,31 @@ const paintings =
         </div>
       </div>
     </section>
-  )}
+    )}
 
-  <section id="layla" class="section section-about">
-    <div class="container">
-      <h2>LAYLA</h2>
-      <div class="about-content">
-        <div class="about-text">
-          <p>
-            Layla González Camarena Soutou es una artista visual multidisciplinaria cuya obra nace de una profunda afinidad con el color, la luz y la expresión creativa libre. Con formación académica en Diseño Gráfico, Historia del Arte y Publicidad y Mercadotecnia, Layla combina el conocimiento teórico con una sensibilidad intuitiva para desarrollar un lenguaje artístico propio y auténtico.
-          </p>
-          <p>
-            Su práctica artística se centra principalmente en el arte abstracto. Se siente especialmente atraída por los colores vivos y luminosos, así como por composiciones dinámicas que transmiten vida, alegría y emoción. Trabaja con acrílico, óleo, técnicas mixtas, dibujo, tintas, pasteles y ceras calientes y frías, permitiendo que cada obra evolucione de manera orgánica, sin reglas rígidas ni estructuras predefinidas.
-          </p>
-          <p>
-            Para Layla, pintar es esencial: es su forma más profunda y hermosa de expresarse. A través de la pintura comunica emociones, energía y estados interiores que van más allá de las palabras. El lienzo se convierte en un espacio de libertad, exploración y verdad, donde el color y el movimiento dialogan directamente con el espectador.
-          </p>
-          <p>
-            Su trayectoria artística ha sido enriquecida por una formación continua en pintura, dibujo, figura humana, expresión creativa y técnicas mixtas, desarrollada tanto en México como en Estados Unidos. Esta diversidad de experiencias se refleja en una obra expresiva, vibrante y profundamente conectada con la experiencia humana.
-          </p>
+    <section id="layla" class="section section-about">
+      <div class="container">
+        <h2>LAYLA</h2>
+        <div class="about-content">
+          <div class="about-text">
+            <p>
+              Layla González Camarena Soutou es una artista visual multidisciplinaria cuya obra nace de una profunda afinidad con el color, la luz y la expresión creativa libre. Con formación académica en Diseño Gráfico, Historia del Arte y Publicidad y Mercadotecnia, Layla combina el conocimiento teórico con una sensibilidad intuitiva para desarrollar un lenguaje artístico propio y auténtico.
+            </p>
+            <p>
+              Su práctica artística se centra principalmente en el arte abstracto. Se siente especialmente atraída por los colores vivos y luminosos, así como por composiciones dinámicas que transmiten vida, alegría y emoción. Trabaja con acrílico, óleo, técnicas mixtas, dibujo, tintas, pasteles y ceras calientes y frías, permitiendo que cada obra evolucione de manera orgánica, sin reglas rígidas ni estructuras predefinidas.
+            </p>
+            <p>
+              Para Layla, pintar es esencial: es su forma más profunda y hermosa de expresarse. A través de la pintura comunica emociones, energía y estados interiores que van más allá de las palabras. El lienzo se convierte en un espacio de libertad, exploración y verdad, donde el color y el movimiento dialogan directamente con el espectador.
+            </p>
+            <p>
+              Su trayectoria artística ha sido enriquecida por una formación continua en pintura, dibujo, figura humana, expresión creativa y técnicas mixtas, desarrollada tanto en México como en Estados Unidos. Esta diversidad de experiencias se refleja en una obra expresiva, vibrante y profundamente conectada con la experiencia humana.
+            </p>
+          </div>
+          <div class="about-image"></div>
         </div>
-        <div class="about-image"></div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </BaseLayout>
 
 <style>
@@ -204,13 +173,34 @@ const paintings =
     text-transform: uppercase;
   }
 
+  .pattern-surface {
+    position: relative;
+    --motif-url: url('/motifs/paint-blotches.svg');
+    background-color: #fbf8f4;
+    background-image:
+      radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.9), transparent 60%),
+      radial-gradient(circle at 85% 10%, rgba(255, 255, 255, 0.6), transparent 55%),
+      var(--motif-url),
+      linear-gradient(150deg, rgba(255, 255, 255, 0.96), rgba(241, 234, 226, 0.92));
+    background-size: 180% 180%, 180% 180%, 150% auto, 100% 100%;
+    background-position: 10% 0%, 90% 0%, center 30%, center;
+    background-repeat: no-repeat;
+    background-attachment: scroll, scroll, fixed, scroll;
+  }
+
   .section-intro {
     font-size: 1.1rem;
     line-height: 1.8;
-    color: #555;
+    color: #4b433a;
     text-align: center;
-    max-width: 900px;
+    max-width: 960px;
     margin: 0 auto 3rem;
+    padding: 2.4rem 3.25rem;
+    border-radius: 14px;
+    border: 1px solid rgba(214, 204, 192, 0.5);
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow: 0 18px 45px rgba(22, 16, 10, 0.12);
+    backdrop-filter: blur(6px);
   }
 
   .section-footer {
@@ -236,7 +226,310 @@ const paintings =
 
   /* Colecciones Section */
   .section-colecciones {
-    background: white;
+    background: transparent;
+  }
+
+  .rg-collections {
+    --rg-ink: #1d1a16;
+    --rg-muted: #6f675f;
+    --rg-line: #d7cfc2;
+    --rg-paper: #fbf8f2;
+    background:
+      radial-gradient(circle at 12% 15%, rgba(255, 255, 255, 0.85), transparent 55%),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(238, 230, 218, 0.95));
+    color: var(--rg-ink);
+    font-family: 'Roboto', sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .rg-collections::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--motif-url, url('/motifs/paint-blotches.svg'));
+    background-size: 1200px auto;
+    background-repeat: repeat;
+    opacity: 0.22;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .rg-collections > .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .rg-collections__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 3.5rem;
+    align-items: center;
+  }
+
+  .rg-collections__media {
+    position: relative;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid var(--rg-line);
+    box-shadow: 0 25px 60px rgba(35, 24, 16, 0.18);
+    animation: rg-rise 0.9s ease both;
+  }
+
+  .rg-collections__media img {
+    width: 100%;
+    height: 520px;
+    object-fit: cover;
+    display: block;
+    border: 1px solid rgba(40, 32, 24, 0.15);
+  }
+
+  .rg-collections__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 520px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px dashed var(--rg-line);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--rg-muted);
+  }
+
+  .rg-collections__content {
+    animation: rg-rise 0.9s ease both;
+    animation-delay: 0.12s;
+  }
+
+  .rg-collections h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 4vw, 3.2rem);
+    letter-spacing: 0.08em;
+    text-align: left;
+    margin-bottom: 1.5rem;
+  }
+
+  .rg-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.72rem;
+    color: var(--rg-muted);
+  }
+
+  .rg-eyebrow::after {
+    content: '';
+    width: 36px;
+    height: 1px;
+    background: var(--rg-line);
+  }
+
+  .rg-collections .section-intro {
+    margin: 0 0 2rem;
+    padding: 0;
+    text-align: left;
+    max-width: none;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    color: var(--rg-muted);
+    font-size: 1.05rem;
+  }
+
+  .rg-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--rg-ink);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.78rem;
+    border-bottom: 1px solid var(--rg-ink);
+    padding-bottom: 0.35rem;
+    transition: opacity 0.3s;
+  }
+
+  .rg-link:hover {
+    opacity: 0.7;
+  }
+
+  .rg-whats-on {
+    --rg-ink: #1d1a16;
+    --rg-muted: #6f675f;
+    --rg-line: #d7cfc2;
+    background:
+      radial-gradient(circle at 85% 5%, rgba(255, 255, 255, 0.7), transparent 55%),
+      linear-gradient(180deg, rgba(240, 232, 220, 0.92), rgba(229, 221, 208, 0.98));
+    color: var(--rg-ink);
+    font-family: 'Roboto', sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .rg-whats-on::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--motif-url, url('/motifs/paint-blotches.svg'));
+    background-size: 1200px auto;
+    background-repeat: repeat;
+    opacity: 0.22;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .rg-whats-on > .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .rg-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--rg-line);
+    margin-bottom: 3rem;
+  }
+
+  .rg-heading h2 {
+    margin: 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 4vw, 3rem);
+    letter-spacing: 0.08em;
+    text-align: left;
+  }
+
+  .rg-more-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 0.75rem;
+  }
+
+  .rg-more-link a {
+    text-decoration: none;
+    color: var(--rg-ink);
+  }
+
+  .rg-exhibitions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2.5rem;
+  }
+
+  .rg-exhibition {
+    background: rgba(255, 255, 255, 0.86);
+    border: 1px solid var(--rg-line);
+    padding: 1.5rem;
+    box-shadow: 0 18px 40px rgba(40, 30, 20, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    animation: rg-rise 0.8s ease both;
+    animation-delay: var(--delay, 0s);
+  }
+
+  .rg-exhibition header {
+    font-size: 0.7rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--rg-muted);
+  }
+
+  .rg-exhibition__image img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    border: 1px solid rgba(35, 28, 20, 0.12);
+    display: block;
+  }
+
+  .rg-exhibition__content h3 {
+    margin: 0 0 0.5rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+  }
+
+  .rg-exhibition__meta {
+    color: var(--rg-muted);
+    font-size: 0.95rem;
+  }
+
+  .rg-exhibition__button {
+    align-self: flex-start;
+    text-decoration: none;
+    color: var(--rg-ink);
+    border: 1px solid var(--rg-ink);
+    padding: 0.65rem 1.4rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+  }
+
+  .rg-exhibition__button:hover {
+    background: var(--rg-ink);
+    color: #fff;
+  }
+
+  .rg-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--rg-muted);
+  }
+
+  @keyframes rg-rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rg-collections__media,
+    .rg-collections__content,
+    .rg-exhibition {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .rg-collections__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .rg-collections__media img,
+    .rg-collections__placeholder {
+      height: 420px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .rg-heading {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .rg-exhibition__image img {
+      height: 260px;
+    }
   }
 
   /* Paintings Carousel */
@@ -469,8 +762,9 @@ const paintings =
 
   /* Eventos Section */
   .section-eventos {
-    background: #1a1a1a;
+    background: rgba(26, 26, 26, 0.92);
     color: #fff;
+    backdrop-filter: blur(6px);
   }
 
   .section-eventos h2 {
@@ -574,7 +868,7 @@ const paintings =
 
   /* Noticias Section */
   .section-noticias {
-    background: white;
+    background: transparent;
   }
 
   .news-grid {
@@ -624,7 +918,8 @@ const paintings =
 
   /* Quienes Somos Section */
   .section-about {
-    background: #f9f7f5;
+    background: rgba(249, 247, 245, 0.72);
+    backdrop-filter: blur(4px);
   }
 
   .section-about .container {
@@ -695,7 +990,12 @@ const paintings =
 
     .section-intro {
       font-size: 1rem;
-      padding: 0 0.5rem;
+      padding: 1.8rem 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .pattern-surface {
+      background-attachment: scroll, scroll, scroll, scroll;
     }
 
     .paintings-carousel {
@@ -758,53 +1058,3 @@ const paintings =
     }
   }
 </style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const cards = document.querySelectorAll('.painting-card');
-    const lightbox = document.getElementById('lightbox');
-    const imgTarget = document.getElementById('lightbox-img') as HTMLImageElement | null;
-    const captionTarget = document.querySelector('.lightbox-caption') as HTMLElement | null;
-    const closeBtn = document.querySelector('.lightbox-close');
-    const backdrop = document.querySelector('.lightbox-backdrop');
-
-    if (!lightbox || !imgTarget || !captionTarget || !closeBtn || !backdrop) return;
-
-    const open = (src: string, alt: string, caption: string) => {
-      imgTarget.src = src;
-      imgTarget.alt = alt;
-      captionTarget.textContent = caption;
-      lightbox.classList.add('is-open');
-      lightbox.setAttribute('aria-hidden', 'false');
-    };
-
-    const close = () => {
-      lightbox.classList.remove('is-open');
-      lightbox.setAttribute('aria-hidden', 'true');
-      imgTarget.src = '';
-      captionTarget.textContent = '';
-    };
-
-    cards.forEach(card => {
-      card.addEventListener('click', event => {
-        event.preventDefault();
-        const img = card.querySelector('img');
-        if (!(img instanceof HTMLImageElement)) return;
-        const fullSrc = (card as HTMLElement).dataset.full || img.src;
-        const caption =
-          (card as HTMLElement).dataset.caption ||
-          card.querySelector('h3')?.textContent ||
-          '';
-        open(fullSrc, img.alt || caption, caption);
-      });
-    });
-
-    closeBtn.addEventListener('click', close);
-    backdrop.addEventListener('click', close);
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape') {
-        close();
-      }
-    });
-  });
-</script>

@@ -8,14 +8,14 @@ const infoLinks =
   isEn
     ? [
         { href: '/en/#collections', label: 'Collections' },
-        ...(showEventsNews ? [{ href: '/en/#events', label: 'Events' }] : []),
+        ...(showEventsNews ? [{ href: '/en/#events', label: "What's on" }] : []),
         { href: '/en/#layla', label: 'Layla' },
         { href: '/en/#buy', label: 'Buy' },
         { href: '/en/contact', label: 'Contact' },
       ]
     : [
         { href: '/#colecciones', label: 'Colecciones' },
-        ...(showEventsNews ? [{ href: '/#eventos', label: 'Eventos' }] : []),
+        ...(showEventsNews ? [{ href: '/#eventos', label: 'Qué hay' }] : []),
         { href: '/#layla', label: 'Layla' },
         { href: '/#compra', label: 'Compra' },
         { href: '/contacto', label: 'Contacto' },
@@ -43,6 +43,7 @@ const hoursTitle = isEn ? 'Contact Hours' : 'Horarios de Contacto';
 const locationTitle = isEn ? 'Location' : 'Ubicación';
 const legalTitle = isEn ? 'Legal' : 'Avisos legales';
 const madeByText = isEn ? 'made by o7Digital' : 'hecho por o7Digital';
+const logoAlt = 'My Light Art Gallery';
 const copyright =
   isEn
     ? '© 2026 My Light Gallery Art. All rights reserved.'
@@ -55,7 +56,15 @@ const hours =
 
 <footer class="site-footer">
   <div class="container footer-grid">
-    <div>
+    <div class="footer-brand">
+      <img
+        src="/logo/MY%20LIGHT%20ART%20GALLERY%20colourLOGO.png"
+        alt={logoAlt}
+        class="footer-logo"
+      />
+    </div>
+
+    <div class="footer-info">
       <strong>{infoTitle}</strong>
       {infoLinks.map((link) => (
         <p><a href={link.href}>{link.label}</a></p>
@@ -81,8 +90,8 @@ const hours =
 
     <div>
       <strong>{contactTitle}</strong>
-      <p>Email: layla@mylightartgallery.com</p>
-      <p>Tel: +1 (214) 537-6953</p>
+      <p>Email: <a href="mailto:layla@mylightartgallery.com">layla@mylightartgallery.com</a></p>
+      <p>Tel: <a href="tel:+12145376953">+1 (214) 537-6953</a></p>
       <div class="social-icons">
         <a href="https://instagram.com/mylightgalleryart" target="_blank" aria-label="Instagram">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -92,6 +101,11 @@ const hours =
         <a href="https://facebook.com/mylightgalleryart" target="_blank" aria-label="Facebook">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+        </a>
+        <a href="https://www.pinterest.com/mylightgalleryart/" target="_blank" aria-label="Pinterest">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.004 0C5.372 0 0 5.372 0 12.004c0 5.086 3.163 9.435 7.618 11.122-.105-.944-.2-2.391.041-3.426.217-.925 1.397-5.89 1.397-5.89s-.357-.716-.357-1.775c0-1.66.962-2.9 2.158-2.9 1.017 0 1.508.763 1.508 1.676 0 1.022-.651 2.55-.987 3.966-.281 1.19.596 2.159 1.766 2.159 2.12 0 3.75-2.236 3.75-5.462 0-2.855-2.051-4.852-4.98-4.852-3.392 0-5.386 2.544-5.386 5.172 0 1.022.394 2.12.886 2.719.097.118.112.222.083.342-.091.375-.296 1.19-.336 1.356-.053.222-.174.27-.402.163-1.499-.697-2.437-2.886-2.437-4.65 0-3.786 2.751-7.261 7.938-7.261 4.166 0 7.405 2.968 7.405 6.936 0 4.14-2.612 7.477-6.235 7.477-1.218 0-2.365-.632-2.757-1.378l-.748 2.847c-.271 1.043-1.005 2.35-1.498 3.147 1.129.349 2.321.537 3.556.537 6.632 0 12.004-5.372 12.004-12.004C24.008 5.372 18.636 0 12.004 0z"/>
           </svg>
         </a>
       </div>
@@ -106,7 +120,7 @@ const hours =
 
 <style>
   .site-footer {
-    background: #f5f5f5;
+    background: rgb(229, 225, 212);
     padding: 3rem 2rem 1rem;
     margin-top: 4rem;
   }
@@ -118,15 +132,29 @@ const hours =
 
   .footer-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
+    grid-template-columns: minmax(200px, 280px) repeat(4, minmax(200px, 1fr));
+    gap: 1.5rem;
     margin-bottom: 2rem;
+  }
+
+  .footer-brand {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-left: -2cm;
+  }
+
+  .footer-logo {
+    width: 168px;
+    height: auto;
+    display: block;
   }
 
   .footer-grid strong {
     display: block;
     margin-bottom: 1rem;
     font-size: 1.1rem;
+    color: #3b3b3b;
   }
 
   .footer-grid p {
@@ -185,10 +213,20 @@ const hours =
     color: #000;
   }
 
+  @media (max-width: 900px) {
+    .footer-grid {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+  }
+
   @media (max-width: 768px) {
     .footer-bottom {
       flex-direction: column;
       gap: 1rem;
+    }
+
+    .footer-logo {
+      width: 98px;
     }
   }
 </style>
