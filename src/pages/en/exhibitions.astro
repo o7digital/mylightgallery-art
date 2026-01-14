@@ -10,6 +10,7 @@ const paintings =
   paintingsFromWp.length > 0
     ? paintingsFromWp
     : fallbackPaintings.map(item => ({ ...item, link: '#!' }));
+const orderedPaintings = [...paintings].reverse();
 const heroImage = '/gallerie/gallerie-virtuelle.png';
 ---
 
@@ -40,11 +41,11 @@ const heroImage = '/gallerie/gallerie-virtuelle.png';
       <div class="container">
         <div class="rg-exhibitions-header">
           <h2>ALL WORKS</h2>
-          <span class="rg-exhibitions-count">{paintings.length} works</span>
+          <span class="rg-exhibitions-count">{orderedPaintings.length} works</span>
         </div>
 
         <div class="rg-exhibitions-grid">
-          {paintings.map((painting, index) => {
+          {orderedPaintings.map((painting, index) => {
             const paintingHref =
               painting.link && painting.link !== '#!' ? painting.link : painting.image ?? '#!';
             const meta = [painting.dimensions, painting.priceText].filter(Boolean).join(' • ');
@@ -63,7 +64,7 @@ const heroImage = '/gallerie/gallerie-virtuelle.png';
               </article>
             );
           })}
-          {paintings.length === 0 && (
+          {orderedPaintings.length === 0 && (
             <p class="rg-empty">New works coming soon.</p>
           )}
         </div>
