@@ -8,12 +8,12 @@ const navLeft =
     ? [
         { href: '/en/#collections', label: 'Collections' },
         { href: '/en/#collections', label: 'Buy' },
-        ...(showEventsNews ? [{ href: '/en/#events', label: 'Events' }] : []),
+        ...(showEventsNews ? [{ href: '/en/#events', label: "What's on" }] : []),
       ]
     : [
         { href: '/#colecciones', label: 'Colecciones' },
         { href: '/#colecciones', label: 'Compra' },
-        ...(showEventsNews ? [{ href: '/#eventos', label: 'Eventos' }] : []),
+        ...(showEventsNews ? [{ href: '/#eventos', label: 'Qué hay' }] : []),
       ];
 
 const navRight =
@@ -38,6 +38,8 @@ const langPathMap = {
   '/en/privacy': '/aviso-privacidad',
   '/contacto': '/en/contact',
   '/en/contact': '/contacto',
+  '/exhibitions': '/en/exhibitions',
+  '/en/exhibitions': '/exhibitions',
   '/newsletter': '/en/newsletter',
   '/en/newsletter': '/newsletter',
   '/es/condiciones-generales-de-uso': '/en/terms-and-conditions',
