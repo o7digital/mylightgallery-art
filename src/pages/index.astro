@@ -235,6 +235,26 @@ const exhibitionsHref = '/exhibitions';
       linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(238, 230, 218, 0.95));
     color: var(--rg-ink);
     font-family: 'Roboto', sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .rg-collections::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--motif-url, url('/motifs/paint-blotches.svg'));
+    background-size: 1200px auto;
+    background-repeat: repeat;
+    opacity: 0.22;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .rg-collections > .container {
+    position: relative;
+    z-index: 1;
   }
 
   .rg-collections__inner {
@@ -345,6 +365,26 @@ const exhibitionsHref = '/exhibitions';
       linear-gradient(180deg, rgba(240, 232, 220, 0.92), rgba(229, 221, 208, 0.98));
     color: var(--rg-ink);
     font-family: 'Roboto', sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .rg-whats-on::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--motif-url, url('/motifs/paint-blotches.svg'));
+    background-size: 1200px auto;
+    background-repeat: repeat;
+    opacity: 0.22;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .rg-whats-on > .container {
+    position: relative;
+    z-index: 1;
   }
 
   .rg-heading {
