@@ -12,6 +12,7 @@ const paintings =
     ? paintingsFromWp
     : fallbackPaintings.map(item => ({ ...item, link: '#!' }));
 const orderedPaintings = [...paintings].reverse();
+const heroImage = '/gallerie/gallerie-virtuelle.png';
 const introText =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
 const detailBase = '/en/works';
@@ -23,10 +24,25 @@ const detailBase = '/en/works';
   description="Works currently available at the gallery"
 >
   <div class="rg-exhibitions-page rg-exhibitions-list">
-    <section class="rg-exhibitions-intro">
-      <div class="container">
+    <section class="rg-exhibitions-hero">
+      {heroImage ? (
+        <img
+          src={heroImage}
+          alt="Gallery overview"
+          loading="eager"
+          decoding="async"
+        />
+      ) : (
+        <div class="rg-exhibitions-hero__placeholder"></div>
+      )}
+      <header>
         <p class="rg-eyebrow">Exhibitions</p>
         <h1>WHAT&rsquo;S ON</h1>
+      </header>
+    </section>
+
+    <section class="rg-exhibitions-intro">
+      <div class="container">
         <p class="rg-exhibitions-copy">{introText}</p>
       </div>
     </section>
@@ -100,6 +116,53 @@ const detailBase = '/en/works';
     z-index: 1;
   }
 
+  .rg-exhibitions-hero {
+    position: relative;
+    min-height: 55vh;
+    height: 55vh;
+    overflow: hidden;
+    background: #0f0c0a;
+  }
+
+  .rg-exhibitions-hero img,
+  .rg-exhibitions-hero__placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+  }
+
+  .rg-exhibitions-hero__placeholder {
+    background: linear-gradient(140deg, #c9c1b6, #efe9df);
+  }
+
+  .rg-exhibitions-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15, 12, 10, 0.45), rgba(15, 12, 10, 0.1));
+  }
+
+  .rg-exhibitions-hero header {
+    position: absolute;
+    left: 50%;
+    bottom: 15%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #fff;
+    z-index: 1;
+    padding: 0 1.5rem;
+  }
+
+  .rg-exhibitions-hero h1 {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: clamp(2.8rem, 6vw, 4rem);
+    letter-spacing: 0.08em;
+    margin: 0.5rem 0 0;
+    text-transform: uppercase;
+  }
+
   .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -107,15 +170,7 @@ const detailBase = '/en/works';
   }
 
   .rg-exhibitions-intro {
-    padding: 5rem 2rem 2.5rem;
-  }
-
-  .rg-exhibitions-intro h1 {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: clamp(2.8rem, 6vw, 4rem);
-    letter-spacing: 0.08em;
-    margin: 0.5rem 0 1.5rem;
-    text-transform: uppercase;
+    padding: 3rem 2rem 2.5rem;
   }
 
   .rg-exhibitions-copy {
@@ -216,6 +271,11 @@ const detailBase = '/en/works';
   }
 
   @media (max-width: 900px) {
+    .rg-exhibitions-hero {
+      height: 45vh;
+      min-height: 320px;
+    }
+
     .rg-exhibitions-grid {
       grid-template-columns: 1fr;
     }
