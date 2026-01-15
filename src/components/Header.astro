@@ -51,6 +51,12 @@ const langPathMap = {
   '/es/impuestos-texas': '/en/texas-taxes',
   '/en/texas-taxes': '/es/impuestos-texas',
 };
+const dynamicSwitch =
+  normalizedPath.startsWith('/obras/')
+    ? normalizedPath.replace('/obras/', '/en/works/')
+    : normalizedPath.startsWith('/en/works/')
+      ? normalizedPath.replace('/en/works/', '/obras/')
+      : null;
 const fallbackSwitch =
   lang === 'en'
     ? normalizedPath === '/en'
@@ -59,7 +65,7 @@ const fallbackSwitch =
     : normalizedPath === '/'
       ? '/en/'
       : `/en${normalizedPath}`;
-const switchHref = langPathMap[normalizedPath] ?? fallbackSwitch;
+const switchHref = langPathMap[normalizedPath] ?? dynamicSwitch ?? fallbackSwitch;
 const switchLang = lang === 'en' ? { href: switchHref, label: 'ES' } : { href: switchHref, label: 'EN' };
 ---
 

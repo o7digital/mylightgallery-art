@@ -1,0 +1,272 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getProducts } from '../../../lib/wp';
+import { fallbackPaintings } from '../../../lib/fallbackPaintings';
+import { slugify } from '../../../lib/slugify';
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+const paintingsFromWp = (await getProducts(120)).filter(painting => painting.image);
+const paintings =
+  paintingsFromWp.length > 0
+    ? paintingsFromWp
+    : fallbackPaintings.map(item => ({ ...item, link: '#!', slug: slugify(item.title) }));
+const painting = paintings.find(
+  item => (item.slug ?? slugify(item.title)) === slug
+);
+
+const paintingTitle = painting?.title ?? 'Artwork not found';
+const paintingImage = painting?.image ?? '/gallerie/gallerie-virtuelle.png';
+const detailText = painting?.description || 'Original artwork.';
+const dimensions = painting?.dimensions ?? '—';
+const pageTitle = painting ? `${painting.title} – My Light Gallery Art` : 'Artwork – My Light Gallery Art';
+const description = painting?.description || 'Artwork details available from the gallery.';
+const phoneLabel = '+1 (214) 537-6953';
+const phoneHref = 'tel:+12145376953';
+const email = 'layla@mylightartgallery.com';
+const currentUrl = Astro.url?.href ?? '';
+const shareUrl = encodeURIComponent(currentUrl);
+const shareImage = encodeURIComponent(painting?.image ?? '');
+const shareTitle = encodeURIComponent(paintingTitle);
+const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
+const pinterestShare =
+  `https://pinterest.com/pin/create/button/?url=${shareUrl}&media=${shareImage}&description=${shareTitle}`;
+---
+
+<BaseLayout lang="en" title={pageTitle} description={description}>
+  <div class="rg-artwork-page">
+    <section class="rg-artwork-hero">
+      <div class="container">
+        <a class="rg-back-link" href="/en/exhibitions">← Back to works</a>
+      </div>
+    </section>
+
+    <section class="rg-artwork-content">
+      <div class="container rg-artwork-grid">
+        <div class="rg-artwork-images">
+          <div class="rg-artwork-visual">
+            <span class="rg-artwork-label">Without frame</span>
+            {painting?.image ? (
+              <img src={paintingImage} alt={paintingTitle} loading="lazy" decoding="async" />
+            ) : (
+              <div class="rg-artwork-placeholder"></div>
+            )}
+          </div>
+          <div class="rg-artwork-visual rg-artwork-visual--framed">
+            <span class="rg-artwork-label">With frame</span>
+            {painting?.image ? (
+              <img src={paintingImage} alt={`${paintingTitle} framed`} loading="lazy" decoding="async" />
+            ) : (
+              <div class="rg-artwork-placeholder"></div>
+            )}
+          </div>
+        </div>
+
+        <aside class="rg-artwork-details">
+          <h1>{paintingTitle}</h1>
+          <dl class="rg-artwork-specs">
+            <div>
+              <dt>Details</dt>
+              <dd>{detailText}</dd>
+            </div>
+            <div>
+              <dt>Dimensions</dt>
+              <dd>{dimensions}</dd>
+            </div>
+          </dl>
+          <p class="rg-artwork-sale">This artwork is for sale.</p>
+          <p class="rg-artwork-contact">
+            Send an enquiry or contact us:
+            <a href={phoneHref}>{phoneLabel}</a>
+            <span aria-hidden="true"> · </span>
+            <a href={`mailto:${email}`}>{email}</a>
+          </p>
+          <div class="rg-artwork-share">
+            <span>Share</span>
+            <a href={facebookShare} target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href={pinterestShare} target="_blank" rel="noopener noreferrer">Pinterest</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .rg-artwork-page {
+    --rg-ink: #1d1a16;
+    --rg-muted: #6f675f;
+    --rg-line: #d7cfc2;
+    --rg-paper: #fbf8f2;
+    background:
+      radial-gradient(circle at 12% 15%, rgba(255, 255, 255, 0.85), transparent 55%),
+      linear-gradient(140deg, rgba(248, 244, 238, 0.96), rgba(231, 222, 210, 0.98));
+    color: var(--rg-ink);
+    font-family: 'Roboto', sans-serif;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .rg-artwork-hero {
+    padding: 3.5rem 2rem 0;
+  }
+
+  .rg-back-link {
+    text-decoration: none;
+    color: var(--rg-ink);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 0.75rem;
+  }
+
+  .rg-artwork-content {
+    padding: 2.5rem 2rem 6rem;
+  }
+
+  .rg-artwork-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .rg-artwork-images {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .rg-artwork-visual {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--rg-line);
+    padding: 1.5rem;
+    box-shadow: 0 18px 40px rgba(40, 30, 20, 0.1);
+  }
+
+  .rg-artwork-visual img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .rg-artwork-visual--framed img {
+    border: 12px solid #5a4636;
+    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.25);
+  }
+
+  .rg-artwork-label {
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    font-size: 0.7rem;
+    color: var(--rg-muted);
+    margin-bottom: 0.85rem;
+  }
+
+  .rg-artwork-placeholder {
+    width: 100%;
+    height: 360px;
+    background: rgba(210, 200, 190, 0.4);
+  }
+
+  .rg-artwork-details h1 {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    letter-spacing: 0.08em;
+    margin: 0 0 1.5rem;
+    text-transform: uppercase;
+  }
+
+  .rg-artwork-specs {
+    margin: 0 0 1.5rem;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .rg-artwork-specs div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--rg-line);
+  }
+
+  .rg-artwork-specs dt {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .rg-artwork-specs dd {
+    margin: 0;
+    color: var(--rg-muted);
+    text-align: right;
+  }
+
+  .rg-artwork-sale {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    margin: 0 0 1.25rem;
+  }
+
+  .rg-artwork-contact {
+    color: var(--rg-muted);
+    margin: 0 0 1.75rem;
+    line-height: 1.6;
+  }
+
+  .rg-artwork-contact a {
+    color: var(--rg-ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rg-line);
+  }
+
+  .rg-artwork-share {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.7rem;
+  }
+
+  .rg-artwork-share a {
+    text-decoration: none;
+    color: var(--rg-ink);
+    border: 1px solid var(--rg-ink);
+    padding: 0.45rem 0.9rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+  }
+
+  @media (max-width: 960px) {
+    .rg-artwork-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .rg-artwork-specs dd {
+      text-align: left;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .rg-artwork-visual {
+      padding: 1rem;
+    }
+
+    .rg-artwork-placeholder {
+      height: 240px;
+    }
+
+    .rg-artwork-specs div {
+      flex-direction: column;
+    }
+  }
+</style>

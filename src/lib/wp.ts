@@ -9,6 +9,7 @@ type ProductCard = {
   image?: string | null;
   priceText?: string | null;
   dimensions?: string | null;
+  description?: string | null;
 };
 
 const baseUrl =
@@ -173,6 +174,7 @@ export const getProducts = async (limit = 100): Promise<ProductCard[]> => {
         const image =
           normalizeImage(item.images?.[0]?.src) ||
           extractFirstImageSrc(item.description);
+        const description = stripTags(item.description) || null;
         return {
           id: item.id,
           title,
@@ -181,6 +183,7 @@ export const getProducts = async (limit = 100): Promise<ProductCard[]> => {
           image,
           priceText,
           dimensions,
+          description,
         };
       })
       .filter(item => item.image);

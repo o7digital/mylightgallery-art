@@ -4,6 +4,7 @@ import Hero from '../components/Hero.astro';
 import { getProducts } from '../lib/wp';
 import { fallbackPaintings } from '../lib/fallbackPaintings';
 import { getBooleanEnv } from '../lib/env';
+import { slugify } from '../lib/slugify';
 
 export const prerender = false;
 
@@ -21,6 +22,7 @@ const orderedPaintings = [...paintings].reverse();
 const featuredPainting = orderedPaintings.find(painting => painting.image);
 const whatsOnPaintings = orderedPaintings.filter(painting => painting.image).slice(0, 2);
 const exhibitionsHref = '/exhibitions';
+const detailBase = '/obras';
 ---
 
 <BaseLayout
@@ -69,8 +71,8 @@ const exhibitionsHref = '/exhibitions';
 
         <div class="rg-exhibitions">
           {whatsOnPaintings.map((painting, index) => {
-            const paintingHref =
-              painting.link && painting.link !== '#!' ? painting.link : exhibitionsHref;
+            const paintingSlug = painting.slug ?? slugify(painting.title);
+            const paintingHref = `${detailBase}/${paintingSlug}`;
             const meta = [painting.dimensions, painting.priceText].filter(Boolean).join(' • ');
             return (
               <article class="rg-exhibition" style={`--delay: ${index * 0.12}s`}>

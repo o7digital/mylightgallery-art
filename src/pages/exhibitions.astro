@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getProducts } from '../lib/wp';
 import { fallbackPaintings } from '../lib/fallbackPaintings';
+import { slugify } from '../lib/slugify';
 
 export const prerender = false;
 
@@ -11,46 +12,34 @@ const paintings =
     ? paintingsFromWp
     : fallbackPaintings.map(item => ({ ...item, link: '#!' }));
 const orderedPaintings = [...paintings].reverse();
-const heroImage = '/gallerie/gallerie-virtuelle.png';
+const introText =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+const detailBase = '/obras';
 ---
 
 <BaseLayout
   title="Qué hay – My Light Gallery Art"
   description="Obras disponibles en la galería"
 >
-  <div class="rg-exhibitions-page">
-    <section class="rg-exhibitions-hero">
-      {heroImage ? (
-        <img
-          src={heroImage}
-          alt="Galería virtual"
-          loading="eager"
-          decoding="async"
-        />
-      ) : (
-        <div class="rg-exhibitions-hero__placeholder"></div>
-      )}
-      <header>
+  <div class="rg-exhibitions-page rg-exhibitions-list">
+    <section class="rg-exhibitions-intro">
+      <div class="container">
         <p class="rg-eyebrow">Exhibiciones</p>
-        <h1>QU&Eacute; HAY</h1>
-      </header>
+        <h1>QUÉ HAY</h1>
+        <p class="rg-exhibitions-copy">{introText}</p>
+      </div>
     </section>
 
     <section class="rg-exhibitions-grid-section">
       <div class="container">
-        <div class="rg-exhibitions-header">
-          <h2>TODAS LAS OBRAS</h2>
-          <span class="rg-exhibitions-count">{orderedPaintings.length} obras</span>
-        </div>
-
         <div class="rg-exhibitions-grid">
           {orderedPaintings.map((painting, index) => {
-            const paintingHref =
-              painting.link && painting.link !== '#!' ? painting.link : painting.image ?? '#!';
+            const paintingSlug = painting.slug ?? slugify(painting.title);
+            const paintingHref = `${detailBase}/${paintingSlug}`;
             const meta = [painting.dimensions, painting.priceText].filter(Boolean).join(' • ');
             return (
               <article class="rg-exhibitions-item" style={`--delay: ${index * 0.04}s`}>
-                <a href={paintingHref}>
+                <a class="rg-exhibitions-image" href={paintingHref}>
                   <img
                     src={painting.image}
                     alt={painting.title}
@@ -58,8 +47,11 @@ const heroImage = '/gallerie/gallerie-virtuelle.png';
                     decoding="async"
                   />
                 </a>
-                <p class="rg-exhibitions-title">{painting.title}</p>
-                {meta && <p class="rg-exhibitions-meta">{meta}</p>}
+                <div class="rg-exhibitions-details">
+                  <h2 class="rg-exhibitions-title">{painting.title}</h2>
+                  {meta && <p class="rg-exhibitions-meta">{meta}</p>}
+                  <a class="rg-exhibitions-link" href={paintingHref}>Más info</a>
+                </div>
               </article>
             );
           })}
@@ -77,6 +69,7 @@ const heroImage = '/gallerie/gallerie-virtuelle.png';
     --rg-ink: #1d1a16;
     --rg-muted: #6f675f;
     --rg-line: #d7cfc2;
+    --rg-paper: #fbf8f2;
     --motif-url: url('/motifs/paint-blotches.svg');
     background:
       radial-gradient(circle at 12% 15%, rgba(255, 255, 255, 0.85), transparent 55%),
@@ -106,51 +99,30 @@ const heroImage = '/gallerie/gallerie-virtuelle.png';
     z-index: 1;
   }
 
-  .rg-exhibitions-hero {
-    position: relative;
-    min-height: 55vh;
-    height: 55vh;
-    overflow: hidden;
-    background: #0f0c0a;
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
   }
 
-  .rg-exhibitions-hero img,
-  .rg-exhibitions-hero__placeholder {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: center;
-    display: block;
+  .rg-exhibitions-intro {
+    padding: 5rem 2rem 2.5rem;
   }
 
-  .rg-exhibitions-hero__placeholder {
-    background: linear-gradient(140deg, #c9c1b6, #efe9df);
-  }
-
-  .rg-exhibitions-hero::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(15, 12, 10, 0.45), rgba(15, 12, 10, 0.1));
-  }
-
-  .rg-exhibitions-hero header {
-    position: absolute;
-    left: 50%;
-    bottom: 15%;
-    transform: translateX(-50%);
-    text-align: center;
-    color: #fff;
-    z-index: 1;
-    padding: 0 1.5rem;
-  }
-
-  .rg-exhibitions-hero h1 {
+  .rg-exhibitions-intro h1 {
     font-family: 'Times New Roman', Times, serif;
-    font-size: clamp(2.8rem, 6vw, 4.6rem);
-    letter-spacing: 0.1em;
-    margin: 0.5rem 0 0;
+    font-size: clamp(2.8rem, 6vw, 4rem);
+    letter-spacing: 0.08em;
+    margin: 0.5rem 0 1.5rem;
     text-transform: uppercase;
+  }
+
+  .rg-exhibitions-copy {
+    max-width: 720px;
+    color: var(--rg-muted);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin: 0;
   }
 
   .rg-eyebrow {
@@ -161,75 +133,62 @@ const heroImage = '/gallerie/gallerie-virtuelle.png';
   }
 
   .rg-exhibitions-grid-section {
-    padding: 5rem 2rem 6rem;
-  }
-
-  .rg-exhibitions-grid-section .container {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .rg-exhibitions-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 2rem;
-    border-bottom: 1px solid var(--rg-line);
-    padding-bottom: 1.5rem;
-    margin-bottom: 3rem;
-  }
-
-  .rg-exhibitions-header h2 {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: clamp(2rem, 4vw, 3rem);
-    letter-spacing: 0.08em;
-    margin: 0;
-    text-transform: uppercase;
-  }
-
-  .rg-exhibitions-count {
-    text-transform: uppercase;
-    letter-spacing: 0.3em;
-    font-size: 0.7rem;
-    color: var(--rg-muted);
+    padding: 2.5rem 2rem 6rem;
   }
 
   .rg-exhibitions-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 2.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.75rem 2.5rem;
   }
 
   .rg-exhibitions-item {
-    background: rgba(255, 255, 255, 0.86);
+    background: rgba(255, 255, 255, 0.9);
     border: 1px solid var(--rg-line);
-    padding: 1rem;
+    padding: 1.5rem;
     box-shadow: 0 18px 40px rgba(40, 30, 20, 0.12);
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1.25rem;
     animation: rg-rise 0.8s ease both;
     animation-delay: var(--delay, 0s);
   }
 
-  .rg-exhibitions-item img {
+  .rg-exhibitions-image img {
     width: 100%;
-    height: 280px;
+    height: 320px;
     object-fit: cover;
     display: block;
     border: 1px solid rgba(35, 28, 20, 0.12);
   }
 
+  .rg-exhibitions-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
   .rg-exhibitions-title {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     margin: 0;
   }
 
   .rg-exhibitions-meta {
     margin: 0;
     color: var(--rg-muted);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+  }
+
+  .rg-exhibitions-link {
+    align-self: flex-start;
+    text-decoration: none;
+    color: var(--rg-ink);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.78rem;
+    border-bottom: 1px solid var(--rg-ink);
+    padding-bottom: 0.35rem;
   }
 
   .rg-empty {
@@ -255,19 +214,15 @@ const heroImage = '/gallerie/gallerie-virtuelle.png';
     }
   }
 
-  @media (max-width: 768px) {
-    .rg-exhibitions-hero {
-      height: 45vh;
-      min-height: 320px;
+  @media (max-width: 900px) {
+    .rg-exhibitions-grid {
+      grid-template-columns: 1fr;
     }
+  }
 
-    .rg-exhibitions-header {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .rg-exhibitions-item img {
-      height: 220px;
+  @media (max-width: 600px) {
+    .rg-exhibitions-image img {
+      height: 240px;
     }
   }
 </style>
