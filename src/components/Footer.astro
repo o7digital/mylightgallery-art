@@ -220,13 +220,20 @@ const hours =
   }
 
   @media (max-width: 768px) {
+    .footer-brand {
+      margin-left: 0;
+      justify-content: center;
+    }
+
     .footer-bottom {
       flex-direction: column;
       gap: 1rem;
     }
 
     .footer-logo {
-      width: 98px;
+      width: 140px;
+      height: auto;
+      object-fit: contain;
     }
   }
 </style>

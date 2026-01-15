@@ -13,8 +13,6 @@ const paintings =
     : fallbackPaintings.map(item => ({ ...item, link: '#!' }));
 const orderedPaintings = [...paintings].reverse();
 const heroImage = '/gallerie/gallerie-virtuelle.png';
-const introText =
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
 const detailBase = '/obras';
 ---
 
@@ -41,9 +39,7 @@ const detailBase = '/obras';
     </section>
 
     <section class="rg-exhibitions-intro">
-      <div class="container">
-        <p class="rg-exhibitions-copy">{introText}</p>
-      </div>
+      <div class="container"></div>
     </section>
 
     <section class="rg-exhibitions-grid-section">
