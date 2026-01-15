@@ -119,6 +119,28 @@ const extractFirstImageSrc = (html?: string | null) => {
   return normalizeImage(match?.[1]);
 };
 
+const mapProduct = (item: Record<string, any>): ProductCard | null => {
+  const rawTitle = stripTags(item.name);
+  if (!rawTitle) return null;
+  const dimensions = deriveDimensions(rawTitle, item.dimensions);
+  const title = stripDimensionsFromTitle(rawTitle, dimensions);
+  const priceText = formatPrice(item.price, item.regular_price);
+  const image =
+    normalizeImage(item.images?.[0]?.src) ||
+    extractFirstImageSrc(item.description);
+  const description = stripTags(item.description) || null;
+  return {
+    id: item.id,
+    title,
+    slug: item.slug,
+    link: item.permalink,
+    image,
+    priceText,
+    dimensions,
+    description,
+  };
+};
+
 const getCachedProducts = (limit: number) => {
   if (!productsCache) return null;
   const { expiresAt, items, limit: cachedLimit } = productsCache;
@@ -166,32 +188,39 @@ export const getProducts = async (limit = 100): Promise<ProductCard[]> => {
     }
     const items = (await res.json()) as Array<Record<string, any>>;
     const products = items
-      .map(item => {
-        const rawTitle = stripTags(item.name);
-        const dimensions = deriveDimensions(rawTitle, item.dimensions);
-        const title = stripDimensionsFromTitle(rawTitle, dimensions);
-        const priceText = formatPrice(item.price, item.regular_price);
-        const image =
-          normalizeImage(item.images?.[0]?.src) ||
-          extractFirstImageSrc(item.description);
-        const description = stripTags(item.description) || null;
-        return {
-          id: item.id,
-          title,
-          slug: item.slug,
-          link: item.permalink,
-          image,
-          priceText,
-          dimensions,
-          description,
-        };
-      })
-      .filter(item => item.image);
+      .map(mapProduct)
+      .filter((item): item is ProductCard => Boolean(item?.image));
 
     setCache(products, limit);
     return products;
   } catch (error) {
     console.warn('WP products fetch error', error);
     return stale ?? [];
+  }
+};
+
+export const getProductBySlug = async (slug: string): Promise<ProductCard | null> => {
+  if (!baseUrl) return null;
+  const url = new URL(`${baseUrl}/wc/v3/products`);
+  url.searchParams.set('slug', slug);
+  url.searchParams.set('per_page', '1');
+  url.searchParams.set(
+    '_fields',
+    'id,name,slug,permalink,images,price,regular_price,dimensions,description'
+  );
+
+  try {
+    const res = await fetchFromWP(url.toString());
+    if (!res.ok) {
+      console.warn('WP product slug fetch failed', res.status, res.statusText);
+      return null;
+    }
+    const items = (await res.json()) as Array<Record<string, any>>;
+    const item = items[0];
+    const mapped = item ? mapProduct(item) : null;
+    return mapped && mapped.image ? mapped : null;
+  } catch (error) {
+    console.warn('WP product slug fetch error', error);
+    return null;
   }
 };
