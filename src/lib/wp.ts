@@ -57,6 +57,13 @@ const fetchFromWP = async (path: string, init?: RequestInit) => {
 const stripTags = (value?: string | null) =>
   (value || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
 
+const normalizeMediumText = (value: string) =>
+  value.replace(/\bolio\b/gi, match => {
+    if (match === match.toUpperCase()) return 'ÓLEO';
+    if (match[0] === match[0].toUpperCase()) return 'Óleo';
+    return 'óleo';
+  });
+
 const normalizeImage = (src?: string | null) => {
   if (!src) return null;
   return src.replace('http://', 'https://');
@@ -120,7 +127,7 @@ const extractFirstImageSrc = (html?: string | null) => {
 };
 
 const mapProduct = (item: Record<string, any>): ProductCard | null => {
-  const rawTitle = stripTags(item.name);
+  const rawTitle = normalizeMediumText(stripTags(item.name));
   if (!rawTitle) return null;
   const dimensions = deriveDimensions(rawTitle, item.dimensions);
   const title = stripDimensionsFromTitle(rawTitle, dimensions);
@@ -128,7 +135,8 @@ const mapProduct = (item: Record<string, any>): ProductCard | null => {
   const image =
     normalizeImage(item.images?.[0]?.src) ||
     extractFirstImageSrc(item.description);
-  const description = stripTags(item.description) || null;
+  const descriptionRaw = stripTags(item.description);
+  const description = descriptionRaw ? normalizeMediumText(descriptionRaw) : null;
   return {
     id: item.id,
     title,
