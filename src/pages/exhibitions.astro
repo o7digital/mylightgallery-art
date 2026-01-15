@@ -107,6 +107,7 @@ const detailBase = '/obras';
     mix-blend-mode: multiply;
     pointer-events: none;
     z-index: 0;
+    animation: motif-drift 40s linear infinite;
   }
 
   .rg-exhibitions-page > section,
@@ -252,6 +253,18 @@ const detailBase = '/obras';
     color: var(--rg-muted);
   }
 
+  @keyframes motif-drift {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 45% 35%;
+    }
+    100% {
+      background-position: 0% 70%;
+    }
+  }
+
   @keyframes rg-rise {
     from {
       opacity: 0;
@@ -264,6 +277,10 @@ const detailBase = '/obras';
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .rg-exhibitions-page::before {
+      animation: none;
+    }
+
     .rg-exhibitions-item {
       animation: none;
     }

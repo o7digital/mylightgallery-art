@@ -190,6 +190,26 @@ const detailBase = '/en/works';
     background-position: 10% 0%, 90% 0%, center 30%, center;
     background-repeat: no-repeat;
     background-attachment: scroll, scroll, fixed, scroll;
+    overflow: hidden;
+  }
+
+  .pattern-surface::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--motif-url);
+    background-size: 1400px auto;
+    background-repeat: repeat;
+    opacity: 0.2;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    animation: motif-drift 36s linear infinite;
+    z-index: 0;
+  }
+
+  .pattern-surface > * {
+    position: relative;
+    z-index: 1;
   }
 
   .section-intro {
@@ -257,6 +277,7 @@ const detailBase = '/en/works';
     mix-blend-mode: multiply;
     pointer-events: none;
     z-index: 0;
+    animation: motif-drift 42s linear infinite;
   }
 
   .rg-collections > .container {
@@ -387,6 +408,7 @@ const detailBase = '/en/works';
     mix-blend-mode: multiply;
     pointer-events: none;
     z-index: 0;
+    animation: motif-drift 38s linear infinite;
   }
 
   .rg-whats-on > .container {
@@ -494,6 +516,18 @@ const detailBase = '/en/works';
     color: var(--rg-muted);
   }
 
+  @keyframes motif-drift {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 40% 30%;
+    }
+    100% {
+      background-position: 0% 60%;
+    }
+  }
+
   @keyframes rg-rise {
     from {
       opacity: 0;
@@ -506,6 +540,13 @@ const detailBase = '/en/works';
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .pattern-surface::before,
+    .rg-collections::before,
+    .rg-whats-on::before,
+    .section-about::before {
+      animation: none;
+    }
+
     .rg-collections__media,
     .rg-collections__content,
     .rg-exhibition {
@@ -867,13 +908,31 @@ const detailBase = '/en/works';
 
   /* About */
   .section-about {
+    position: relative;
     background: rgba(249, 247, 245, 0.72);
     backdrop-filter: blur(4px);
+    overflow: hidden;
+  }
+
+  .section-about::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--motif-url, url('/motifs/paint-blotches.svg'));
+    background-size: 1400px auto;
+    background-repeat: repeat;
+    opacity: 0.18;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    animation: motif-drift 40s linear infinite;
+    z-index: 0;
   }
 
   .section-about .container {
     max-width: 1400px;
     padding: 0 1rem;
+    position: relative;
+    z-index: 1;
   }
 
   .about-content {
