@@ -86,19 +86,15 @@ const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
               <div class="rg-artwork-placeholder"></div>
             )}
           </div>
-          <div class="rg-artwork-visual rg-artwork-visual--framed">
-            <span class="rg-artwork-label">Con marco</span>
-            {paintingImage ? (
-              <img
-                src={paintingImage}
-                alt={`${paintingTitle} con marco`}
-                loading="lazy"
-                decoding="async"
-                data-zoomable
-              />
-            ) : (
-              <div class="rg-artwork-placeholder"></div>
-            )}
+          <div
+            class="rg-artwork-visual rg-artwork-certificate"
+            id="certificate-panel"
+            data-certificate-panel
+          >
+            <span class="rg-artwork-label">Certificado de autenticidad</span>
+            <div class="rg-certificate-card">
+              <p>Certificado de Autenticidad (COA)</p>
+            </div>
           </div>
         </div>
 
@@ -115,6 +111,15 @@ const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
             </div>
           </dl>
           <p class="rg-artwork-sale">Esta obra está en venta.</p>
+          <button
+            class="rg-certificate-btn"
+            type="button"
+            data-certificate-toggle
+            aria-controls="certificate-panel"
+            aria-expanded="false"
+          >
+            OCA Certificate
+          </button>
           <p class="rg-artwork-contact">
             Envíe una consulta o contáctenos:
             <a href={phoneHref}>{phoneLabel}</a>
@@ -156,6 +161,8 @@ const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
   const lightboxImage = lightbox?.querySelector('img');
   const lightboxClose = lightbox?.querySelector('.rg-lightbox-close');
   const zoomables = document.querySelectorAll('[data-zoomable]');
+  const certificateToggle = document.querySelector('[data-certificate-toggle]');
+  const certificatePanel = document.querySelector('[data-certificate-panel]');
   let zoomed = false;
 
   const openLightbox = (src, alt) => {
@@ -198,6 +205,15 @@ const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape') {
       closeLightbox();
+    }
+  });
+
+  certificateToggle?.addEventListener('click', () => {
+    if (!certificatePanel) return;
+    const isVisible = certificatePanel.classList.toggle('is-visible');
+    certificateToggle.setAttribute('aria-expanded', String(isVisible));
+    if (isVisible) {
+      certificatePanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   });
 </script>
@@ -264,9 +280,23 @@ const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
     cursor: zoom-in;
   }
 
-  .rg-artwork-visual--framed img {
-    border: 12px solid #5a4636;
-    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.25);
+  .rg-artwork-certificate {
+    display: none;
+  }
+
+  .rg-artwork-certificate.is-visible {
+    display: block;
+  }
+
+  .rg-certificate-card {
+    border: 1px dashed rgba(90, 70, 54, 0.45);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 0.8rem;
+    color: var(--rg-muted);
+    background: rgba(255, 255, 255, 0.7);
   }
 
   .rg-artwork-label {
@@ -324,6 +354,25 @@ const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
     letter-spacing: 0.12em;
     font-weight: 600;
     margin: 0 0 1.25rem;
+  }
+
+  .rg-certificate-btn {
+    align-self: flex-start;
+    margin: 0 0 1.5rem;
+    background: transparent;
+    border: 1px solid var(--rg-ink);
+    color: var(--rg-ink);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.75rem;
+    padding: 0.7rem 1.4rem;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .rg-certificate-btn:hover {
+    background: var(--rg-ink);
+    color: #fff;
   }
 
   .rg-artwork-contact {
