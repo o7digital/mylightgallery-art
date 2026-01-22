@@ -67,7 +67,9 @@ const normalizeMediumText = (value: string) =>
 
 const normalizeImage = (src?: string | null) => {
   if (!src) return null;
-  return src.replace('http://', 'https://');
+  const httpsSrc = src.replace('http://', 'https://');
+  // Prefer full-size WordPress media instead of small thumbnails (e.g., -300x300.jpg).
+  return httpsSrc.replace(/-\d+x\d+(?=\.(?:jpe?g|png|webp))/i, '');
 };
 
 const formatPrice = (price?: string | null, regular?: string | null) => {

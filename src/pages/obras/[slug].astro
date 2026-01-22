@@ -453,11 +453,12 @@ const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
   }
 
   .rg-lightbox img {
-    max-width: 90vw;
-    max-height: 80vh;
+    width: min(90vw, 1200px);
+    max-height: 85vh;
     object-fit: contain;
     cursor: zoom-in;
     transition: transform 0.3s ease;
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
   }
 
   .rg-lightbox img.is-zoomed {
