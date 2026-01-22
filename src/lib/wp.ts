@@ -9,6 +9,7 @@ type ProductCard = {
   image?: string | null;
   priceText?: string | null;
   dimensions?: string | null;
+  medium?: string | null;
   description?: string | null;
 };
 
@@ -94,30 +95,36 @@ const deriveDimensions = (
   dimensions?: { width?: string; height?: string; length?: string }
 ) => {
   if (dimensions?.width && dimensions?.height) {
-    return `${dimensions.width} x ${dimensions.height} in`;
+    return `${dimensions.width} x ${dimensions.height}`;
   }
 
   const match = name.match(/(\d{2,3})\s*[xX]\s*(\d{2,3})/);
   if (match) {
-    return `${match[1]} x ${match[2]} in`;
+    return `${match[1]} x ${match[2]}`;
   }
 
   return null;
 };
 
-const stripDimensionsFromTitle = (title: string, dimensions?: string | null) => {
-  const dimensionPattern = /\b\d{2,3}\s*[xX]\s*\d{2,3}\b(?:\s*in\.?)?/;
-  const cleaned = title
-    .replace(dimensionPattern, '')
-    .replace(/[()\-–—]+/g, ' ')
-    .replace(/\s{2,}/g, ' ')
-    .trim();
-
-  if (cleaned) return cleaned;
-  if (dimensions) {
-    return title.replace(dimensions, '').replace(/\s{2,}/g, ' ').trim() || title;
+const getDimensionsFromAttributes = (attributes: Array<Record<string, any>>) => {
+  for (const attr of attributes ?? []) {
+    const name = stripTags(attr?.name).trim();
+    if (name) return name;
   }
-  return title;
+  return null;
+};
+
+const getMediumFromAttributes = (attributes: Array<Record<string, any>>) => {
+  for (const attr of attributes ?? []) {
+    const options = Array.isArray(attr?.options) ? attr.options : [];
+    for (const option of options) {
+      const cleaned = stripTags(typeof option === 'string' ? option : String(option)).trim();
+      if (cleaned) {
+        return normalizeMediumText(cleaned);
+      }
+    }
+  }
+  return null;
 };
 
 const extractFirstImageSrc = (html?: string | null) => {
@@ -129,8 +136,11 @@ const extractFirstImageSrc = (html?: string | null) => {
 const mapProduct = (item: Record<string, any>): ProductCard | null => {
   const rawTitle = normalizeMediumText(stripTags(item.name));
   if (!rawTitle) return null;
-  const dimensions = deriveDimensions(rawTitle, item.dimensions);
-  const title = stripDimensionsFromTitle(rawTitle, dimensions);
+  const attributes = Array.isArray(item.attributes) ? item.attributes : [];
+  const dimensions =
+    getDimensionsFromAttributes(attributes) || deriveDimensions(rawTitle, item.dimensions);
+  const medium = getMediumFromAttributes(attributes);
+  const title = rawTitle;
   const priceText = formatPrice(item.price, item.regular_price);
   const image =
     normalizeImage(item.images?.[0]?.src) ||
@@ -145,6 +155,7 @@ const mapProduct = (item: Record<string, any>): ProductCard | null => {
     image,
     priceText,
     dimensions,
+    medium,
     description,
   };
 };
@@ -185,7 +196,7 @@ export const getProducts = async (limit = 100): Promise<ProductCard[]> => {
   url.searchParams.set('orderby', 'date');
   url.searchParams.set(
     '_fields',
-    'id,name,slug,permalink,images,price,regular_price,dimensions,description'
+    'id,name,slug,permalink,images,price,regular_price,dimensions,description,attributes'
   );
 
   try {
@@ -214,7 +225,7 @@ export const getProductBySlug = async (slug: string): Promise<ProductCard | null
   url.searchParams.set('per_page', '1');
   url.searchParams.set(
     '_fields',
-    'id,name,slug,permalink,images,price,regular_price,dimensions,description'
+    'id,name,slug,permalink,images,price,regular_price,dimensions,description,attributes'
   );
 
   try {

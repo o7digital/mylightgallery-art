@@ -7,7 +7,8 @@ import { slugify } from '../../../lib/slugify';
 export const prerender = false;
 
 const { slug } = Astro.params;
-const normalizeSlug = (value = '') => value.replace(/-\d{2,3}x\d{2,3}.*$/i, '');
+const normalizeSlug = (value = '') =>
+  value.toLowerCase().replace(/-\d{2,3}x\d{2,3}.*$/i, '').replace(/-+$/g, '');
 const humanizeSlug = (value = '') => {
   const cleaned = normalizeSlug(value).replace(/-/g, ' ').trim().toLowerCase();
   if (!cleaned) return 'Woman with Moon';
@@ -28,17 +29,22 @@ const paintings =
     ? paintingsFromWp
     : fallbackPaintings.map(item => ({ ...item, link: '#!', slug: slugify(item.title) }));
 
-let painting = paintings.find(
-  item => (item.slug ?? slugify(item.title)) === slug
-);
+const findPainting = (items: typeof paintings, targetSlug?: string) => {
+  if (!targetSlug) return undefined;
+  const normalizedTarget = normalizeSlug(targetSlug);
+  return items.find(item => {
+    const itemSlug = item.slug ?? slugify(item.title);
+    return itemSlug === targetSlug || normalizeSlug(itemSlug) === normalizedTarget;
+  });
+};
+
+let painting = findPainting(paintings, slug);
 if (!painting && slug) {
   painting = await getProductBySlug(slug);
 }
 const normalizedSlug = slug ? normalizeSlug(slug) : '';
 if (!painting && normalizedSlug && normalizedSlug !== slug) {
-  painting =
-    paintings.find(item => (item.slug ?? slugify(item.title)) === normalizedSlug) ||
-    (await getProductBySlug(normalizedSlug));
+  painting = findPainting(paintings, normalizedSlug) || (await getProductBySlug(normalizedSlug));
 }
 
 const fallbackTitle = slug ? humanizeSlug(slug) : 'Woman with Moon';
@@ -46,6 +52,7 @@ const paintingTitle = painting?.title ?? fallbackTitle;
 const paintingImage = painting?.image ?? paintings[0]?.image ?? '/gallerie/gallerie-virtuelle.png';
 const detailText = painting?.description || 'Original artwork.';
 const dimensions = painting?.dimensions ?? '—';
+const medium = painting?.medium ?? '—';
 const pageTitle = `${paintingTitle} – My Light Gallery Art`;
 const description = painting?.description || 'Artwork details available from the gallery.';
 const phoneLabel = '+1 (214) 537-6953';
@@ -108,6 +115,10 @@ const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
             <div>
               <dt>Dimensions</dt>
               <dd>{dimensions}</dd>
+            </div>
+            <div>
+              <dt>Technique</dt>
+              <dd>{medium}</dd>
             </div>
           </dl>
           <p class="rg-artwork-sale">This artwork is for sale.</p>

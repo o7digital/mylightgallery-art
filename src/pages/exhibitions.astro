@@ -44,7 +44,9 @@ const detailBase = '/obras';
           {orderedPaintings.map((painting, index) => {
             const paintingSlug = painting.slug ?? slugify(painting.title);
             const paintingHref = `${detailBase}/${paintingSlug}`;
-            const meta = [painting.dimensions, painting.priceText].filter(Boolean).join(' • ');
+            const meta = [painting.dimensions, painting.medium, painting.priceText]
+              .filter(Boolean)
+              .join(' • ');
             return (
               <article class="rg-exhibitions-item" style={`--delay: ${index * 0.04}s`}>
                 <a class="rg-exhibitions-image" href={paintingHref}>
