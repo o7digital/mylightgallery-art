@@ -60,7 +60,7 @@ const detailBase = '/obras';
                 <div class="rg-exhibitions-details">
                   <h2 class="rg-exhibitions-title">{painting.title}</h2>
                   {meta && <p class="rg-exhibitions-meta">{meta}</p>}
-                  <a class="rg-exhibitions-link" href={paintingHref}>Más info</a>
+            <a class="rg-exhibitions-link" href={paintingHref} aria-label={`Ver más sobre ${painting.title}`}>Más info</a>
                 </div>
               </article>
             );

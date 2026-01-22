@@ -8,16 +8,12 @@ const infoLinks =
   isEn
     ? [
         { href: '/en/#collections', label: 'Collections' },
-        ...(showEventsNews ? [{ href: '/en/#events', label: "What's on" }] : []),
         { href: '/en/#layla', label: 'Layla' },
-        { href: '/en/#buy', label: 'Buy' },
         { href: '/en/contact', label: 'Contact' },
       ]
     : [
         { href: '/#colecciones', label: 'Colecciones' },
-        ...(showEventsNews ? [{ href: '/#eventos', label: 'Qué hay' }] : []),
         { href: '/#layla', label: 'Layla' },
-        { href: '/#compra', label: 'Compra' },
         { href: '/contacto', label: 'Contacto' },
       ];
 const legalLinks =
@@ -139,15 +135,16 @@ const hours =
 
   .footer-brand {
     display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    margin-left: -2cm;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0;
   }
 
   .footer-logo {
-    width: 168px;
+    width: 170px;
     height: auto;
     display: block;
+    object-fit: contain;
   }
 
   .footer-grid strong {

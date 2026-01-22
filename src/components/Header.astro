@@ -7,24 +7,18 @@ const navLeft =
   lang === 'en'
     ? [
         { href: '/en/#collections', label: 'Collections' },
-        { href: '/en/#collections', label: 'Buy' },
-        ...(showEventsNews ? [{ href: '/en/#events', label: "What's on" }] : []),
       ]
     : [
         { href: '/#colecciones', label: 'Colecciones' },
-        { href: '/#colecciones', label: 'Compra' },
-        ...(showEventsNews ? [{ href: '/#eventos', label: 'Qué hay' }] : []),
       ];
 
 const navRight =
   lang === 'en'
     ? [
-        ...(showEventsNews ? [{ href: '/en/#news', label: 'News', isNews: true }] : []),
         { href: '/en/#layla', label: 'Layla' },
         { href: '/en/contact', label: 'Contact' },
       ]
     : [
-        ...(showEventsNews ? [{ href: '/#noticias', label: 'Noticias', isNews: true }] : []),
         { href: '/#layla', label: 'Layla' },
         { href: '/contacto', label: 'Contacto' },
       ];
