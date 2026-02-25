@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { createHmac, randomBytes } from 'node:crypto';
+import { getEnvValue } from '../../lib/env';
 
 export const prerender = false;
 
@@ -11,8 +12,8 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ ok: false, error: 'Invalid request' }, 400);
   }
 
-  const expectedUser = import.meta.env.COA_USER;
-  const expectedPassword = import.meta.env.COA_PASSWORD;
+  const expectedUser = getEnvValue(['COA_USER']);
+  const expectedPassword = getEnvValue(['COA_PASSWORD']);
 
   if (!expectedUser || !expectedPassword) {
     return json({ ok: false, error: 'COA auth not configured' }, 503);
@@ -30,7 +31,7 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   // Génère un token signé HMAC valide 8h
-  const secret = import.meta.env.COA_SECRET || randomBytes(16).toString('hex');
+  const secret = getEnvValue(['COA_SECRET']) || randomBytes(16).toString('hex');
   const expires = Date.now() + 8 * 60 * 60 * 1000;
   const nonce = randomBytes(8).toString('hex');
   const payload = `${expires}.${nonce}`;
