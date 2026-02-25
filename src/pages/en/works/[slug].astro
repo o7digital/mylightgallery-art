@@ -53,6 +53,7 @@ const paintingImage = painting?.image ?? paintings[0]?.image ?? '/gallerie/galle
 const detailText = painting?.description || 'Original artwork.';
 const dimensions = painting?.dimensions ?? '—';
 const medium = painting?.medium ?? '—';
+const certificateSeed = String(painting?.id ?? painting?.slug ?? slug ?? paintingTitle);
 const pageTitle = `${paintingTitle} – My Light Gallery Art`;
 const description = painting?.description || 'Artwork details available from the gallery.';
 const phoneLabel = '+1 (214) 537-6953';
@@ -97,11 +98,69 @@ const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
             class="rg-artwork-visual rg-artwork-certificate"
             id="certificate-panel"
             data-certificate-panel
+            data-certificate-seed={certificateSeed}
           >
             <span class="rg-artwork-label">Certificate of Authenticity</span>
-            <div class="rg-certificate-card">
-              <p>Certificate of Authenticity (COA)</p>
+            <div class="rg-certificate-controls">
+              <label class="rg-certificate-field">
+                <span>Collector's name</span>
+                <input type="text" placeholder="e.g. Jane Smith" data-certificate-client />
+              </label>
+              <label class="rg-certificate-field">
+                <span>Issue date</span>
+                <input type="date" data-certificate-date />
+              </label>
+              <button type="button" class="rg-certificate-download" data-certificate-download>
+                Download certificate as PDF
+              </button>
             </div>
+            <article class="rg-certificate-card" data-certificate-card>
+              <p class="rg-certificate-eyebrow">My Light Art Gallery</p>
+              <h2>Certificate of Authenticity</h2>
+              <p class="rg-certificate-number">
+                No. <span data-certificate-number>COA-00000000-ART-00000</span>
+              </p>
+              <dl class="rg-certificate-meta">
+                <div>
+                  <dt>Artist</dt>
+                  <dd>Layla Lastra</dd>
+                </div>
+                <div>
+                  <dt>Artwork</dt>
+                  <dd>{paintingTitle}</dd>
+                </div>
+                <div>
+                  <dt>Technique</dt>
+                  <dd>{medium}</dd>
+                </div>
+                <div>
+                  <dt>Dimensions</dt>
+                  <dd>{dimensions}</dd>
+                </div>
+                <div>
+                  <dt>Collector</dt>
+                  <dd data-certificate-client-value>To be assigned</dd>
+                </div>
+                <div>
+                  <dt>Issue date</dt>
+                  <dd data-certificate-date-value>To be defined</dd>
+                </div>
+              </dl>
+              <p class="rg-certificate-statement">
+                This certifies that this piece is an original and unique work, created by Layla Lastra.
+                The purchase of the artwork does not transfer copyright or reproduction rights.
+              </p>
+              <div class="rg-certificate-signatures">
+                <div>
+                  <p class="rg-signature-name">Layla Lastra</p>
+                  <p class="rg-signature-label">Artist's signature</p>
+                </div>
+                <div>
+                  <p class="rg-signature-name">My Light Art Gallery</p>
+                  <p class="rg-signature-label">Issuer</p>
+                </div>
+              </div>
+            </article>
           </div>
         </div>
 
@@ -174,7 +233,59 @@ const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
   const zoomables = document.querySelectorAll('[data-zoomable]');
   const certificateToggle = document.querySelector('[data-certificate-toggle]');
   const certificatePanel = document.querySelector('[data-certificate-panel]');
+  const certificateClientInput = document.querySelector('[data-certificate-client]');
+  const certificateDateInput = document.querySelector('[data-certificate-date]');
+  const certificateNumberValue = document.querySelector('[data-certificate-number]');
+  const certificateClientValue = document.querySelector('[data-certificate-client-value]');
+  const certificateDateValue = document.querySelector('[data-certificate-date-value]');
+  const certificateDownload = document.querySelector('[data-certificate-download]');
   let zoomed = false;
+
+  const normalizeCertificateToken = value =>
+    value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9]+/g, '')
+      .toUpperCase();
+
+  const formatCertificateDate = value => {
+    if (!value) return 'To be defined';
+    const date = new Date(`${value}T12:00:00`);
+    if (Number.isNaN(date.getTime())) return 'To be defined';
+    return new Intl.DateTimeFormat('en-US', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    }).format(date);
+  };
+
+  const buildCertificateNumber = (seed, client, dateValue) => {
+    const datePart = (dateValue || new Date().toISOString().slice(0, 10)).replace(/-/g, '');
+    const tokenSource = `${seed || 'ART'}${client || ''}`;
+    const token = (normalizeCertificateToken(tokenSource).slice(0, 6) || 'ART').padEnd(3, 'X');
+    const hashSource = `${seed}|${client}|${datePart}`;
+    let hash = 0;
+    for (let index = 0; index < hashSource.length; index += 1) {
+      hash = (hash * 31 + hashSource.charCodeAt(index)) % 100000;
+    }
+    const serial = String(hash).padStart(5, '0');
+    return `COA-${datePart}-${token}-${serial}`;
+  };
+
+  const syncCertificate = () => {
+    const seed = certificatePanel?.getAttribute('data-certificate-seed') || 'ART';
+    const client = certificateClientInput?.value?.trim() || '';
+    const issueDate = certificateDateInput?.value || '';
+    if (certificateNumberValue) {
+      certificateNumberValue.textContent = buildCertificateNumber(seed, client, issueDate);
+    }
+    if (certificateClientValue) {
+      certificateClientValue.textContent = client || 'To be assigned';
+    }
+    if (certificateDateValue) {
+      certificateDateValue.textContent = formatCertificateDate(issueDate);
+    }
+  };
 
   const openLightbox = (src, alt) => {
     if (!lightbox || !lightboxImage) return;
@@ -224,8 +335,30 @@ const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
     const isVisible = certificatePanel.classList.toggle('is-visible');
     certificateToggle.setAttribute('aria-expanded', String(isVisible));
     if (isVisible) {
+      syncCertificate();
       certificatePanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  });
+
+  const today = new Date();
+  const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(
+    today.getDate()
+  ).padStart(2, '0')}`;
+  if (certificateDateInput && !certificateDateInput.value) {
+    certificateDateInput.value = todayIso;
+  }
+
+  syncCertificate();
+
+  certificateClientInput?.addEventListener('input', syncCertificate);
+  certificateDateInput?.addEventListener('input', syncCertificate);
+  certificateDateInput?.addEventListener('change', syncCertificate);
+  certificateDownload?.addEventListener('click', () => {
+    if (!certificatePanel) return;
+    certificatePanel.classList.add('is-visible');
+    certificateToggle?.setAttribute('aria-expanded', 'true');
+    syncCertificate();
+    window.print();
   });
 </script>
 
@@ -300,14 +433,142 @@ const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
   }
 
   .rg-certificate-card {
-    border: 1px dashed rgba(90, 70, 54, 0.45);
-    padding: 2.5rem 2rem;
-    text-align: center;
+    border: 1px solid rgba(90, 70, 54, 0.45);
+    padding: clamp(1.2rem, 2.8vw, 2.1rem);
+    color: #2f2821;
+    background:
+      radial-gradient(circle at 14% 16%, rgba(255, 255, 255, 0.9), transparent 45%),
+      linear-gradient(150deg, rgba(255, 255, 255, 0.92), rgba(248, 240, 231, 0.86));
+  }
+
+  .rg-certificate-controls {
+    display: grid;
+    gap: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .rg-certificate-field {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .rg-certificate-field span {
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.65rem;
+    color: var(--rg-muted);
+  }
+
+  .rg-certificate-field input {
+    border: 1px solid var(--rg-line);
+    padding: 0.55rem 0.65rem;
+    background: rgba(255, 255, 255, 0.88);
+    color: var(--rg-ink);
+    font: inherit;
+    width: 100%;
+  }
+
+  .rg-certificate-download {
+    border: 1px solid var(--rg-ink);
+    background: var(--rg-ink);
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.7rem;
+    padding: 0.65rem 0.95rem;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .rg-certificate-download:hover {
+    opacity: 0.86;
+  }
+
+  .rg-certificate-eyebrow {
+    margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    font-size: 0.8rem;
+    font-size: 0.64rem;
     color: var(--rg-muted);
-    background: rgba(255, 255, 255, 0.7);
+  }
+
+  .rg-certificate-card h2 {
+    margin: 0.6rem 0 0.35rem;
+    font-family: 'Times New Roman', Times, serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+  }
+
+  .rg-certificate-number {
+    margin: 0;
+    font-size: 0.77rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+  }
+
+  .rg-certificate-number span {
+    font-weight: 700;
+  }
+
+  .rg-certificate-meta {
+    margin: 1.4rem 0;
+    display: grid;
+    gap: 0.72rem;
+  }
+
+  .rg-certificate-meta div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px dashed rgba(90, 70, 54, 0.35);
+    padding-bottom: 0.55rem;
+  }
+
+  .rg-certificate-meta dt {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.66rem;
+    color: #665d55;
+  }
+
+  .rg-certificate-meta dd {
+    margin: 0;
+    text-align: right;
+    font-size: 0.92rem;
+  }
+
+  .rg-certificate-statement {
+    margin: 0;
+    color: #494138;
+    line-height: 1.6;
+    font-size: 0.9rem;
+  }
+
+  .rg-certificate-signatures {
+    margin-top: 1.6rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
+
+  .rg-certificate-signatures > div {
+    border-top: 1px solid rgba(90, 70, 54, 0.55);
+    padding-top: 0.7rem;
+  }
+
+  .rg-signature-name {
+    margin: 0 0 0.2rem;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.05rem;
+  }
+
+  .rg-signature-label {
+    margin: 0;
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--rg-muted);
   }
 
   .rg-artwork-label {
@@ -511,8 +772,64 @@ const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
       flex-direction: column;
     }
 
+    .rg-certificate-meta div {
+      flex-direction: column;
+    }
+
+    .rg-certificate-meta dd {
+      text-align: left;
+    }
+
+    .rg-certificate-signatures {
+      grid-template-columns: 1fr;
+    }
+
     .rg-lightbox img.is-zoomed {
       transform: scale(1.2);
+    }
+  }
+
+  @media print {
+    body {
+      background: #fff !important;
+    }
+
+    body * {
+      visibility: hidden;
+    }
+
+    .rg-artwork-certificate,
+    .rg-artwork-certificate *,
+    .rg-certificate-card,
+    .rg-certificate-card * {
+      visibility: visible;
+    }
+
+    .rg-artwork-certificate {
+      display: block !important;
+      position: fixed;
+      inset: 0;
+      background: #fff !important;
+      border: none !important;
+      box-shadow: none !important;
+      margin: 0;
+      padding: 0;
+      z-index: 9999;
+      overflow: visible;
+    }
+
+    .rg-artwork-label,
+    .rg-certificate-controls {
+      display: none !important;
+    }
+
+    .rg-certificate-card {
+      margin: 0;
+      min-height: 100vh;
+      border: 1px solid #000;
+      box-shadow: none;
+      padding: 2.4rem;
+      background: #fff !important;
     }
   }
 </style>
