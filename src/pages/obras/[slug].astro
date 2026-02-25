@@ -223,6 +223,28 @@ const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
       <img alt="" />
       <p class="rg-lightbox-hint">Haz clic en la imagen para hacer zoom.</p>
     </div>
+
+    <!-- Modale d'authentification COA -->
+    <div class="rg-coa-modal" id="coa-auth-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="coa-modal-title">
+      <div class="rg-coa-modal-box">
+        <p class="rg-coa-modal-logo">My Light Art Gallery</p>
+        <h2 id="coa-modal-title">Acceso restringido</h2>
+        <p class="rg-coa-modal-sub">El certificado COA está reservado a la galera.</p>
+        <form id="coa-auth-form" novalidate>
+          <label class="rg-coa-field">
+            <span>Usuario</span>
+            <input type="text" id="coa-user-input" autocomplete="username" placeholder="layla" required />
+          </label>
+          <label class="rg-coa-field">
+            <span>Contraseña</span>
+            <input type="password" id="coa-pass-input" autocomplete="current-password" placeholder="••••••••" required />
+          </label>
+          <p class="rg-coa-error" id="coa-auth-error" aria-live="polite"></p>
+          <button type="submit" class="rg-coa-submit" id="coa-submit-btn">Acceder</button>
+          <button type="button" class="rg-coa-cancel" id="coa-cancel-btn">Cancelar</button>
+        </form>
+      </div>
+    </div>
   </div>
 </BaseLayout>
 
@@ -330,16 +352,102 @@ const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
     }
   });
 
+  // ── Auth COA ──────────────────────────────────────────────
+  const COA_TOKEN_KEY = 'coa_auth_token';
+  const COA_EXPIRES_KEY = 'coa_auth_expires';
+  const authModal = document.getElementById('coa-auth-modal');
+  const authForm = document.getElementById('coa-auth-form');
+  const authError = document.getElementById('coa-auth-error');
+  const authUserInput = document.getElementById('coa-user-input');
+  const authPassInput = document.getElementById('coa-pass-input');
+  const authSubmitBtn = document.getElementById('coa-submit-btn');
+  const authCancelBtn = document.getElementById('coa-cancel-btn');
+
+  const isAuthenticated = () => {
+    const token = sessionStorage.getItem(COA_TOKEN_KEY);
+    const expires = Number(sessionStorage.getItem(COA_EXPIRES_KEY) || 0);
+    return !!token && Date.now() < expires;
+  };
+
+  const openModal = () => {
+    if (!authModal) return;
+    authModal.setAttribute('aria-hidden', 'false');
+    authModal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    authUserInput?.focus();
+    if (authError) authError.textContent = '';
+  };
+
+  const closeModal = () => {
+    if (!authModal) return;
+    authModal.setAttribute('aria-hidden', 'true');
+    authModal.classList.remove('is-open');
+    document.body.style.overflow = '';
+  };
+
+  const openCertificatePanel = () => {
+    if (!certificatePanel) return;
+    certificatePanel.classList.add('is-visible');
+    certificateToggle?.setAttribute('aria-expanded', 'true');
+    syncCertificate();
+    certificatePanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   certificateToggle?.addEventListener('click', () => {
     if (!certificatePanel) return;
-    const isVisible = certificatePanel.classList.toggle('is-visible');
-    certificateToggle.setAttribute('aria-expanded', String(isVisible));
-    if (isVisible) {
-      syncCertificate();
-      certificatePanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const isCurrentlyVisible = certificatePanel.classList.contains('is-visible');
+    if (isCurrentlyVisible) {
+      certificatePanel.classList.remove('is-visible');
+      certificateToggle.setAttribute('aria-expanded', 'false');
+      return;
+    }
+    if (isAuthenticated()) {
+      openCertificatePanel();
+    } else {
+      openModal();
     }
   });
 
+  authCancelBtn?.addEventListener('click', closeModal);
+  authModal?.addEventListener('click', e => {
+    if (e.target === authModal) closeModal();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && authModal?.classList.contains('is-open')) closeModal();
+  });
+
+  authForm?.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (authError) authError.textContent = '';
+    if (authSubmitBtn) authSubmitBtn.textContent = 'Verificando...';
+    if (authSubmitBtn) (authSubmitBtn as HTMLButtonElement).disabled = true;
+    try {
+      const res = await fetch('/api/coa-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user: (authUserInput as HTMLInputElement)?.value?.trim(),
+          password: (authPassInput as HTMLInputElement)?.value,
+        }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        sessionStorage.setItem(COA_TOKEN_KEY, data.token);
+        sessionStorage.setItem(COA_EXPIRES_KEY, String(data.expires));
+        closeModal();
+        openCertificatePanel();
+      } else {
+        if (authError) authError.textContent = data.error || 'Identifiants incorrects';
+      }
+    } catch {
+      if (authError) authError.textContent = 'Error de red. Inténtalo de nuevo.';
+    } finally {
+      if (authSubmitBtn) authSubmitBtn.textContent = 'Acceder';
+      if (authSubmitBtn) (authSubmitBtn as HTMLButtonElement).disabled = false;
+    }
+  });
+
+  // ── Init certificat ───────────────────────────────────────
   const today = new Date();
   const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(
     today.getDate()
@@ -354,6 +462,7 @@ const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
   certificateDateInput?.addEventListener('input', syncCertificate);
   certificateDateInput?.addEventListener('change', syncCertificate);
   certificateDownload?.addEventListener('click', () => {
+    if (!isAuthenticated()) { openModal(); return; }
     if (!certificatePanel) return;
     certificatePanel.classList.add('is-visible');
     certificateToggle?.setAttribute('aria-expanded', 'true');
@@ -830,6 +939,145 @@ const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
       box-shadow: none;
       padding: 2.4rem;
       background: #fff !important;
+    }
+  }
+
+  /* ── Modale auth COA ──────────────────────────────── */
+  .rg-coa-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 8, 6, 0.78);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    padding: 1.5rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+  }
+
+  .rg-coa-modal.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .rg-coa-modal-box {
+    background:
+      radial-gradient(circle at 12% 14%, rgba(255,255,255,0.95), transparent 55%),
+      linear-gradient(145deg, #faf7f2, #ede4d8);
+    border: 1px solid var(--rg-line);
+    box-shadow: 0 28px 70px rgba(20, 15, 10, 0.3);
+    padding: clamp(1.8rem, 5vw, 3rem);
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .rg-coa-modal-logo {
+    margin: 0 0 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.62rem;
+    color: var(--rg-muted);
+  }
+
+  .rg-coa-modal-box h2 {
+    margin: 0 0 0.3rem;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .rg-coa-modal-sub {
+    margin: 0 0 1.6rem;
+    font-size: 0.85rem;
+    color: var(--rg-muted);
+    line-height: 1.5;
+  }
+
+  .rg-coa-field {
+    display: grid;
+    gap: 0.3rem;
+    margin-bottom: 1rem;
+  }
+
+  .rg-coa-field span {
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.65rem;
+    color: var(--rg-muted);
+  }
+
+  .rg-coa-field input {
+    border: 1px solid var(--rg-line);
+    padding: 0.6rem 0.75rem;
+    background: rgba(255,255,255,0.9);
+    color: var(--rg-ink);
+    font: inherit;
+    font-size: 0.95rem;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.18s ease;
+  }
+
+  .rg-coa-field input:focus {
+    border-color: var(--rg-ink);
+  }
+
+  .rg-coa-error {
+    margin: 0 0 0.8rem;
+    min-height: 1.2em;
+    font-size: 0.8rem;
+    color: #b04040;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .rg-coa-submit {
+    width: 100%;
+    background: var(--rg-ink);
+    color: #fff;
+    border: 1px solid var(--rg-ink);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.75rem;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    margin-bottom: 0.65rem;
+  }
+
+  .rg-coa-submit:hover {
+    opacity: 0.84;
+  }
+
+  .rg-coa-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .rg-coa-cancel {
+    width: 100%;
+    background: transparent;
+    color: var(--rg-muted);
+    border: 1px solid var(--rg-line);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.7rem;
+    padding: 0.65rem 1rem;
+    cursor: pointer;
+    transition: border-color 0.18s ease, color 0.18s ease;
+  }
+
+  .rg-coa-cancel:hover {
+    border-color: var(--rg-ink);
+    color: var(--rg-ink);
+  }
+
+  @media print {
+    .rg-coa-modal {
+      display: none !important;
     }
   }
 </style>
