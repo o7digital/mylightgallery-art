@@ -54,7 +54,7 @@ const imageOverrides: Record<string, string> = {
   'mujer-con-luna': '/collections/featured.webp',
 };
 const paintingImage =
-  imageOverrides[paintingSlug] ?? painting?.image ?? null;
+  imageOverrides[paintingSlug] ?? painting?.imageFull ?? painting?.image ?? null;
 const detailText = painting?.description || 'Obra original.';
 const dimensions = painting?.dimensions ?? '—';
 const medium = painting?.medium ?? '—';

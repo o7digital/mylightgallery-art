@@ -84,6 +84,8 @@ const collectionsImage = '/collections/featured.webp';
                   <a href={paintingHref}>
                     <img
                       src={painting.image}
+                      srcset={painting.imageSrcSet ?? undefined}
+                      sizes="(max-width: 960px) 100vw, 50vw"
                       alt={painting.title}
                       loading="lazy"
                       decoding="async"

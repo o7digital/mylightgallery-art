@@ -7,6 +7,9 @@ type ProductCard = {
   slug: string;
   link: string;
   image?: string | null;
+  imageFull?: string | null;
+  imageSrcSet?: string | null;
+  imageSizes?: string | null;
   priceText?: string | null;
   dimensions?: string | null;
   medium?: string | null;
@@ -67,9 +70,50 @@ const normalizeMediumText = (value: string) =>
 
 const normalizeImage = (src?: string | null) => {
   if (!src) return null;
-  const httpsSrc = src.replace('http://', 'https://');
-  // Prefer full-size WordPress media instead of small thumbnails (e.g., -300x300.jpg).
-  return httpsSrc.replace(/-\d+x\d+(?=\.(?:jpe?g|png|webp))/i, '');
+  return src.replace('http://', 'https://');
+};
+
+const normalizeFullImage = (src?: string | null) => {
+  const normalized = normalizeImage(src);
+  if (!normalized) return null;
+  return normalized.replace(/-\d+x\d+(?=\.(?:jpe?g|png|webp))/i, '');
+};
+
+const normalizeSrcSet = (srcset?: string | null) => {
+  if (!srcset) return null;
+  return srcset
+    .split(',')
+    .map(part => part.trim())
+    .filter(Boolean)
+    .map(part => {
+      const match = part.match(/^(\S+)\s+(.+)$/);
+      if (!match) return normalizeImage(part) ?? part;
+      const url = normalizeImage(match[1]) ?? match[1];
+      return `${url} ${match[2]}`;
+    })
+    .join(', ');
+};
+
+const pickListImageFromSrcSet = (srcset?: string | null, targetWidth = 768) => {
+  if (!srcset) return null;
+  const candidates = srcset
+    .split(',')
+    .map(part => part.trim())
+    .map(part => {
+      const match = part.match(/^(\S+)\s+(\d+)w$/);
+      if (!match) return null;
+      const url = normalizeImage(match[1]);
+      const width = Number(match[2]);
+      if (!url || !Number.isFinite(width)) return null;
+      return { url, width };
+    })
+    .filter((item): item is { url: string; width: number } => Boolean(item));
+
+  if (candidates.length === 0) return null;
+  const sorted = candidates.sort((a, b) => a.width - b.width);
+  const notTooLarge = sorted.filter(item => item.width <= targetWidth);
+  if (notTooLarge.length > 0) return notTooLarge[notTooLarge.length - 1].url;
+  return sorted[0].url;
 };
 
 const formatPrice = (price?: string | null, regular?: string | null) => {
@@ -144,9 +188,17 @@ const mapProduct = (item: Record<string, any>): ProductCard | null => {
   const medium = getMediumFromAttributes(attributes);
   const title = rawTitle;
   const priceText = formatPrice(item.price, item.regular_price);
+  const mainImage = item.images?.[0] ?? null;
+  const imageSrcSet = normalizeSrcSet(mainImage?.srcset);
+  const imageSizes = typeof mainImage?.sizes === 'string' ? mainImage.sizes : null;
   const image =
-    normalizeImage(item.images?.[0]?.src) ||
+    pickListImageFromSrcSet(mainImage?.srcset) ||
+    normalizeImage(mainImage?.thumbnail) ||
+    normalizeImage(mainImage?.src) ||
     extractFirstImageSrc(item.description);
+  const imageFull =
+    normalizeFullImage(mainImage?.src) ||
+    normalizeFullImage(extractFirstImageSrc(item.description));
   const descriptionRaw = stripTags(item.description);
   const description = descriptionRaw ? normalizeMediumText(descriptionRaw) : null;
   return {
@@ -155,6 +207,9 @@ const mapProduct = (item: Record<string, any>): ProductCard | null => {
     slug: item.slug,
     link: item.permalink,
     image,
+    imageFull,
+    imageSrcSet,
+    imageSizes,
     priceText,
     dimensions,
     medium,

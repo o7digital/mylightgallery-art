@@ -53,6 +53,8 @@ const detailBase = '/en/works';
                 <a class="rg-exhibitions-image" href={paintingHref}>
                   <img
                     src={painting.image}
+                    srcset={painting.imageSrcSet ?? undefined}
+                    sizes="(max-width: 960px) 100vw, 50vw"
                     alt={painting.title}
                     loading="lazy"
                     decoding="async"
