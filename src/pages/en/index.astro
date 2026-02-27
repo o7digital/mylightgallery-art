@@ -41,7 +41,7 @@ const collectionsImage = '/collections/featured.webp';
           {collectionsImage || featuredPainting?.image ? (
             <img
               src={collectionsImage || featuredPainting?.image}
-              alt={featuredPainting.title ?? 'Collections'}
+              alt={featuredPainting?.title ? `${featuredPainting.title} – original painting by Layla` : 'Original painting collections – My Light Gallery Art'}
               loading="lazy"
               decoding="async"
             />
@@ -87,7 +87,7 @@ const collectionsImage = '/collections/featured.webp';
                       src={painting.image}
                       srcset={painting.imageSrcSet ?? undefined}
                       sizes="(max-width: 960px) 100vw, 50vw"
-                      alt={painting.title}
+                      alt={`${painting.title} – original painting by Layla${painting.medium ? `, ${painting.medium}` : ''}`}
                       loading="lazy"
                       decoding="async"
                     />

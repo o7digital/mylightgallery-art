@@ -112,7 +112,7 @@ const artworkSchema = {
             {paintingImage ? (
               <img
                 src={paintingImage}
-                alt={paintingTitle}
+                alt={`${paintingTitle} – pintura original de Layla${medium !== '—' ? `, ${medium}` : ''}${dimensions !== '—' ? `, ${dimensions}` : ''}`}
                 loading="lazy"
                 decoding="async"
                 data-zoomable

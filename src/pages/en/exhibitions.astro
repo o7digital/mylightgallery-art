@@ -37,7 +37,7 @@ const buildPageHref = (page: number) =>
       {heroImage ? (
         <img
           src={heroImage}
-          alt="Gallery overview"
+          alt="My Light Gallery Art – original paintings gallery in Irving, TX"
           loading="eager"
           decoding="async"
         />
@@ -46,7 +46,7 @@ const buildPageHref = (page: number) =>
       )}
       <header>
         <p class="rg-eyebrow">Exhibitions</p>
-        <h1>WHAT&rsquo;S ON</h1>
+        <h1>Original Paintings for Sale</h1>
       </header>
     </section>
 
@@ -66,7 +66,7 @@ const buildPageHref = (page: number) =>
                     src={painting.image}
                     srcset={painting.imageSrcSet ?? undefined}
                     sizes="(max-width: 960px) 100vw, 50vw"
-                    alt={painting.title}
+                    alt={`${painting.title} – original painting by Layla${painting.medium ? `, ${painting.medium}` : ''}`}
                     loading="lazy"
                     decoding="async"
                   />
