@@ -1,27 +1,146 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Pages principales ES -->
   <url>
     <loc>https://www.mylightartgallery.com/</loc>
-    <lastmod>2025-02-14</lastmod>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mylightartgallery.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mylightartgallery.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mylightartgallery.com/"/>
   </url>
   <url>
-    <loc>https://www.mylightartgallery.com/en/</loc>
-    <lastmod>2025-02-14</lastmod>
+    <loc>https://www.mylightartgallery.com/exhibitions</loc>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mylightartgallery.com/exhibitions"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mylightartgallery.com/en/exhibitions"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mylightartgallery.com/exhibitions"/>
   </url>
   <url>
     <loc>https://www.mylightartgallery.com/contacto</loc>
-    <lastmod>2025-02-14</lastmod>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mylightartgallery.com/contacto"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mylightartgallery.com/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mylightartgallery.com/contacto"/>
   </url>
   <url>
-    <loc>https://www.mylightartgallery.com/en/contact</loc>
-    <lastmod>2025-02-14</lastmod>
+    <loc>https://www.mylightartgallery.com/newsletter</loc>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mylightartgallery.com/newsletter"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mylightartgallery.com/en/newsletter"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mylightartgallery.com/newsletter"/>
   </url>
   <url>
     <loc>https://www.mylightartgallery.com/aviso-privacidad</loc>
-    <lastmod>2025-02-14</lastmod>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mylightartgallery.com/aviso-privacidad"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mylightartgallery.com/en/privacy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mylightartgallery.com/aviso-privacidad"/>
+  </url>
+
+  <!-- Pages ES supplémentaires -->
+  <url>
+    <loc>https://www.mylightartgallery.com/es/condiciones-generales-de-uso</loc>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://www.mylightartgallery.com/es/garantias-y-autenticidad</loc>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.mylightartgallery.com/es/politica-de-devoluciones</loc>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.mylightartgallery.com/es/impuestos-texas</loc>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+
+  <!-- Pages EN -->
+  <url>
+    <loc>https://www.mylightartgallery.com/en/</loc>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mylightartgallery.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mylightartgallery.com/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mylightartgallery.com/"/>
+  </url>
+  <url>
+    <loc>https://www.mylightartgallery.com/en/exhibitions</loc>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mylightartgallery.com/en/exhibitions"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mylightartgallery.com/exhibitions"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mylightartgallery.com/exhibitions"/>
+  </url>
+  <url>
+    <loc>https://www.mylightartgallery.com/en/contact</loc>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mylightartgallery.com/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mylightartgallery.com/contacto"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mylightartgallery.com/contacto"/>
+  </url>
+  <url>
+    <loc>https://www.mylightartgallery.com/en/newsletter</loc>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mylightartgallery.com/en/newsletter"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mylightartgallery.com/newsletter"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mylightartgallery.com/newsletter"/>
   </url>
   <url>
     <loc>https://www.mylightartgallery.com/en/privacy</loc>
-    <lastmod>2025-02-14</lastmod>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
+  <url>
+    <loc>https://www.mylightartgallery.com/en/return-policy</loc>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.mylightartgallery.com/en/warranties-and-authenticity</loc>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.mylightartgallery.com/en/terms-and-conditions</loc>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://www.mylightartgallery.com/en/texas-taxes</loc>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+
 </urlset>

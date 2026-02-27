@@ -58,9 +58,11 @@ const paintingImage =
 const detailText = painting?.description || 'Original artwork.';
 const dimensions = painting?.dimensions ?? '—';
 const medium = painting?.medium ?? '—';
-const certificateSeed = String(painting?.id ?? painting?.slug ?? slug ?? paintingTitle);
 const pageTitle = `${paintingTitle} – My Light Gallery Art`;
-const description = painting?.description || 'Artwork details available from the gallery.';
+const certificateSeed = String(painting?.id ?? painting?.slug ?? slug ?? paintingTitle);
+const metaDescription = painting?.description
+  ? painting.description.replace(/<[^>]+>/g, '').slice(0, 155).trim()
+  : `Original artwork by Layla: ${paintingTitle}. ${dimensions !== '—' ? dimensions + '. ' : ''}${medium !== '—' ? medium + '. ' : ''}Available at My Light Gallery Art, Irving TX.`;
 const phoneLabel = '+1 (214) 537-6953';
 const phoneHref = 'tel:+12145376953';
 const email = 'layla@mylightartgallery.com';
@@ -72,9 +74,29 @@ const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`
 const pinterestShare =
   `https://pinterest.com/pin/create/button/?url=${shareUrl}&media=${shareImage}&description=${shareTitle}`;
 const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
+const artworkSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'VisualArtwork',
+  name: paintingTitle,
+  url: currentUrl,
+  image: paintingImage ?? undefined,
+  description: metaDescription,
+  ...(dimensions !== '—' ? { width: dimensions } : {}),
+  ...(medium !== '—' ? { artMedium: medium } : {}),
+  creator: {
+    '@type': 'Person',
+    name: 'Layla',
+    url: 'https://www.mylightartgallery.com',
+  },
+  isPartOf: {
+    '@type': 'ArtGallery',
+    name: 'My Light Gallery Art',
+    url: 'https://www.mylightartgallery.com',
+  },
+};
 ---
 
-<BaseLayout lang="en" title={pageTitle} description={description}>
+<BaseLayout lang="en" title={pageTitle} description={metaDescription} ogImage={paintingImage ?? undefined}>
   <div class="rg-artwork-page">
     <section class="rg-artwork-hero">
       <div class="container">
@@ -251,6 +273,7 @@ const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
       </div>
     </div>
   </div>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(artworkSchema)}></script>
 </BaseLayout>
 
 <script>

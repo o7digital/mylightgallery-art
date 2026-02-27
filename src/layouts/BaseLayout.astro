@@ -5,9 +5,10 @@ import '../styles/global.css';
 import { getEnvValue } from '../lib/env';
 
 const {
-  title = 'Site Premium',
+  title = 'My Light Gallery Art',
   description = '',
   lang = 'es',
+  ogImage: ogImageProp,
   showEventsNews = true,
 } = Astro.props;
 const gaMeasurementId =
@@ -24,9 +25,12 @@ const currentUrl = Astro.url;
 const canonicalUrl = site ? new URL(currentUrl.pathname, site).href : currentUrl.href;
 const locale = lang === 'en' ? 'en_US' : 'es_ES';
 const siteName = 'My Light Art Gallery';
-const ogImage = site
+const defaultOgImage = site
   ? new URL('/slider/cadenas-acrilico-36x48.webp', site).href
   : '/slider/cadenas-acrilico-36x48.webp';
+const ogImage = ogImageProp
+  ? (site && !ogImageProp.startsWith('http') ? new URL(ogImageProp, site).href : ogImageProp)
+  : defaultOgImage;
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'ArtGallery',
@@ -59,6 +63,9 @@ const structuredData = {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
     <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="/logo/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/logo/favicon.ico" />
+    <link rel="apple-touch-icon" href="/logo/apple-touch-icon.png" />
     <meta name="description" content={description} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -89,6 +96,7 @@ const structuredData = {
       <>
         <link rel="alternate" href={new URL('/', site).href} hreflang="es" />
         <link rel="alternate" href={new URL('/en/', site).href} hreflang="en" />
+        <link rel="alternate" href={new URL('/', site).href} hreflang="x-default" />
       </>
     )}
     <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)}></script>
