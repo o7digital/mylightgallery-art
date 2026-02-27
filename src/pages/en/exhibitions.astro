@@ -14,6 +14,17 @@ const paintings =
 const orderedPaintings = [...paintings].reverse();
 const heroImage = '/gallerie/gallerie-virtuelle.png';
 const detailBase = '/en/works';
+const exhibitionsPath = '/en/exhibitions';
+const pageSize = 12;
+const parsedPage = Number.parseInt(Astro.url.searchParams.get('page') ?? '1', 10);
+const requestedPage = Number.isFinite(parsedPage) ? parsedPage : 1;
+const totalPages = Math.max(1, Math.ceil(orderedPaintings.length / pageSize));
+const currentPage = Math.min(Math.max(requestedPage, 1), totalPages);
+const pageStart = (currentPage - 1) * pageSize;
+const visiblePaintings = orderedPaintings.slice(pageStart, pageStart + pageSize);
+const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
+const buildPageHref = (page: number) =>
+  page <= 1 ? exhibitionsPath : `${exhibitionsPath}?page=${page}`;
 ---
 
 <BaseLayout
@@ -42,7 +53,7 @@ const detailBase = '/en/works';
     <section class="rg-exhibitions-grid-section">
       <div class="container">
         <div class="rg-exhibitions-grid">
-          {orderedPaintings.map((painting, index) => {
+          {visiblePaintings.map((painting, index) => {
             const paintingSlug = painting.slug ?? slugify(painting.title);
             const paintingHref = `${detailBase}/${paintingSlug}`;
             const meta = [painting.dimensions, painting.medium, painting.priceText]
@@ -68,10 +79,39 @@ const detailBase = '/en/works';
               </article>
             );
           })}
-          {orderedPaintings.length === 0 && (
+          {visiblePaintings.length === 0 && (
             <p class="rg-empty">New works coming soon.</p>
           )}
         </div>
+        {totalPages > 1 && (
+          <nav class="rg-pagination" aria-label="Artwork pagination">
+            <a
+              class={`rg-page-link ${currentPage === 1 ? 'is-disabled' : ''}`}
+              href={currentPage === 1 ? undefined : buildPageHref(currentPage - 1)}
+              rel="prev"
+              aria-disabled={currentPage === 1 ? 'true' : undefined}
+            >
+              ← Previous
+            </a>
+            <div class="rg-page-numbers">
+              {pageNumbers.map(page => (
+                page === currentPage ? (
+                  <span class="rg-page-number is-current" aria-current="page">{page}</span>
+                ) : (
+                  <a class="rg-page-number" href={buildPageHref(page)}>{page}</a>
+                )
+              ))}
+            </div>
+            <a
+              class={`rg-page-link ${currentPage === totalPages ? 'is-disabled' : ''}`}
+              href={currentPage === totalPages ? undefined : buildPageHref(currentPage + 1)}
+              rel="next"
+              aria-disabled={currentPage === totalPages ? 'true' : undefined}
+            >
+              Next →
+            </a>
+          </nav>
+        )}
       </div>
     </section>
   </div>
@@ -238,6 +278,57 @@ const detailBase = '/en/works';
     color: var(--rg-muted);
   }
 
+  .rg-pagination {
+    margin-top: 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .rg-page-link,
+  .rg-page-number {
+    text-decoration: none;
+    color: var(--rg-ink);
+    border: 1px solid var(--rg-line);
+    background: rgba(255, 255, 255, 0.85);
+    padding: 0.55rem 0.85rem;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .rg-page-link:hover,
+  .rg-page-number:hover {
+    background: var(--rg-ink);
+    color: #fff;
+  }
+
+  .rg-page-numbers {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .rg-page-number {
+    min-width: 2.15rem;
+    text-align: center;
+  }
+
+  .rg-page-number.is-current {
+    background: var(--rg-ink);
+    color: #fff;
+    border-color: var(--rg-ink);
+  }
+
+  .rg-page-link.is-disabled {
+    pointer-events: none;
+    opacity: 0.45;
+  }
+
   @keyframes motif-drift {
     0% {
       background-position: 0% 0%;
@@ -285,6 +376,10 @@ const detailBase = '/en/works';
   @media (max-width: 600px) {
     .rg-exhibitions-image img {
       height: 240px;
+    }
+
+    .rg-pagination {
+      justify-content: center;
     }
   }
 </style>
