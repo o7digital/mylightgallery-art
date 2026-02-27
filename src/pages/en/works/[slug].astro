@@ -49,7 +49,12 @@ if (!painting && normalizedSlug && normalizedSlug !== slug) {
 
 const fallbackTitle = slug ? humanizeSlug(slug) : 'Woman with Moon';
 const paintingTitle = painting?.title ?? fallbackTitle;
-const paintingImage = painting?.image ?? paintings[0]?.image ?? '/gallerie/gallerie-virtuelle.png';
+const paintingSlug = normalizeSlug(painting?.slug ?? slug ?? '');
+const imageOverrides: Record<string, string> = {
+  'mujer-con-luna': '/collections/featured.webp',
+};
+const paintingImage =
+  imageOverrides[paintingSlug] ?? painting?.image ?? null;
 const detailText = painting?.description || 'Original artwork.';
 const dimensions = painting?.dimensions ?? '—';
 const medium = painting?.medium ?? '—';
@@ -61,7 +66,7 @@ const phoneHref = 'tel:+12145376953';
 const email = 'layla@mylightartgallery.com';
 const currentUrl = Astro.url?.href ?? '';
 const shareUrl = encodeURIComponent(currentUrl);
-const shareImage = encodeURIComponent(painting?.image ?? '');
+const shareImage = encodeURIComponent(paintingImage ?? '');
 const shareTitle = encodeURIComponent(paintingTitle);
 const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
 const pinterestShare =

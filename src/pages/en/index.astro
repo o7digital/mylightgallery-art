@@ -23,6 +23,7 @@ const featuredPainting = orderedPaintings.find(painting => painting.image);
 const whatsOnPaintings = orderedPaintings.filter(painting => painting.image).slice(0, 2);
 const exhibitionsHref = '/en/exhibitions';
 const detailBase = '/en/works';
+const collectionsImage = '/collections/featured.webp';
 ---
 
 <BaseLayout
@@ -37,9 +38,9 @@ const detailBase = '/en/works';
     <section id="collections" class="section section-colecciones rg-collections">
       <div class="container rg-collections__inner">
         <div class="rg-collections__media">
-          {featuredPainting?.image ? (
+          {collectionsImage || featuredPainting?.image ? (
             <img
-              src={featuredPainting.image}
+              src={collectionsImage || featuredPainting?.image}
               alt={featuredPainting.title ?? 'Collections'}
               loading="lazy"
               decoding="async"

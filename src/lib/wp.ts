@@ -187,13 +187,14 @@ const setCache = (items: ProductCard[], limit: number) => {
 
 export const getProducts = async (limit = 100): Promise<ProductCard[]> => {
   if (!baseUrl) return [];
+  const safeLimit = Math.min(Math.max(Math.floor(limit || 0), 1), 100);
 
-  const cached = getCachedProducts(limit);
+  const cached = getCachedProducts(safeLimit);
   if (cached) return cached;
 
-  const stale = getStaleProducts(limit);
+  const stale = getStaleProducts(safeLimit);
   const url = new URL(`${baseUrl}/wc/v3/products`);
-  url.searchParams.set('per_page', String(limit));
+  url.searchParams.set('per_page', String(safeLimit));
   url.searchParams.set('order', 'desc');
   url.searchParams.set('orderby', 'date');
   url.searchParams.set(
@@ -212,7 +213,7 @@ export const getProducts = async (limit = 100): Promise<ProductCard[]> => {
       .map(mapProduct)
       .filter((item): item is ProductCard => Boolean(item?.image));
 
-    setCache(products, limit);
+    setCache(products, safeLimit);
     return products;
   } catch (error) {
     console.warn('WP products fetch error', error);
