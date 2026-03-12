@@ -1,4 +1,6 @@
 ---
+import { footerKeywordGroups } from '../lib/seoKeywords';
+
 const { lang = 'es', showEventsNews = true } = Astro.props;
 const path = Astro.url?.pathname ?? '';
 const resolvedLang = path.startsWith('/en/') ? 'en' : path.startsWith('/es/') ? 'es' : lang;
@@ -91,6 +93,15 @@ const hours =
     </div>
   </div>
 
+  <div class="container footer-keywords" aria-label="Local SEO keywords">
+    {footerKeywordGroups.map((group) => (
+      <p class="footer-keywords__line">
+        <span class="footer-keywords__label">{group.label}:</span>
+        <span>{group.keywords.join(' · ')}</span>
+      </p>
+    ))}
+  </div>
+
   <div class="footer-bottom">
     <span>{copyright}</span>
     <a href="https://www.o7digital.com" target="_blank" class="made-by">{madeByText}</a>
@@ -155,13 +166,34 @@ const hours =
 
   .footer-bottom {
     text-align: center;
-    padding-top: 2rem;
+    padding-top: 1.5rem;
     border-top: 1px solid #ddd;
     color: #777;
     font-size: 0.9rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .footer-keywords {
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #6a6358;
+  }
+
+  .footer-keywords__line {
+    margin: 0.45rem 0;
+    font-size: 0.74rem;
+    line-height: 1.8;
+    letter-spacing: 0.02em;
+  }
+
+  .footer-keywords__label {
+    font-weight: 600;
+    color: #494238;
+    margin-right: 0.45rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
 
   .made-by {
@@ -189,6 +221,10 @@ const hours =
     .footer-bottom {
       flex-direction: column;
       gap: 1rem;
+    }
+
+    .footer-keywords__line {
+      font-size: 0.7rem;
     }
 
     .footer-logo {

@@ -3,6 +3,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getProducts, getProductBySlug } from '../../../lib/wp';
 import { fallbackPaintings } from '../../../lib/fallbackPaintings';
 import { slugify } from '../../../lib/slugify';
+import { seoCopy } from '../../../lib/seoKeywords';
 
 export const prerender = false;
 
@@ -58,11 +59,15 @@ const paintingImage =
 const detailText = painting?.description || 'Original artwork.';
 const dimensions = painting?.dimensions ?? '—';
 const medium = painting?.medium ?? '—';
-const pageTitle = `${paintingTitle} – My Light Gallery Art`;
+const seo = seoCopy.en;
+const plainDescription = painting?.description?.replace(/<[^>]+>/g, '').trim() ?? '';
+const locationSuffix = seo.artworkMetaSuffix;
+const maxDescriptionLength = Math.max(0, 155 - locationSuffix.length - 1);
+const pageTitle = `${paintingTitle} | ${seo.artworkTitleSuffix}`;
 const certificateSeed = String(painting?.id ?? painting?.slug ?? slug ?? paintingTitle);
-const metaDescription = painting?.description
-  ? painting.description.replace(/<[^>]+>/g, '').slice(0, 155).trim()
-  : `Original artwork by Layla: ${paintingTitle}. ${dimensions !== '—' ? dimensions + '. ' : ''}${medium !== '—' ? medium + '. ' : ''}Available at My Light Gallery Art, Irving TX.`;
+const metaDescription = plainDescription
+  ? `${plainDescription.slice(0, maxDescriptionLength).trim()} ${locationSuffix}`.trim()
+  : `Original artwork by Layla: ${paintingTitle}. ${dimensions !== '—' ? dimensions + '. ' : ''}${medium !== '—' ? medium + '. ' : ''}${locationSuffix}`.trim();
 const phoneLabel = '+1 (214) 537-6953';
 const phoneHref = 'tel:+12145376953';
 const email = 'layla@mylightartgallery.com';

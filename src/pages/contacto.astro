@@ -1,10 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { seoCopy } from '../lib/seoKeywords';
+
+const seo = seoCopy.es;
 ---
 
 <BaseLayout
-  title="Contacto en Irving, TX – My Light Art Gallery"
-  description="Contacta a My Light Art Gallery en Irving, TX para información sobre arte contemporáneo, colecciones y colaboraciones."
+  title={seo.contactTitle}
+  description={seo.contactDescription}
 >
   <section class="contact">
     <div class="container">
@@ -12,6 +15,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <h1>Contacto</h1>
         <p>
           ¿Tienes preguntas sobre obras, eventos o colaboraciones? Escríbenos y te responderemos a la brevedad.
+        </p>
+        <p>
+          {seo.contactIntro}
         </p>
         <div class="details">
           <p><strong>Tel:</strong> +1 (972) 444-4553</p>

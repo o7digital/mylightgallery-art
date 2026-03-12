@@ -5,6 +5,7 @@ import { getProducts } from '../../lib/wp';
 import { fallbackPaintings } from '../../lib/fallbackPaintings';
 import { getBooleanEnv } from '../../lib/env';
 import { slugify } from '../../lib/slugify';
+import { seoCopy } from '../../lib/seoKeywords';
 
 export const prerender = false;
 
@@ -24,12 +25,14 @@ const whatsOnPaintings = orderedPaintings.filter(painting => painting.image).sli
 const exhibitionsHref = '/en/exhibitions';
 const detailBase = '/en/works';
 const collectionsImage = '/collections/featured.webp';
+const seo = seoCopy.en;
+const collectionsIntro = `${seo.homeIntro} Painting is my essential need and my most authentic way to express myself. Through color and creative freedom, I communicate emotions and feelings that words cannot fully convey. Painting is my natural language, an intimate space where my sensitivity flows.`;
 ---
 
 <BaseLayout
   lang="en"
-  title="My Light Gallery Art – Contemporary Art Gallery | Irving, TX"
-  description="Art gallery in Irving, TX featuring original contemporary paintings by Layla. Discover unique collections of acrylics, oils, and mixed media works."
+  title={seo.homeTitle}
+  description={seo.homeDescription}
   showEventsNews={showEventsNews}
 >
   <Hero lang="en" showEventsNews={showEventsNews} />
@@ -53,7 +56,7 @@ const collectionsImage = '/collections/featured.webp';
           <span class="rg-eyebrow">Collection</span>
           <h2>Collections</h2>
           <p class="section-intro">
-            Painting is my essential need and my most authentic way to express myself. Through color and creative freedom, I communicate emotions and feelings that words can’t fully convey. Painting is my natural language, an intimate space where my sensitivity flows.
+            {collectionsIntro}
           </p>
           <a class="rg-link" href={exhibitionsHref}>View all works</a>
         </div>
