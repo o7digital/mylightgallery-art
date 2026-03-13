@@ -43,6 +43,19 @@ const legalTitle = isEn ? 'Legal' : 'Avisos legales';
 const madeByText = isEn ? 'made by o7Digital' : 'hecho por o7Digital';
 const logoAlt = 'My Light Art Gallery';
 const footerKeywords = isEn ? footerKeywordLines.en : footerKeywordLines.es;
+const splitFooterKeywords = (keywords: readonly string[], rowCount: number) => {
+  const rows = Array.from({ length: rowCount }, () => [] as string[]);
+  const rowLengths = Array.from({ length: rowCount }, () => 0);
+
+  for (const keyword of keywords) {
+    const shortestRowIndex = rowLengths.indexOf(Math.min(...rowLengths));
+    rows[shortestRowIndex].push(keyword);
+    rowLengths[shortestRowIndex] += keyword.length + 3;
+  }
+
+  return rows;
+};
+const footerKeywordRows = splitFooterKeywords(footerKeywords, 3);
 const copyright =
   isEn
     ? '© 2026 My Light Gallery Art. All rights reserved.'
@@ -96,11 +109,15 @@ const hours =
 
   <div class="container footer-keywords">
     <div class="footer-keywords__inner">
-      {footerKeywords.map((keyword, index) => (
-        <span class="footer-keyword-group">
-          <span class="footer-keyword">{keyword}</span>
-          {index < footerKeywords.length - 1 && <span class="footer-separator" aria-hidden="true">·</span>}
-        </span>
+      {footerKeywordRows.map((row) => (
+        <p class="footer-keywords__row">
+          {row.map((keyword, index) => (
+            <span class="footer-keyword-group">
+              <span class="footer-keyword">{keyword}</span>
+              {index < row.length - 1 && <span class="footer-separator" aria-hidden="true">·</span>}
+            </span>
+          ))}
+        </p>
       ))}
     </div>
   </div>
@@ -179,6 +196,8 @@ const hours =
   }
 
   .container.footer-keywords {
+    max-width: min(1540px, calc(100vw - 72px));
+    width: 100%;
     display: flex;
     justify-content: center;
     margin: 0 auto 1.55rem;
@@ -187,12 +206,10 @@ const hours =
   }
 
   .footer-keywords__inner {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    max-width: 980px;
-    padding: 0.95rem 1.35rem;
+    display: grid;
+    gap: 0.3rem;
+    width: 100%;
+    padding: 0.95rem 1.6rem;
     border: 1px solid rgba(73, 66, 56, 0.16);
     border-radius: 18px;
     background: rgba(255, 255, 255, 0.24);
@@ -200,14 +217,22 @@ const hours =
     text-align: center;
   }
 
+  .footer-keywords__row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    margin: 0;
+  }
+
   .footer-keyword-group {
     display: inline-flex;
     align-items: center;
-    margin: 0.2rem 0;
+    margin: 0;
     color: rgba(73, 66, 56, 0.82);
-    font-size: 0.92rem;
-    line-height: 1.55;
-    letter-spacing: 0.015em;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    letter-spacing: 0.01em;
     font-weight: 400;
     white-space: nowrap;
   }
@@ -237,6 +262,16 @@ const hours =
     }
   }
 
+  @media (max-width: 1280px) {
+    .container.footer-keywords {
+      max-width: 1200px;
+    }
+
+    .footer-keywords__row {
+      flex-wrap: wrap;
+    }
+  }
+
   @media (max-width: 768px) {
     .footer-brand {
       margin-left: 0;
@@ -254,9 +289,12 @@ const hours =
     }
 
     .footer-keywords__inner {
-      max-width: 100%;
       padding: 0.9rem 1rem;
       border-radius: 16px;
+    }
+
+    .footer-keywords__row {
+      display: block;
     }
 
     .footer-keyword-group {
