@@ -1,5 +1,5 @@
 ---
-import { footerKeywordGroups } from '../lib/seoKeywords';
+import { footerKeywordLines } from '../lib/seoKeywords';
 
 const { lang = 'es', showEventsNews = true } = Astro.props;
 const path = Astro.url?.pathname ?? '';
@@ -42,6 +42,7 @@ const locationTitle = isEn ? 'Location' : 'Ubicación';
 const legalTitle = isEn ? 'Legal' : 'Avisos legales';
 const madeByText = isEn ? 'made by o7Digital' : 'hecho por o7Digital';
 const logoAlt = 'My Light Art Gallery';
+const footerKeywords = isEn ? footerKeywordLines.en : footerKeywordLines.es;
 const copyright =
   isEn
     ? '© 2026 My Light Gallery Art. All rights reserved.'
@@ -93,13 +94,15 @@ const hours =
     </div>
   </div>
 
-  <div class="container footer-keywords" aria-label="Local SEO keywords">
-    {footerKeywordGroups.map((group) => (
-      <p class="footer-keywords__line">
-        <span class="footer-keywords__label">{group.label}:</span>
-        <span>{group.keywords.join(' · ')}</span>
-      </p>
-    ))}
+  <div class="container footer-keywords">
+    <div class="footer-keywords__inner">
+      {footerKeywords.map((keyword, index) => (
+        <span class="footer-keyword-group">
+          <span class="footer-keyword">{keyword}</span>
+          {index < footerKeywords.length - 1 && <span class="footer-separator" aria-hidden="true">·</span>}
+        </span>
+      ))}
+    </div>
   </div>
 
   <div class="footer-bottom">
@@ -175,25 +178,47 @@ const hours =
     align-items: center;
   }
 
-  .footer-keywords {
-    margin-bottom: 1.5rem;
+  .container.footer-keywords {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto 1.55rem;
+    padding: 1.25rem 0 0.2rem;
+    border-top: 1px solid rgba(59, 59, 59, 0.09);
+  }
+
+  .footer-keywords__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: 980px;
+    padding: 0.95rem 1.35rem;
+    border: 1px solid rgba(73, 66, 56, 0.16);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.24);
+    box-shadow: 0 10px 24px rgba(73, 66, 56, 0.05);
     text-align: center;
-    color: #6a6358;
   }
 
-  .footer-keywords__line {
-    margin: 0.45rem 0;
-    font-size: 0.74rem;
-    line-height: 1.8;
-    letter-spacing: 0.02em;
+  .footer-keyword-group {
+    display: inline-flex;
+    align-items: center;
+    margin: 0.2rem 0;
+    color: rgba(73, 66, 56, 0.82);
+    font-size: 0.92rem;
+    line-height: 1.55;
+    letter-spacing: 0.015em;
+    font-weight: 400;
+    white-space: nowrap;
   }
 
-  .footer-keywords__label {
-    font-weight: 600;
-    color: #494238;
-    margin-right: 0.45rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+  .footer-keyword {
+    white-space: nowrap;
+  }
+
+  .footer-separator {
+    color: rgba(73, 66, 56, 0.68);
+    margin: 0 0.26rem;
   }
 
   .made-by {
@@ -223,14 +248,40 @@ const hours =
       gap: 1rem;
     }
 
-    .footer-keywords__line {
-      font-size: 0.7rem;
+    .container.footer-keywords {
+      padding-top: 1rem;
+      margin-bottom: 1.35rem;
+    }
+
+    .footer-keywords__inner {
+      max-width: 100%;
+      padding: 0.9rem 1rem;
+      border-radius: 16px;
+    }
+
+    .footer-keyword-group {
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+
+    .footer-separator {
+      margin: 0 0.35rem;
     }
 
     .footer-logo {
       width: 140px;
       height: auto;
       object-fit: contain;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .footer-keywords__inner {
+      padding: 0.8rem 0.85rem;
+    }
+
+    .footer-keyword-group {
+      font-size: 0.78rem;
     }
   }
 </style>
