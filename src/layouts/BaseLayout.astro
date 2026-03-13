@@ -10,6 +10,11 @@ const {
   lang = 'es',
   ogImage: ogImageProp,
   showEventsNews = true,
+  canonicalPath,
+  alternateEsPath,
+  alternateEnPath,
+  xDefaultPath,
+  extraStructuredData = [],
 } = Astro.props;
 const gaMeasurementId =
   getEnvValue(['PUBLIC_GA_MEASUREMENT_ID', 'GA_MEASUREMENT_ID']) ?? 'G-5F4G9JJ05G';
@@ -22,9 +27,13 @@ gtag('config', '${gaMeasurementId}');`
   : null;
 const site = Astro.site;
 const currentUrl = Astro.url;
-const canonicalUrl = site ? new URL(currentUrl.pathname, site).href : currentUrl.href;
+const canonicalTarget = canonicalPath ?? currentUrl.pathname;
+const canonicalUrl = site ? new URL(canonicalTarget, site).href : currentUrl.href;
 const locale = lang === 'en' ? 'en_US' : 'es_ES';
 const siteName = 'My Light Art Gallery';
+const alternateEsUrl = site ? new URL(alternateEsPath ?? '/', site).href : null;
+const alternateEnUrl = site ? new URL(alternateEnPath ?? '/en/', site).href : null;
+const xDefaultUrl = site ? new URL(xDefaultPath ?? alternateEsPath ?? '/', site).href : null;
 const defaultOgImage = site
   ? new URL('/slider/cadenas-acrilico-36x48.webp', site).href
   : '/slider/cadenas-acrilico-36x48.webp';
@@ -55,6 +64,11 @@ const structuredData = {
     'https://facebook.com/mylightgalleryart',
   ],
 };
+const structuredDataNodes = [structuredData].concat(
+  Array.isArray(extraStructuredData)
+    ? extraStructuredData.filter(Boolean)
+    : [extraStructuredData].filter(Boolean)
+);
 ---
 
 <!DOCTYPE html>
@@ -92,14 +106,16 @@ const structuredData = {
         <script is:inline set:html={gaInlineScript}></script>
       </>
     )}
-    {site && (
+    {site && alternateEsUrl && alternateEnUrl && xDefaultUrl && (
       <>
-        <link rel="alternate" href={new URL('/', site).href} hreflang="es" />
-        <link rel="alternate" href={new URL('/en/', site).href} hreflang="en" />
-        <link rel="alternate" href={new URL('/', site).href} hreflang="x-default" />
+        <link rel="alternate" href={alternateEsUrl} hreflang="es" />
+        <link rel="alternate" href={alternateEnUrl} hreflang="en" />
+        <link rel="alternate" href={xDefaultUrl} hreflang="x-default" />
       </>
     )}
-    <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)}></script>
+    {structuredDataNodes.map((schema) => (
+      <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)}></script>
+    ))}
   </head>
   <body>
     <Header lang={lang} showEventsNews={showEventsNews} />

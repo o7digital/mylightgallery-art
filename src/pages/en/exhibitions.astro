@@ -27,12 +27,25 @@ const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
 const buildPageHref = (page: number) =>
   page <= 1 ? exhibitionsPath : `${exhibitionsPath}?page=${page}`;
 const seo = seoCopy.en;
+const exhibitionsSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: seo.exhibitionsTitle,
+  description: seo.exhibitionsDescription,
+  inLanguage: 'en-US',
+  url: Astro.site ? new URL(buildPageHref(currentPage), Astro.site).href : buildPageHref(currentPage),
+};
 ---
 
 <BaseLayout
   lang="en"
   title={seo.exhibitionsTitle}
   description={seo.exhibitionsDescription}
+  canonicalPath={buildPageHref(currentPage)}
+  alternateEsPath={currentPage <= 1 ? '/exhibitions' : `/exhibitions?page=${currentPage}`}
+  alternateEnPath={buildPageHref(currentPage)}
+  xDefaultPath={currentPage <= 1 ? '/exhibitions' : `/exhibitions?page=${currentPage}`}
+  extraStructuredData={exhibitionsSchema}
 >
   <div class="rg-exhibitions-page rg-exhibitions-list">
     <section class="rg-exhibitions-hero">

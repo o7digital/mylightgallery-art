@@ -79,6 +79,8 @@ const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`
 const pinterestShare =
   `https://pinterest.com/pin/create/button/?url=${shareUrl}&media=${shareImage}&description=${shareTitle}`;
 const instagramHref = 'https://www.instagram.com/mylightgalleryart/';
+const artworkEnPath = paintingSlug ? `/en/works/${paintingSlug}` : '/en/exhibitions';
+const artworkEsPath = paintingSlug ? `/obras/${paintingSlug}` : '/exhibitions';
 const artworkSchema = {
   '@context': 'https://schema.org',
   '@type': 'VisualArtwork',
@@ -86,6 +88,7 @@ const artworkSchema = {
   url: currentUrl,
   image: paintingImage ?? undefined,
   description: metaDescription,
+  inLanguage: 'en-US',
   ...(dimensions !== '—' ? { width: dimensions } : {}),
   ...(medium !== '—' ? { artMedium: medium } : {}),
   creator: {
@@ -101,7 +104,15 @@ const artworkSchema = {
 };
 ---
 
-<BaseLayout lang="en" title={pageTitle} description={metaDescription} ogImage={paintingImage ?? undefined}>
+<BaseLayout
+  lang="en"
+  title={pageTitle}
+  description={metaDescription}
+  ogImage={paintingImage ?? undefined}
+  alternateEsPath={artworkEsPath}
+  alternateEnPath={artworkEnPath}
+  xDefaultPath={artworkEsPath}
+>
   <div class="rg-artwork-page">
     <section class="rg-artwork-hero">
       <div class="container">

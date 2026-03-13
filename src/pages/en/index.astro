@@ -27,6 +27,14 @@ const detailBase = '/en/works';
 const collectionsImage = '/collections/featured.webp';
 const seo = seoCopy.en;
 const collectionsIntro = `${seo.homeIntro} Painting is my essential need and my most authentic way to express myself. Through color and creative freedom, I communicate emotions and feelings that words cannot fully convey. Painting is my natural language, an intimate space where my sensitivity flows.`;
+const homeSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: seo.homeTitle,
+  description: seo.homeDescription,
+  inLanguage: 'en-US',
+  url: Astro.site ? new URL('/en/', Astro.site).href : '/en/',
+};
 ---
 
 <BaseLayout
@@ -34,6 +42,10 @@ const collectionsIntro = `${seo.homeIntro} Painting is my essential need and my 
   title={seo.homeTitle}
   description={seo.homeDescription}
   showEventsNews={showEventsNews}
+  alternateEsPath="/"
+  alternateEnPath="/en/"
+  xDefaultPath="/"
+  extraStructuredData={homeSchema}
 >
   <Hero lang="en" showEventsNews={showEventsNews} />
 

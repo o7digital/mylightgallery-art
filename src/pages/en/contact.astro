@@ -3,12 +3,38 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { seoCopy } from '../../lib/seoKeywords';
 
 const seo = seoCopy.en;
+const contactSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: seo.contactTitle,
+  description: seo.contactDescription,
+  inLanguage: 'en-US',
+  url: Astro.site ? new URL('/en/contact', Astro.site).href : '/en/contact',
+  mainEntity: {
+    '@type': 'ArtGallery',
+    name: 'My Light Gallery Art',
+    telephone: '+1-972-444-4553',
+    email: 'info@mylightartgallery.com',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: "5215 N. O'Connor Rd. Ste 1725",
+      addressLocality: 'Irving',
+      addressRegion: 'TX',
+      postalCode: '75039',
+      addressCountry: 'US',
+    },
+  },
+};
 ---
 
 <BaseLayout
   lang="en"
   title={seo.contactTitle}
   description={seo.contactDescription}
+  alternateEsPath="/contacto"
+  alternateEnPath="/en/contact"
+  xDefaultPath="/contacto"
+  extraStructuredData={contactSchema}
 >
   <section class="contact">
     <div class="container">

@@ -67,23 +67,23 @@ export const seoCopy = {
       'Disponible en My Light Gallery Art, galería de arte en Irving Texas para coleccionistas de Dallas Texas.',
   },
   en: {
-    homeTitle: 'Contemporary Art Gallery Irving Texas | My Light Gallery Art',
+    homeTitle: 'Contemporary Art Gallery in Irving Texas | Original Paintings by Layla',
     homeDescription:
-      'Contemporary art gallery in Irving Texas with original paintings, abstract art and unique works by Layla. My Light Gallery Art also serves collectors in Dallas Texas.',
+      'Discover My Light Gallery Art, a contemporary art gallery in Irving Texas featuring original paintings, abstract art, and mixed media by Layla for collectors in Dallas Texas.',
     homeIntro:
-      'My Light Gallery Art is a contemporary art gallery in Irving Texas presenting original paintings and abstract art for collectors in Dallas Texas.',
-    exhibitionsTitle: 'Original Paintings for Sale Irving Texas | My Light Gallery Art',
+      'My Light Gallery Art is a contemporary art gallery in Irving Texas presenting original paintings, abstract art, and mixed media for collectors in Dallas Texas.',
+    exhibitionsTitle: 'Original Paintings for Sale in Irving Texas | Contemporary Art by Layla',
     exhibitionsDescription:
-      'Browse original paintings, abstract art and mixed media in Irving Texas. My Light Gallery Art offers available works for collectors in Dallas Texas.',
+      'Browse original paintings, abstract art, and mixed media for sale in Irving Texas at My Light Gallery Art. Contemporary works by Layla for collectors in Dallas Texas.',
     exhibitionsIntro:
-      'Browse original paintings, abstract art and mixed media in Irving Texas, with guidance for collectors in Dallas Texas.',
-    contactTitle: 'Contact Art Gallery Irving Texas | My Light Gallery Art',
+      'Browse original paintings, abstract art, and mixed media in Irving Texas, with guidance for collectors in Dallas Texas.',
+    contactTitle: 'Contact Contemporary Art Gallery in Irving Texas | My Light Gallery Art',
     contactDescription:
-      'Contact My Light Gallery Art, an art gallery in Irving Texas, for original paintings, abstract art and collector support in Dallas Texas.',
+      'Contact My Light Gallery Art in Irving Texas for original paintings, abstract art, private visits, and collector support across Dallas Texas.',
     contactIntro:
-      'If you are looking for original paintings or abstract art in Irving Texas and Dallas Texas, contact us for available works and private visits.',
-    artworkTitleSuffix: 'My Light Gallery Art Irving Texas',
+      'If you are looking for original paintings, abstract art, or mixed media in Irving Texas and Dallas Texas, contact us for available works and private visits.',
+    artworkTitleSuffix: 'Original Painting | My Light Gallery Art Irving Texas',
     artworkMetaSuffix:
-      'Available at My Light Gallery Art, an art gallery in Irving Texas for collectors in Dallas Texas.',
+      'Available at My Light Gallery Art, a contemporary art gallery in Irving Texas serving collectors in Dallas Texas.',
   },
 } as const;
