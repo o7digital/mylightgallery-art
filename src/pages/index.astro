@@ -5,6 +5,7 @@ import { getProducts } from '../lib/wp';
 import { fallbackPaintings } from '../lib/fallbackPaintings';
 import { getBooleanEnv } from '../lib/env';
 import { slugify } from '../lib/slugify';
+import { seoCopy } from '../lib/seoKeywords';
 
 export const prerender = false;
 
@@ -24,11 +25,13 @@ const whatsOnPaintings = orderedPaintings.filter(painting => painting.image).sli
 const exhibitionsHref = '/exhibitions';
 const detailBase = '/obras';
 const collectionsImage = '/collections/featured.webp';
+const seo = seoCopy.es;
+const collectionsIntro = `${seo.homeIntro} Para mí, pintar es una necesidad esencial y la forma más auténtica de expresarme. A través del color y la libertad creativa, logro comunicar emociones y sentimientos que no siempre pueden expresarse con palabras. La pintura se convierte en mi lenguaje natural, un espacio íntimo donde fluye mi sensibilidad y mi conexión con la vida.`;
 ---
 
 <BaseLayout
-  title="My Light Gallery Art – Galería de Arte Contemporáneo | Irving, TX"
-  description="Galería de arte en Irving, TX especializada en pinturas originales contemporáneas. Descubre colecciones únicas de Layla: acrílicos, óleos y obras sobre lienzo."
+  title={seo.homeTitle}
+  description={seo.homeDescription}
   showEventsNews={showEventsNews}
 >
   <Hero showEventsNews={showEventsNews} />
@@ -52,7 +55,7 @@ const collectionsImage = '/collections/featured.webp';
           <span class="rg-eyebrow">Colección</span>
           <h2>COLECCIONES</h2>
           <p class="section-intro">
-            Para mí, pintar es una necesidad esencial y la forma más auténtica de expresarme. A través del color y la libertad creativa, logro comunicar emociones y sentimientos que no siempre pueden expresarse con palabras. La pintura se convierte en mi lenguaje natural, un espacio íntimo donde fluye mi sensibilidad y mi conexión con la vida.
+            {collectionsIntro}
           </p>
           <a class="rg-link" href={exhibitionsHref}>Ver todas las obras</a>
         </div>

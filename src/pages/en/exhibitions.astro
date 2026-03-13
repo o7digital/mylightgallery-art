@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getProducts } from '../../lib/wp';
 import { fallbackPaintings } from '../../lib/fallbackPaintings';
 import { slugify } from '../../lib/slugify';
+import { seoCopy } from '../../lib/seoKeywords';
 
 export const prerender = false;
 
@@ -25,12 +26,26 @@ const visiblePaintings = orderedPaintings.slice(pageStart, pageStart + pageSize)
 const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
 const buildPageHref = (page: number) =>
   page <= 1 ? exhibitionsPath : `${exhibitionsPath}?page=${page}`;
+const seo = seoCopy.en;
+const exhibitionsSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: seo.exhibitionsTitle,
+  description: seo.exhibitionsDescription,
+  inLanguage: 'en-US',
+  url: Astro.site ? new URL(buildPageHref(currentPage), Astro.site).href : buildPageHref(currentPage),
+};
 ---
 
 <BaseLayout
   lang="en"
-  title="Available Artworks – My Light Gallery Art | Irving, TX"
-  description="Browse original paintings available at My Light Gallery Art. Acrylics, oils and mixed media by artist Layla. Worldwide shipping available."
+  title={seo.exhibitionsTitle}
+  description={seo.exhibitionsDescription}
+  canonicalPath={buildPageHref(currentPage)}
+  alternateEsPath={currentPage <= 1 ? '/exhibitions' : `/exhibitions?page=${currentPage}`}
+  alternateEnPath={buildPageHref(currentPage)}
+  xDefaultPath={currentPage <= 1 ? '/exhibitions' : `/exhibitions?page=${currentPage}`}
+  extraStructuredData={exhibitionsSchema}
 >
   <div class="rg-exhibitions-page rg-exhibitions-list">
     <section class="rg-exhibitions-hero">
@@ -46,12 +61,13 @@ const buildPageHref = (page: number) =>
       )}
       <header>
         <p class="rg-eyebrow">Exhibitions</p>
-        <h1>Original Paintings for Sale</h1>
+        <h1>Original Paintings for Sale in Irving Texas</h1>
       </header>
     </section>
 
     <section class="rg-exhibitions-grid-section">
       <div class="container">
+        <p class="rg-exhibitions-intro">{seo.exhibitionsIntro}</p>
         <div class="rg-exhibitions-grid">
           {visiblePaintings.map((painting, index) => {
             const paintingSlug = painting.slug ?? slugify(painting.title);
@@ -215,6 +231,15 @@ const buildPageHref = (page: number) =>
 
   .rg-exhibitions-grid-section {
     padding: 2.5rem 2rem 6rem;
+  }
+
+  .rg-exhibitions-intro {
+    max-width: 760px;
+    margin: 0 auto 2.5rem;
+    text-align: center;
+    color: var(--rg-muted);
+    line-height: 1.75;
+    font-size: 1rem;
   }
 
   .rg-exhibitions-grid {

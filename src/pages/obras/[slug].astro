@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getProducts, getProductBySlug } from '../../lib/wp';
 import { fallbackPaintings } from '../../lib/fallbackPaintings';
 import { slugify } from '../../lib/slugify';
+import { seoCopy } from '../../lib/seoKeywords';
 
 export const prerender = false;
 
@@ -58,10 +59,14 @@ const paintingImage =
 const detailText = painting?.description || 'Obra original.';
 const dimensions = painting?.dimensions ?? '—';
 const medium = painting?.medium ?? '—';
-const pageTitle = `${paintingTitle} – My Light Gallery Art`;
-const metaDescription = painting?.description
-  ? painting.description.replace(/<[^>]+>/g, '').slice(0, 155).trim()
-  : `Obra original de Layla: ${paintingTitle}. ${dimensions !== '—' ? dimensions + '. ' : ''}${medium !== '—' ? medium + '. ' : ''}Disponible en My Light Gallery Art, Irving TX.`;
+const seo = seoCopy.es;
+const plainDescription = painting?.description?.replace(/<[^>]+>/g, '').trim() ?? '';
+const locationSuffix = seo.artworkMetaSuffix;
+const maxDescriptionLength = Math.max(0, 155 - locationSuffix.length - 1);
+const pageTitle = `${paintingTitle} | ${seo.artworkTitleSuffix}`;
+const metaDescription = plainDescription
+  ? `${plainDescription.slice(0, maxDescriptionLength).trim()} ${locationSuffix}`.trim()
+  : `Obra original de Layla: ${paintingTitle}. ${dimensions !== '—' ? dimensions + '. ' : ''}${medium !== '—' ? medium + '. ' : ''}${locationSuffix}`.trim();
 const certificateSeed = String(painting?.id ?? painting?.slug ?? slug ?? paintingTitle);
 const phoneLabel = '+1 (214) 537-6953';
 const phoneHref = 'tel:+12145376953';
