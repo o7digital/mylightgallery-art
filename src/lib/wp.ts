@@ -62,11 +62,43 @@ const stripTags = (value?: string | null) =>
   (value || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
 
 const normalizeMediumText = (value: string) =>
-  value.replace(/\bolio\b/gi, match => {
-    if (match === match.toUpperCase()) return 'ÓLEO';
-    if (match[0] === match[0].toUpperCase()) return 'Óleo';
-    return 'óleo';
-  });
+  value
+    .replace(/\bolio\b/gi, match => {
+      if (match === match.toUpperCase()) return 'ÓLEO';
+      if (match[0] === match[0].toUpperCase()) return 'Óleo';
+      return 'óleo';
+    })
+    .replace(/\bacrilico\b/gi, match => {
+      if (match === match.toUpperCase()) return 'ACRÍLICO';
+      if (match[0] === match[0].toUpperCase()) return 'Acrílico';
+      return 'acrílico';
+    });
+
+const normalizeDimensionsText = (value: string) =>
+  value
+    .replace(/(\d{2,3})\s*[x×]\s*(\d{2,3})/gi, '$1 x $2')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const extractDimensionsFromText = (value?: string | null) => {
+  if (!value) return null;
+  const normalized = value.replace(/-/g, ' ');
+  const match = normalized.match(/(\d{2,3})\s*[x×]\s*(\d{2,3})/i);
+  if (!match) return null;
+  return `${match[1]} x ${match[2]}`;
+};
+
+const extractMediumFromText = (value?: string | null) => {
+  if (!value) return null;
+  const normalized = value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+
+  if (/\bacrilic(?:o)?\b/.test(normalized)) return 'Acrílico';
+  if (/\boleo\b|\boil\b/.test(normalized)) return 'Óleo';
+  return null;
+};
 
 const normalizeImage = (src?: string | null) => {
   if (!src) return null;
@@ -138,45 +170,58 @@ const formatPrice = (price?: string | null, regular?: string | null) => {
 
 const deriveDimensions = (
   name: string,
-  dimensions?: { width?: string; height?: string; length?: string }
+  dimensions?: { width?: string; height?: string; length?: string },
+  slug?: string,
+  permalink?: string
 ) => {
   if (dimensions?.width && dimensions?.height) {
-    return `${dimensions.width} x ${dimensions.height}`;
+    return normalizeDimensionsText(`${dimensions.width} x ${dimensions.height}`);
   }
 
-  const match = name.match(/(\d{2,3})\s*[xX]\s*(\d{2,3})/);
-  if (match) {
-    return `${match[1]} x ${match[2]}`;
-  }
+  const fromName = extractDimensionsFromText(name);
+  if (fromName) return fromName;
+
+  const fromSlug = extractDimensionsFromText(slug);
+  if (fromSlug) return fromSlug;
+
+  const fromPermalink = extractDimensionsFromText(permalink);
+  if (fromPermalink) return fromPermalink;
 
   return null;
 };
 
-const getDimensionsFromAttributes = (attributes: Array<Record<string, any>>) => {
-  for (const attr of attributes ?? []) {
-    const name = stripTags(attr?.name).trim();
-    if (name) return name;
-  }
+const deriveMedium = (
+  attributes: Array<Record<string, any>>,
+  name?: string,
+  slug?: string,
+  permalink?: string,
+  description?: string
+) => {
+  const fromAttributes = getMediumFromAttributes(attributes);
+  if (fromAttributes) return fromAttributes;
+
+  const fromName = extractMediumFromText(name);
+  if (fromName) return fromName;
+
+  const fromSlug = extractMediumFromText(slug);
+  if (fromSlug) return fromSlug;
+
+  const fromPermalink = extractMediumFromText(permalink);
+  if (fromPermalink) return fromPermalink;
+
+  const fromDescription = extractMediumFromText(description);
+  if (fromDescription) return fromDescription;
+
   return null;
 };
 
-const getMediumFromAttributes = (attributes: Array<Record<string, any>>) => {
-  for (const attr of attributes ?? []) {
-    const options = Array.isArray(attr?.options) ? attr.options : [];
-    for (const option of options) {
-      const cleaned = stripTags(typeof option === 'string' ? option : String(option)).trim();
-      if (cleaned) {
-        return normalizeMediumText(cleaned);
-      }
-    }
-  }
-  return null;
-};
-
-const extractFirstImageSrc = (html?: string | null) => {
-  if (!html) return null;
-  const match = html.match(/<img[^>]+src\s*=\s*['"]([^'">]+)['"]/i);
-  return normalizeImage(match?.[1]);
+const deriveDimensionsFromAttributes = (attributes: Array<Record<string, any>>) => {
+  const fromAttributes = getDimensionsFromAttributes(attributes);
+  if (!fromAttributes) return null;
+  const extracted = extractDimensionsFromText(fromAttributes);
+  if (extracted) return extracted;
+  const normalized = normalizeDimensionsText(fromAttributes);
+  return normalized || null;
 };
 
 const mapProduct = (item: Record<string, any>): ProductCard | null => {
@@ -184,8 +229,15 @@ const mapProduct = (item: Record<string, any>): ProductCard | null => {
   if (!rawTitle) return null;
   const attributes = Array.isArray(item.attributes) ? item.attributes : [];
   const dimensions =
-    getDimensionsFromAttributes(attributes) || deriveDimensions(rawTitle, item.dimensions);
-  const medium = getMediumFromAttributes(attributes);
+    deriveDimensionsFromAttributes(attributes) ||
+    deriveDimensions(rawTitle, item.dimensions, item.slug, item.permalink);
+  const medium = deriveMedium(
+    attributes,
+    rawTitle,
+    item.slug,
+    item.permalink,
+    typeof item.description === 'string' ? item.description : null
+  );
   const title = rawTitle;
   const priceText = formatPrice(item.price, item.regular_price);
   const mainImage = item.images?.[0] ?? null;
@@ -216,6 +268,34 @@ const mapProduct = (item: Record<string, any>): ProductCard | null => {
     description,
   };
 };
+
+const getDimensionsFromAttributes = (attributes: Array<Record<string, any>>) => {
+  for (const attr of attributes ?? []) {
+    const name = stripTags(attr?.name).trim();
+    if (name) return name;
+  }
+  return null;
+};
+
+const getMediumFromAttributes = (attributes: Array<Record<string, any>>) => {
+  for (const attr of attributes ?? []) {
+    const options = Array.isArray(attr?.options) ? attr.options : [];
+    for (const option of options) {
+      const cleaned = stripTags(typeof option === 'string' ? option : String(option)).trim();
+      if (cleaned) {
+        return normalizeMediumText(cleaned);
+      }
+    }
+  }
+  return null;
+};
+
+const extractFirstImageSrc = (html?: string | null) => {
+  if (!html) return null;
+  const match = html.match(/<img[^>]+src\s*=\s*['"]([^'">]+)['"]/i);
+  return normalizeImage(match?.[1]);
+};
+
 
 const getCachedProducts = (limit: number) => {
   if (!productsCache) return null;

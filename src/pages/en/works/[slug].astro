@@ -57,8 +57,24 @@ const imageOverrides: Record<string, string> = {
 const paintingImage =
   imageOverrides[paintingSlug] ?? painting?.imageFull ?? painting?.image ?? null;
 const detailText = painting?.description || 'Original artwork.';
-const dimensions = painting?.dimensions ?? '—';
-const medium = painting?.medium ?? '—';
+const formatDimensionsEn = (value?: string | null) => {
+  if (!value) return null;
+  const match = value.match(/^\s*(\d{2,3})\s*x\s*(\d{2,3})\s*$/i);
+  if (!match) return value;
+  return `${match[1]} x ${match[2]} in`;
+};
+const formatMediumEn = (value?: string | null) => {
+  if (!value) return null;
+  const normalized = value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+  if (/\bacrilic(?:o)?\b/.test(normalized)) return 'Acrylic';
+  if (/\boleo\b|\boil\b/.test(normalized)) return 'Oil';
+  return value;
+};
+const dimensions = formatDimensionsEn(painting?.dimensions) ?? '—';
+const medium = formatMediumEn(painting?.medium) ?? '—';
 const seo = seoCopy.en;
 const plainDescription = painting?.description?.replace(/<[^>]+>/g, '').trim() ?? '';
 const locationSuffix = seo.artworkMetaSuffix;

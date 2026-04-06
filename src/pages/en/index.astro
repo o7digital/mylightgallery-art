@@ -27,6 +27,22 @@ const detailBase = '/en/works';
 const collectionsImage = '/collections/featured.webp';
 const seo = seoCopy.en;
 const collectionsIntro = `${seo.homeIntro} Painting is my essential need and my most authentic way to express myself. Through color and creative freedom, I communicate emotions and feelings that words cannot fully convey. Painting is my natural language, an intimate space where my sensitivity flows.`;
+const formatDimensionsEn = (value?: string | null) => {
+  if (!value) return null;
+  const match = value.match(/^\s*(\d{2,3})\s*x\s*(\d{2,3})\s*$/i);
+  if (!match) return value;
+  return `${match[1]} x ${match[2]} in`;
+};
+const formatMediumEn = (value?: string | null) => {
+  if (!value) return null;
+  const normalized = value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+  if (/\bacrilic(?:o)?\b/.test(normalized)) return 'Acrylic';
+  if (/\boleo\b|\boil\b/.test(normalized)) return 'Oil';
+  return value;
+};
 const homeSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
@@ -90,7 +106,9 @@ const homeSchema = {
           {whatsOnPaintings.map((painting, index) => {
             const paintingSlug = painting.slug ?? slugify(painting.title);
             const paintingHref = `${detailBase}/${paintingSlug}`;
-            const meta = [painting.dimensions, painting.medium, painting.priceText]
+            const dimensions = formatDimensionsEn(painting.dimensions);
+            const medium = formatMediumEn(painting.medium);
+            const meta = [dimensions, medium, painting.priceText]
               .filter(Boolean)
               .join(' • ');
             return (
@@ -102,7 +120,7 @@ const homeSchema = {
                       src={painting.image}
                       srcset={painting.imageSrcSet ?? undefined}
                       sizes="(max-width: 960px) 100vw, 50vw"
-                      alt={`${painting.title} – original painting by Layla${painting.medium ? `, ${painting.medium}` : ''}`}
+                      alt={`${painting.title} – original painting by Layla${medium ? `, ${medium}` : ''}`}
                       loading="lazy"
                       decoding="async"
                     />
