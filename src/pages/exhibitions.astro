@@ -12,7 +12,7 @@ const paintings =
   paintingsFromWp.length > 0
     ? paintingsFromWp
     : fallbackPaintings.map(item => ({ ...item, link: '#!' }));
-const orderedPaintings = [...paintings].reverse();
+const orderedPaintings = paintings;
 const heroImage = '/gallerie/gallerie-virtuelle.png';
 const detailBase = '/obras';
 const exhibitionsPath = '/exhibitions';
