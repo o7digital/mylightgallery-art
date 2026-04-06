@@ -80,6 +80,20 @@ const normalizeDimensionsText = (value: string) =>
     .replace(/\s+/g, ' ')
     .trim();
 
+const cleanProductTitle = (value: string) => {
+  const normalized = normalizeDimensionsText(value);
+  const trimmed = normalized
+    .replace(
+      /\s*\b\d{2,3}\s*x\s*\d{2,3}\b\s*(?:acrilic[oa]?|acrílic[oa]?|oleo|óleo|oil)?\s*$/i,
+      ''
+    )
+    .replace(/\s*\b(?:acrilic[oa]?|acrílic[oa]?|oleo|óleo|oil)\b\s*$/i, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  return trimmed || normalized;
+};
+
 const extractDimensionsFromText = (value?: string | null) => {
   if (!value) return null;
   const normalized = value.replace(/-/g, ' ');
@@ -227,6 +241,7 @@ const deriveDimensionsFromAttributes = (attributes: Array<Record<string, any>>) 
 const mapProduct = (item: Record<string, any>): ProductCard | null => {
   const rawTitle = normalizeMediumText(stripTags(item.name));
   if (!rawTitle) return null;
+  const title = cleanProductTitle(rawTitle);
   const attributes = Array.isArray(item.attributes) ? item.attributes : [];
   const dimensions =
     deriveDimensionsFromAttributes(attributes) ||
@@ -238,7 +253,6 @@ const mapProduct = (item: Record<string, any>): ProductCard | null => {
     item.permalink,
     typeof item.description === 'string' ? item.description : null
   );
-  const title = rawTitle;
   const priceText = formatPrice(item.price, item.regular_price);
   const mainImage = item.images?.[0] ?? null;
   const imageSrcSet = normalizeSrcSet(mainImage?.srcset);
