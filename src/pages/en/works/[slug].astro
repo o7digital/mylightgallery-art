@@ -180,10 +180,10 @@ const artworkSchema = {
           <div class:list={['rg-artwork-gallery', paintingImages.length > 1 && 'is-multiple']}>
             {paintingImages.length > 0 ? (
               paintingImages.map((image, index) => (
-                <div class:list={['rg-artwork-visual', paintingImages.length > 1 && 'is-gallery-tile']}>
-                  {paintingImages.length === 1 && (
-                    <span class="rg-artwork-label">Without frame</span>
-                  )}
+                <div class="rg-artwork-visual">
+                  <span class="rg-artwork-label">
+                    {paintingImages.length > 1 ? `Without frame ${index + 1}` : 'Without frame'}
+                  </span>
                   <img
                     src={image.src}
                     srcset={image.srcSet ?? undefined}
@@ -639,8 +639,7 @@ const artworkSchema = {
   }
 
   .rg-artwork-gallery.is-multiple {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
 
   .rg-artwork-visual {
@@ -655,13 +654,6 @@ const artworkSchema = {
     height: auto;
     display: block;
     cursor: zoom-in;
-  }
-
-  .rg-artwork-visual.is-gallery-tile {
-    background: transparent;
-    border: 0;
-    padding: 0;
-    box-shadow: none;
   }
 
   .rg-artwork-certificate {
@@ -1002,7 +994,6 @@ const artworkSchema = {
   @media (max-width: 600px) {
     .rg-artwork-gallery.is-multiple {
       grid-template-columns: 1fr;
-      gap: 1.25rem;
     }
 
     .rg-artwork-visual {
