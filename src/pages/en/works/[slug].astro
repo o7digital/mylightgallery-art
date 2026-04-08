@@ -10,6 +10,11 @@ export const prerender = false;
 const { slug } = Astro.params;
 const normalizeSlug = (value = '') =>
   value.toLowerCase().replace(/-\d{2,3}x\d{2,3}.*$/i, '').replace(/-+$/g, '');
+const normalizeSlugForMatch = (value = '') =>
+  normalizeSlug(value)
+    .replace(/-\d+(?=-(?:acrilic[oa]?|acrílic[oa]?|oleo|óleo|oil)\b)/gi, '')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '');
 const humanizeSlug = (value = '') => {
   const cleaned = normalizeSlug(value).replace(/-/g, ' ').trim().toLowerCase();
   if (!cleaned) return 'Woman with Moon';
@@ -33,9 +38,14 @@ const paintings =
 const findPainting = (items: typeof paintings, targetSlug?: string) => {
   if (!targetSlug) return undefined;
   const normalizedTarget = normalizeSlug(targetSlug);
+  const relaxedTarget = normalizeSlugForMatch(targetSlug);
   return items.find(item => {
     const itemSlug = item.slug ?? slugify(item.title);
-    return itemSlug === targetSlug || normalizeSlug(itemSlug) === normalizedTarget;
+    return (
+      itemSlug === targetSlug ||
+      normalizeSlug(itemSlug) === normalizedTarget ||
+      normalizeSlugForMatch(itemSlug) === relaxedTarget
+    );
   });
 };
 
@@ -50,13 +60,17 @@ if (!painting && normalizedSlug && normalizedSlug !== slug) {
 
 const fallbackTitle = slug ? humanizeSlug(slug) : 'Woman with Moon';
 const paintingTitle = painting?.title ?? fallbackTitle;
-const paintingSlug = normalizeSlug(painting?.slug ?? slug ?? '');
+const paintingSlug = painting?.slug ?? slug ?? '';
+const normalizedPaintingSlug = normalizeSlug(paintingSlug);
 const imageOverrides: Record<string, string> = {
   'mujer-con-luna': '/collections/featured.webp',
 };
 const paintingImage =
-  imageOverrides[paintingSlug] ?? painting?.imageFull ?? painting?.image ?? null;
+  imageOverrides[normalizedPaintingSlug] ?? painting?.imageFull ?? painting?.image ?? null;
 const detailText = painting?.description || 'Original artwork.';
+const saleLabel = painting?.priceText
+  ? 'This artwork is for sale.'
+  : 'This artwork is not for sale.';
 const formatDimensionsEn = (value?: string | null) => {
   if (!value) return null;
   const match = value.match(/^\s*(\d{2,3})\s*x\s*(\d{2,3})\s*$/i);
@@ -239,7 +253,7 @@ const artworkSchema = {
               <dd>{medium}</dd>
             </div>
           </dl>
-          <p class="rg-artwork-sale">This artwork is for sale.</p>
+          <p class="rg-artwork-sale">{saleLabel}</p>
           <button
             class="rg-certificate-btn"
             type="button"
