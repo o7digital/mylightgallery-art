@@ -10,10 +10,18 @@ type ProductCard = {
   imageFull?: string | null;
   imageSrcSet?: string | null;
   imageSizes?: string | null;
+  images?: ProductImage[];
   priceText?: string | null;
   dimensions?: string | null;
   medium?: string | null;
   description?: string | null;
+};
+
+type ProductImage = {
+  src: string;
+  full?: string | null;
+  srcSet?: string | null;
+  sizes?: string | null;
 };
 
 const baseUrl =
@@ -254,17 +262,23 @@ const mapProduct = (item: Record<string, any>): ProductCard | null => {
     typeof item.description === 'string' ? item.description : null
   );
   const priceText = formatPrice(item.price, item.regular_price);
-  const mainImage = item.images?.[0] ?? null;
-  const imageSrcSet = normalizeSrcSet(mainImage?.srcset);
-  const imageSizes = typeof mainImage?.sizes === 'string' ? mainImage.sizes : null;
-  const image =
-    pickListImageFromSrcSet(mainImage?.srcset) ||
-    normalizeImage(mainImage?.thumbnail) ||
-    normalizeImage(mainImage?.src) ||
-    extractFirstImageSrc(item.description);
-  const imageFull =
-    normalizeFullImage(mainImage?.src) ||
-    normalizeFullImage(extractFirstImageSrc(item.description));
+  const galleryImages = Array.isArray(item.images)
+    ? item.images
+        .map(mapProductImage)
+        .filter((image): image is ProductImage => Boolean(image))
+    : [];
+  const descriptionImages = extractImageSrcs(item.description).map(src => ({
+    src,
+    full: normalizeFullImage(src) || src,
+  }));
+  const images = [...galleryImages, ...descriptionImages].filter(
+    (image, index, all) => all.findIndex(candidate => candidate.src === image.src) === index
+  );
+  const mainImage = images[0] ?? null;
+  const imageSrcSet = mainImage?.srcSet ?? null;
+  const imageSizes = mainImage?.sizes ?? null;
+  const image = mainImage?.src ?? null;
+  const imageFull = mainImage?.full ?? null;
   const descriptionRaw = stripTags(item.description);
   const description = descriptionRaw ? normalizeMediumText(descriptionRaw) : null;
   return {
@@ -276,6 +290,7 @@ const mapProduct = (item: Record<string, any>): ProductCard | null => {
     imageFull,
     imageSrcSet,
     imageSizes,
+    images,
     priceText,
     dimensions,
     medium,
@@ -304,10 +319,29 @@ const getMediumFromAttributes = (attributes: Array<Record<string, any>>) => {
   return null;
 };
 
-const extractFirstImageSrc = (html?: string | null) => {
-  if (!html) return null;
-  const match = html.match(/<img[^>]+src\s*=\s*['"]([^'">]+)['"]/i);
-  return normalizeImage(match?.[1]);
+const extractImageSrcs = (html?: string | null) => {
+  if (!html) return [];
+
+  return [...html.matchAll(/<img[^>]+src\s*=\s*['"]([^'">]+)['"]/gi)]
+    .map(match => normalizeImage(match[1]))
+    .filter((src): src is string => Boolean(src));
+};
+
+const extractFirstImageSrc = (html?: string | null) => extractImageSrcs(html)[0] ?? null;
+
+const mapProductImage = (item: Record<string, any>): ProductImage | null => {
+  const src =
+    pickListImageFromSrcSet(item?.srcset) ||
+    normalizeImage(item?.thumbnail) ||
+    normalizeImage(item?.src);
+  if (!src) return null;
+
+  return {
+    src,
+    full: normalizeFullImage(item?.src) || src,
+    srcSet: normalizeSrcSet(item?.srcset),
+    sizes: typeof item?.sizes === 'string' ? item.sizes : null,
+  };
 };
 
 
