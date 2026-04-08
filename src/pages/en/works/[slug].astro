@@ -68,6 +68,7 @@ const imageOverrides: Record<string, string> = {
 const paintingImage =
   imageOverrides[normalizedPaintingSlug] ?? painting?.imageFull ?? painting?.image ?? null;
 const detailText = painting?.description || 'Original artwork.';
+const priceText = painting?.priceText ?? null;
 const saleLabel = painting?.priceText
   ? 'This artwork is for sale.'
   : 'This artwork is not for sale.';
@@ -252,6 +253,12 @@ const artworkSchema = {
               <dt>Technique</dt>
               <dd>{medium}</dd>
             </div>
+            {priceText && (
+              <div>
+                <dt>Price</dt>
+                <dd>{priceText}</dd>
+              </div>
+            )}
           </dl>
           <p class="rg-artwork-sale">{saleLabel}</p>
           <button

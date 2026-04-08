@@ -70,6 +70,7 @@ const paintingImage =
 const detailText = painting?.description || 'Obra original.';
 const dimensions = painting?.dimensions ?? '—';
 const medium = painting?.medium ?? '—';
+const priceText = painting?.priceText ?? null;
 const saleLabel = painting?.priceText
   ? 'Esta obra está en venta.'
   : 'Esta obra no está a la venta.';
@@ -236,6 +237,12 @@ const artworkSchema = {
               <dt>Técnica</dt>
               <dd>{medium}</dd>
             </div>
+            {priceText && (
+              <div>
+                <dt>Precio</dt>
+                <dd>{priceText}</dd>
+              </div>
+            )}
           </dl>
           <p class="rg-artwork-sale">{saleLabel}</p>
           <button
