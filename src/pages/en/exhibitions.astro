@@ -93,7 +93,6 @@ const exhibitionsSchema = {
             const meta = [dimensions, medium, painting.priceText]
               .filter(Boolean)
               .join(' • ');
-            const saleStatus = painting.priceText ? null : 'Not for sale';
             return (
               <article class="rg-exhibitions-item" style={`--delay: ${index * 0.04}s`}>
                 <a class="rg-exhibitions-image" href={paintingHref}>
@@ -109,7 +108,6 @@ const exhibitionsSchema = {
                 <div class="rg-exhibitions-details">
                   <h2 class="rg-exhibitions-title">{painting.title}</h2>
                   {meta && <p class="rg-exhibitions-meta">{meta}</p>}
-                  {saleStatus && <p class="rg-exhibitions-status">{saleStatus}</p>}
                   <a class="rg-exhibitions-link" href={paintingHref} aria-label={`Read more about ${painting.title}`}>More info</a>
                 </div>
               </article>
@@ -309,14 +307,6 @@ const exhibitionsSchema = {
     margin: 0;
     color: var(--rg-muted);
     font-size: 0.95rem;
-  }
-
-  .rg-exhibitions-status {
-    margin: 0;
-    color: #8a2f2f;
-    font-size: 0.84rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
   }
 
   .rg-exhibitions-link {
