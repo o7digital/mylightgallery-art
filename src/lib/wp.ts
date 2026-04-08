@@ -167,13 +167,13 @@ const formatPrice = (price?: string | null, regular?: string | null) => {
   const regularNumeric =
     regular && !Number.isNaN(Number(regular)) ? Number(regular) : null;
 
-  if (numeric !== null) {
+  if (numeric !== null && numeric > 0) {
     return `$${numeric.toLocaleString('en-US', {
       minimumFractionDigits: 0,
       maximumFractionDigits: 2,
     })} USD`;
   }
-  if (regularNumeric !== null) {
+  if (regularNumeric !== null && regularNumeric > 0) {
     return `$${regularNumeric.toLocaleString('en-US', {
       minimumFractionDigits: 0,
       maximumFractionDigits: 2,
