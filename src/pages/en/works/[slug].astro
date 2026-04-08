@@ -72,8 +72,24 @@ const normalizedPaintingSlug = normalizeSlug(paintingSlug);
 const imageOverrides: Record<string, string> = {
   'mujer-con-luna': '/collections/featured.webp',
 };
-const paintingImage =
-  imageOverrides[normalizedPaintingSlug] ?? painting?.imageFull ?? painting?.image ?? null;
+const paintingImages = (() => {
+  const seen = new Set<string>();
+  const images: Array<{ src: string; srcSet?: string | null; sizes?: string | null }> = [];
+  const addImage = (src?: string | null, srcSet?: string | null, sizes?: string | null) => {
+    if (!src || seen.has(src)) return;
+    seen.add(src);
+    images.push({ src, srcSet, sizes });
+  };
+
+  addImage(imageOverrides[normalizedPaintingSlug] ?? null);
+  for (const image of painting?.images ?? []) {
+    addImage(image.full ?? image.src, image.srcSet, image.sizes);
+  }
+  addImage(painting?.imageFull ?? painting?.image ?? null, painting?.imageSrcSet, painting?.imageSizes);
+
+  return images;
+})();
+const paintingImage = paintingImages[0]?.src ?? null;
 const detailText = painting?.description || 'Original artwork.';
 const priceText = painting?.priceText ?? null;
 const saleLabel = painting?.priceText
@@ -161,18 +177,28 @@ const artworkSchema = {
     <section class="rg-artwork-content">
       <div class="container rg-artwork-grid">
         <div class="rg-artwork-images">
-          <div class="rg-artwork-visual">
-            <span class="rg-artwork-label">Without frame</span>
-            {paintingImage ? (
-              <img
-                src={paintingImage}
-                alt={`${paintingTitle} – original painting by Layla${medium !== '—' ? `, ${medium}` : ''}${dimensions !== '—' ? `, ${dimensions}` : ''}`}
-                loading="lazy"
-                decoding="async"
-                data-zoomable
-              />
+          <div class:list={['rg-artwork-gallery', paintingImages.length > 1 && 'is-multiple']}>
+            {paintingImages.length > 0 ? (
+              paintingImages.map((image, index) => (
+                <div class="rg-artwork-visual">
+                  <span class="rg-artwork-label">
+                    {paintingImages.length > 1 ? `Without frame ${index + 1}` : 'Without frame'}
+                  </span>
+                  <img
+                    src={image.src}
+                    srcset={image.srcSet ?? undefined}
+                    sizes={image.sizes ?? undefined}
+                    alt={`${paintingTitle} – original painting by Layla${medium !== '—' ? `, ${medium}` : ''}${dimensions !== '—' ? `, ${dimensions}` : ''}${paintingImages.length > 1 ? `, view ${index + 1}` : ''}`}
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    data-zoomable
+                  />
+                </div>
+              ))
             ) : (
-              <div class="rg-artwork-placeholder"></div>
+              <div class="rg-artwork-visual">
+                <div class="rg-artwork-placeholder"></div>
+              </div>
             )}
           </div>
           <div
@@ -607,6 +633,15 @@ const artworkSchema = {
     gap: 2rem;
   }
 
+  .rg-artwork-gallery {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .rg-artwork-gallery.is-multiple {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+
   .rg-artwork-visual {
     background: rgba(255, 255, 255, 0.95);
     border: 1px solid var(--rg-line);
@@ -957,6 +992,10 @@ const artworkSchema = {
   }
 
   @media (max-width: 600px) {
+    .rg-artwork-gallery.is-multiple {
+      grid-template-columns: 1fr;
+    }
+
     .rg-artwork-visual {
       padding: 1rem;
     }
