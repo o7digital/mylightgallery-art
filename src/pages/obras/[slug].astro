@@ -15,6 +15,8 @@ const normalizeSlugForMatch = (value = '') =>
     .replace(/-\d+(?=-(?:acrilic[oa]?|acrílic[oa]?|oleo|óleo|oil)\b)/gi, '')
     .replace(/-+/g, '-')
     .replace(/^-+|-+$/g, '');
+const hasSeriesIndex = (value = '') =>
+  /-\d+(?=-(?:acrilic[oa]?|acrílic[oa]?|oleo|óleo|oil)\b)/i.test(normalizeSlug(value));
 const humanizeSlug = (value = '') => {
   const cleaned = normalizeSlug(value).replace(/-/g, ' ').trim().toLowerCase();
   if (!cleaned) return 'Mujer con Luna';
@@ -38,15 +40,20 @@ const paintings =
 const findPainting = (items: typeof paintings, targetSlug?: string) => {
   if (!targetSlug) return undefined;
   const normalizedTarget = normalizeSlug(targetSlug);
+  const directMatch = items.find(item => (item.slug ?? slugify(item.title)) === targetSlug);
+  if (directMatch) return directMatch;
+
+  const normalizedMatch = items.find(
+    item => normalizeSlug(item.slug ?? slugify(item.title)) === normalizedTarget
+  );
+  if (normalizedMatch) return normalizedMatch;
+
+  if (hasSeriesIndex(targetSlug)) return undefined;
+
   const relaxedTarget = normalizeSlugForMatch(targetSlug);
-  return items.find(item => {
-    const itemSlug = item.slug ?? slugify(item.title);
-    return (
-      itemSlug === targetSlug ||
-      normalizeSlug(itemSlug) === normalizedTarget ||
-      normalizeSlugForMatch(itemSlug) === relaxedTarget
-    );
-  });
+  return items.find(
+    item => normalizeSlugForMatch(item.slug ?? slugify(item.title)) === relaxedTarget
+  );
 };
 
 let painting = findPainting(paintings, slug);
