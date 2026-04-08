@@ -111,6 +111,7 @@ const homeSchema = {
             const meta = [dimensions, medium, painting.priceText]
               .filter(Boolean)
               .join(' • ');
+            const saleStatus = painting.priceText ? null : 'Not for sale';
             return (
               <article class="rg-exhibition" style={`--delay: ${index * 0.12}s`}>
                 <header>{index === 0 ? 'On now' : 'Upcoming'}</header>
@@ -129,6 +130,7 @@ const homeSchema = {
                 <div class="rg-exhibition__content">
                   <h3>{painting.title}</h3>
                   {meta && <div class="rg-exhibition__meta">{meta}</div>}
+                  {saleStatus && <div class="rg-exhibition__status">{saleStatus}</div>}
                   <a class="rg-exhibition__button" href={paintingHref}>More info</a>
                 </div>
               </article>
@@ -531,6 +533,13 @@ const homeSchema = {
   .rg-exhibition__meta {
     color: var(--rg-muted);
     font-size: 0.95rem;
+  }
+
+  .rg-exhibition__status {
+    color: #8a2f2f;
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
 
   .rg-exhibition__button {

@@ -84,6 +84,7 @@ const collectionsIntro = `${seo.homeIntro} Para mí, pintar es una necesidad ese
             const meta = [painting.dimensions, painting.medium, painting.priceText]
               .filter(Boolean)
               .join(' • ');
+            const saleStatus = painting.priceText ? null : 'No está a la venta';
             return (
               <article class="rg-exhibition" style={`--delay: ${index * 0.12}s`}>
                 <header>{index === 0 ? 'AHORA' : 'PRÓXIMO'}</header>
@@ -102,6 +103,7 @@ const collectionsIntro = `${seo.homeIntro} Para mí, pintar es una necesidad ese
                 <div class="rg-exhibition__content">
                   <h3>{painting.title}</h3>
                   {meta && <div class="rg-exhibition__meta">{meta}</div>}
+                  {saleStatus && <div class="rg-exhibition__status">{saleStatus}</div>}
                   <a class="rg-exhibition__button" href={paintingHref}>Más información</a>
                 </div>
               </article>
@@ -505,6 +507,13 @@ const collectionsIntro = `${seo.homeIntro} Para mí, pintar es una necesidad ese
   .rg-exhibition__meta {
     color: var(--rg-muted);
     font-size: 0.95rem;
+  }
+
+  .rg-exhibition__status {
+    color: #8a2f2f;
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
 
   .rg-exhibition__button {

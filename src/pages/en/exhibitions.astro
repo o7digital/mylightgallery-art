@@ -93,6 +93,7 @@ const exhibitionsSchema = {
             const meta = [dimensions, medium, painting.priceText]
               .filter(Boolean)
               .join(' • ');
+            const saleStatus = painting.priceText ? null : 'Not for sale';
             return (
               <article class="rg-exhibitions-item" style={`--delay: ${index * 0.04}s`}>
                 <a class="rg-exhibitions-image" href={paintingHref}>
@@ -108,6 +109,7 @@ const exhibitionsSchema = {
                 <div class="rg-exhibitions-details">
                   <h2 class="rg-exhibitions-title">{painting.title}</h2>
                   {meta && <p class="rg-exhibitions-meta">{meta}</p>}
+                  {saleStatus && <p class="rg-exhibitions-status">{saleStatus}</p>}
                   <a class="rg-exhibitions-link" href={paintingHref} aria-label={`Read more about ${painting.title}`}>More info</a>
                 </div>
               </article>
@@ -224,14 +226,17 @@ const exhibitionsSchema = {
     color: #fff;
     z-index: 1;
     padding: 0 1.5rem;
+    width: min(100%, 920px);
   }
 
   .rg-exhibitions-hero h1 {
     font-family: 'Times New Roman', Times, serif;
-    font-size: clamp(2.8rem, 6vw, 4rem);
+    font-size: clamp(1.9rem, 4.2vw, 3.1rem);
     letter-spacing: 0.08em;
     margin: 0.5rem 0 0;
+    line-height: 1.08;
     text-transform: uppercase;
+    text-wrap: balance;
   }
 
   .container {
@@ -296,12 +301,22 @@ const exhibitionsSchema = {
     font-family: 'Cormorant Garamond', serif;
     font-size: 1.6rem;
     margin: 0;
+    font-variant-numeric: lining-nums;
+    font-feature-settings: 'lnum' 1;
   }
 
   .rg-exhibitions-meta {
     margin: 0;
     color: var(--rg-muted);
     font-size: 0.95rem;
+  }
+
+  .rg-exhibitions-status {
+    margin: 0;
+    color: #8a2f2f;
+    font-size: 0.84rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
 
   .rg-exhibitions-link {
@@ -411,12 +426,27 @@ const exhibitionsSchema = {
       min-height: 320px;
     }
 
+    .rg-exhibitions-hero h1 {
+      font-size: clamp(1.7rem, 5vw, 2.45rem);
+      letter-spacing: 0.06em;
+    }
+
     .rg-exhibitions-grid {
       grid-template-columns: 1fr;
     }
   }
 
   @media (max-width: 600px) {
+    .rg-exhibitions-hero header {
+      bottom: 12%;
+      padding: 0 1rem;
+    }
+
+    .rg-exhibitions-hero h1 {
+      font-size: clamp(1.45rem, 7vw, 2rem);
+      letter-spacing: 0.04em;
+    }
+
     .rg-exhibitions-image img {
       height: 240px;
     }
