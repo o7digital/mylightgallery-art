@@ -626,6 +626,13 @@ const artworkSchema = {
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
 
+  .rg-artwork-gallery.is-multiple .rg-artwork-visual {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    align-content: start;
+    height: 100%;
+  }
+
   .rg-artwork-visual {
     background: rgba(255, 255, 255, 0.95);
     border: 1px solid var(--rg-line);
@@ -638,6 +645,12 @@ const artworkSchema = {
     height: auto;
     display: block;
     cursor: zoom-in;
+  }
+
+  .rg-artwork-gallery.is-multiple .rg-artwork-visual img {
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    object-position: top center;
   }
 
   .rg-artwork-certificate {
