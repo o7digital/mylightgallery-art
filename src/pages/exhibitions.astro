@@ -1,17 +1,14 @@
 ---
+import OptimizedImage from '../components/OptimizedImage.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getProducts } from '../lib/wp';
-import { fallbackPaintings } from '../lib/fallbackPaintings';
 import { slugify } from '../lib/slugify';
 import { seoCopy } from '../lib/seoKeywords';
 
 export const prerender = false;
 
 const paintingsFromWp = (await getProducts(60)).filter(painting => painting.image);
-const paintings =
-  paintingsFromWp.length > 0
-    ? paintingsFromWp
-    : fallbackPaintings.map(item => ({ ...item, link: '#!' }));
+const paintings = paintingsFromWp;
 const orderedPaintings = paintings;
 const heroImage = '/gallerie/gallerie-virtuelle.png';
 const detailBase = '/obras';
@@ -50,7 +47,7 @@ const exhibitionsSchema = {
   <div class="rg-exhibitions-page rg-exhibitions-list">
     <section class="rg-exhibitions-hero">
       {heroImage ? (
-        <img
+        <OptimizedImage
           src={heroImage}
           alt="Galería de arte My Light Gallery Art – pinturas originales en Irving, TX"
           loading="eager"
@@ -78,9 +75,8 @@ const exhibitionsSchema = {
             return (
               <article class="rg-exhibitions-item" style={`--delay: ${index * 0.04}s`}>
                 <a class="rg-exhibitions-image" href={paintingHref}>
-                  <img
-                    src={painting.image}
-                    srcset={painting.imageSrcSet ?? undefined}
+                  <OptimizedImage
+                    src={painting.imageFull ?? painting.image}
                     sizes="(max-width: 960px) 100vw, 50vw"
                     alt={`${painting.title} – pintura original de Layla${painting.medium ? `, ${painting.medium}` : ''}`}
                     loading="lazy"

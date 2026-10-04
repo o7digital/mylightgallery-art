@@ -1,7 +1,7 @@
 ---
+import OptimizedImage from '../../../components/OptimizedImage.astro';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getProducts, getProductBySlug } from '../../../lib/wp';
-import { fallbackPaintings } from '../../../lib/fallbackPaintings';
 import { slugify } from '../../../lib/slugify';
 import { seoCopy } from '../../../lib/seoKeywords';
 
@@ -32,10 +32,7 @@ const humanizeSlug = (value = '') => {
 };
 
 const paintingsFromWp = (await getProducts(120)).filter(painting => painting.image);
-const paintings =
-  paintingsFromWp.length > 0
-    ? paintingsFromWp
-    : fallbackPaintings.map(item => ({ ...item, link: '#!', slug: slugify(item.title) }));
+const paintings = paintingsFromWp;
 
 const findPainting = (items: typeof paintings, targetSlug?: string) => {
   if (!targetSlug) return undefined;
@@ -64,6 +61,9 @@ const normalizedSlug = slug ? normalizeSlug(slug) : '';
 if (!painting && normalizedSlug && normalizedSlug !== slug) {
   painting = findPainting(paintings, normalizedSlug) || (await getProductBySlug(normalizedSlug));
 }
+
+if (!painting) return Astro.rewrite('/404');
+if (slug !== painting.slug && painting.slug) return Astro.redirect(`/en/works/${painting.slug}`, 301);
 
 const fallbackTitle = slug ? humanizeSlug(slug) : 'Woman with Moon';
 const paintingTitle = painting?.title ?? fallbackTitle;
@@ -125,7 +125,7 @@ const metaDescription = plainDescription
 const phoneLabel = '+1 (214) 537-6953';
 const phoneHref = 'tel:+12145376953';
 const email = 'layla@mylightartgallery.com';
-const currentUrl = Astro.url?.href ?? '';
+const currentUrl = new URL(`/en/works/${paintingSlug}`, Astro.site).href;
 const shareUrl = encodeURIComponent(currentUrl);
 const shareImage = encodeURIComponent(paintingImage ?? '');
 const shareTitle = encodeURIComponent(paintingTitle);
@@ -143,11 +143,10 @@ const artworkSchema = {
   image: paintingImage ?? undefined,
   description: metaDescription,
   inLanguage: 'en-US',
-  ...(dimensions !== '—' ? { width: dimensions } : {}),
   ...(medium !== '—' ? { artMedium: medium } : {}),
   creator: {
     '@type': 'Person',
-    name: 'Layla',
+    name: 'Layla González Camarena Soutou',
     url: 'https://www.mylightartgallery.com',
   },
   isPartOf: {
@@ -166,6 +165,7 @@ const artworkSchema = {
   alternateEsPath={artworkEsPath}
   alternateEnPath={artworkEnPath}
   xDefaultPath={artworkEsPath}
+  extraStructuredData={artworkSchema}
 >
   <div class="rg-artwork-page">
     <section class="rg-artwork-hero">
@@ -184,14 +184,14 @@ const artworkSchema = {
                   <span class="rg-artwork-label">
                     {paintingImages.length > 1 ? `Without frame ${index + 1}` : 'Without frame'}
                   </span>
-                  <img
+                  <OptimizedImage
                     src={image.src}
-                    srcset={image.srcSet ?? undefined}
-                    sizes={image.sizes ?? undefined}
+                    sizes="(max-width: 960px) 100vw, 60vw"
                     alt={`${paintingTitle} – original painting by Layla${medium !== '—' ? `, ${medium}` : ''}${dimensions !== '—' ? `, ${dimensions}` : ''}${paintingImages.length > 1 ? `, view ${index + 1}` : ''}`}
                     loading={index === 0 ? 'eager' : 'lazy'}
                     decoding="async"
                     data-zoomable
+                    data-full-src={image.src}
                   />
                 </div>
               ))
@@ -359,7 +359,6 @@ const artworkSchema = {
       </div>
     </div>
   </div>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(artworkSchema)}></script>
 </BaseLayout>
 
 <script>
@@ -444,7 +443,7 @@ const artworkSchema = {
   };
 
   zoomables.forEach(img => {
-    img.addEventListener('click', () => openLightbox(img.src, img.alt));
+    img.addEventListener('click', () => openLightbox(img.dataset.fullSrc || img.currentSrc || img.src, img.alt));
   });
 
   lightboxClose?.addEventListener('click', closeLightbox);

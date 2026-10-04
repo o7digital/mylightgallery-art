@@ -1,4 +1,5 @@
 ---
+import OptimizedImage from './OptimizedImage.astro';
 const { lang = 'es', showEventsNews = true } = Astro.props;
 const rawPath = Astro.url?.pathname ?? '/';
 const normalizedPath = rawPath !== '/' && rawPath.endsWith('/') ? rawPath.slice(0, -1) : rawPath;
@@ -105,7 +106,7 @@ const switchLang = lang === 'en' ? { href: switchHref, label: 'ES' } : { href: s
         </div>
         
         <a href={logoHref} class="logo" aria-label={logoLabel}>
-          <img src="/logo/MY%20LIGHT%20ART%20GALLERY%20BlancLOGO.png" alt={logoLabel} />
+          <OptimizedImage sizes="160px" src="/logo/MY%20LIGHT%20ART%20GALLERY%20BlancLOGO.png" alt={logoLabel} />
         </a>
         
         <div class="nav-right">

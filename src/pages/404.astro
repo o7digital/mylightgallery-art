@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+Astro.response.status = 404;
+const isEn = Astro.url.pathname.startsWith('/en/');
+---
+<BaseLayout lang={isEn ? 'en' : 'es'} title={isEn ? 'Page not found | My Light Art Gallery' : 'Página no encontrada | My Light Art Gallery'} robots="noindex,follow">
+  <section class="section container">
+    <h1>{isEn ? 'Page not found' : 'Página no encontrada'}</h1>
+    <p>{isEn ? 'This page or artwork is unavailable.' : 'Esta página u obra no está disponible.'}</p>
+    <a href={isEn ? '/en/exhibitions' : '/exhibitions'}>{isEn ? 'Browse the artworks' : 'Ver las obras'}</a>
+  </section>
+</BaseLayout>

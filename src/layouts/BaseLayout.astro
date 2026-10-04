@@ -3,6 +3,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 import { getEnvValue } from '../lib/env';
+import { languagePairs } from '../lib/seoRoutes';
 
 const {
   title = 'My Light Gallery Art',
@@ -15,6 +16,7 @@ const {
   alternateEnPath,
   xDefaultPath,
   extraStructuredData = [],
+  robots = 'index,follow',
 } = Astro.props;
 const gaMeasurementId =
   getEnvValue(['PUBLIC_GA_MEASUREMENT_ID', 'GA_MEASUREMENT_ID']) ?? 'G-5F4G9JJ05G';
@@ -27,13 +29,18 @@ gtag('config', '${gaMeasurementId}');`
   : null;
 const site = Astro.site;
 const currentUrl = Astro.url;
-const canonicalTarget = canonicalPath ?? currentUrl.pathname;
+const pagePair = languagePairs.find(pair => pair.some(path => path.replace(/\/$/, '') === currentUrl.pathname.replace(/\/$/, '')));
+const canonicalTarget = canonicalPath ?? (pagePair ? pagePair[lang === 'en' ? 1 : 0] : currentUrl.pathname);
+const isPreview = getEnvValue('VERCEL_ENV') === 'preview';
+const robotsValue = isPreview ? 'noindex,nofollow' : robots;
 const canonicalUrl = site ? new URL(canonicalTarget, site).href : currentUrl.href;
-const locale = lang === 'en' ? 'en_US' : 'es_ES';
+const locale = lang === 'en' ? 'en_US' : 'es_MX';
 const siteName = 'My Light Art Gallery';
-const alternateEsUrl = site ? new URL(alternateEsPath ?? '/', site).href : null;
-const alternateEnUrl = site ? new URL(alternateEnPath ?? '/en/', site).href : null;
-const xDefaultUrl = site ? new URL(xDefaultPath ?? alternateEsPath ?? '/', site).href : null;
+const resolvedEsPath = alternateEsPath ?? pagePair?.[0];
+const resolvedEnPath = alternateEnPath ?? pagePair?.[1];
+const alternateEsUrl = site && resolvedEsPath ? new URL(resolvedEsPath, site).href : null;
+const alternateEnUrl = site && resolvedEnPath ? new URL(resolvedEnPath, site).href : null;
+const xDefaultUrl = site && resolvedEsPath ? new URL(xDefaultPath ?? resolvedEsPath, site).href : null;
 const defaultOgImage = site
   ? new URL('/slider/cadenas-acrilico-36x48.webp', site).href
   : '/slider/cadenas-acrilico-36x48.webp';
@@ -54,7 +61,8 @@ const structuredData = {
     postalCode: '75039',
     addressCountry: 'US',
   },
-  telephone: '+1-972-444-4553',
+  telephone: '+1-214-537-6953',
+  email: 'layla@mylightartgallery.com',
   areaServed: {
     '@type': 'AdministrativeArea',
     name: 'Irving, TX',
@@ -77,9 +85,7 @@ const structuredDataNodes = [structuredData].concat(
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
     <title>{title}</title>
-    <link rel="icon" type="image/svg+xml" href="/logo/favicon.svg" />
-    <link rel="icon" type="image/x-icon" href="/logo/favicon.ico" />
-    <link rel="apple-touch-icon" href="/logo/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="description" content={description} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -88,10 +94,11 @@ const structuredDataNodes = [structuredData].concat(
       rel="stylesheet"
     />
     <link rel="canonical" href={canonicalUrl} />
-    <meta name="robots" content="index,follow" />
+    <meta name="robots" content={robotsValue} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={siteName} />
     <meta property="og:locale" content={locale} />
+    <meta property="og:locale:alternate" content={lang === 'en' ? 'es_MX' : 'en_US'} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -114,7 +121,7 @@ const structuredDataNodes = [structuredData].concat(
       </>
     )}
     {structuredDataNodes.map((schema) => (
-      <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)}></script>
+      <script type="application/ld+json" is:inline set:html={JSON.stringify(schema).replace(/</g, '\\u003c')}></script>
     ))}
   </head>
   <body>

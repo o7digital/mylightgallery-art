@@ -1,8 +1,8 @@
 ---
+import OptimizedImage from '../../components/OptimizedImage.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import { getProducts } from '../../lib/wp';
-import { fallbackPaintings } from '../../lib/fallbackPaintings';
 import { getBooleanEnv } from '../../lib/env';
 import { slugify } from '../../lib/slugify';
 import { seoCopy } from '../../lib/seoKeywords';
@@ -15,10 +15,7 @@ const showPurchaseButtons = getBooleanEnv(
   false
 );
 const paintingsFromWp = (await getProducts(60)).filter(painting => painting.image);
-const paintings =
-  paintingsFromWp.length > 0
-    ? paintingsFromWp
-    : fallbackPaintings.map(item => ({ ...item, link: '#!' }));
+const paintings = paintingsFromWp;
 const orderedPaintings = paintings;
 const featuredPainting = orderedPaintings.find(painting => painting.image);
 const whatsOnPaintings = orderedPaintings.filter(painting => painting.image).slice(0, 2);
@@ -70,9 +67,9 @@ const homeSchema = {
       <div class="container rg-collections__inner">
         <div class="rg-collections__media">
           {collectionsImage || featuredPainting?.image ? (
-            <img
+            <OptimizedImage
               src={collectionsImage || featuredPainting?.image}
-              alt={featuredPainting?.title ? `${featuredPainting.title} – original painting by Layla` : 'Original painting collections – My Light Gallery Art'}
+              alt="Original painting collections – My Light Gallery Art"
               loading="lazy"
               decoding="async"
             />
@@ -116,9 +113,8 @@ const homeSchema = {
                 <header>{index === 0 ? 'On now' : 'Upcoming'}</header>
                 <div class="rg-exhibition__image">
                   <a href={paintingHref}>
-                    <img
-                      src={painting.image}
-                      srcset={painting.imageSrcSet ?? undefined}
+                    <OptimizedImage
+                      src={painting.imageFull ?? painting.image}
                       sizes="(max-width: 960px) 100vw, 50vw"
                       alt={`${painting.title} – original painting by Layla${medium ? `, ${medium}` : ''}`}
                       loading="lazy"
