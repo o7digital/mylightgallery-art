@@ -124,7 +124,12 @@ const extractMediumFromText = (value?: string | null) => {
 
 const normalizeImage = (src?: string | null) => {
   if (!src) return null;
-  return src.replace('http://', 'https://');
+  const normalized = src.replace('http://', 'https://');
+  // Migrated product descriptions can retain the previous WordPress media host.
+  if (baseUrl && normalized.startsWith('https://oliviers48.sg-host.com/wp-content/')) {
+    return normalized.replace('https://oliviers48.sg-host.com', new URL(baseUrl).origin);
+  }
+  return normalized;
 };
 
 const normalizeFullImage = (src?: string | null) => {
