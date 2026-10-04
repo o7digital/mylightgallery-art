@@ -9,6 +9,7 @@ export default defineConfig({
       sizes: [320, 480, 640, 768, 960, 1200, 1600, 1920],
       formats: ['image/webp'],
       minimumCacheTTL: 86400,
+      remotePatterns: [{ protocol: 'https', hostname: 'wp-mylightartgallery.o7digitalgroup.com', pathname: '/wp-content/**' }],
     },
   }),
   image: {

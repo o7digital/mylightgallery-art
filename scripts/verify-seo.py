@@ -3,6 +3,7 @@
 import argparse
 import json
 import subprocess
+import os
 from email.parser import Parser
 from html.parser import HTMLParser
 import urllib.request
@@ -69,6 +70,7 @@ def verify(base, preview=False):
     paths = ['/', '/en/', '/exhibitions', '/en/exhibitions', '/exhibitions?page=2', '/contacto', '/en/contact', '/es/condiciones-generales-de-uso', '/en/terms-and-conditions', '/newsletter', '/en/newsletter', '/aviso-privacidad', '/en/privacy', '/es/politica-de-devoluciones', '/en/return-policy', '/es/garantias-y-autenticidad', '/en/warranties-and-authenticity', '/es/impuestos-texas', '/en/texas-taxes']
     artwork = urllib.parse.urlsplit(artworks[0]).path
     paths.extend([artwork, artwork.replace('/obras/', '/en/works/')])
+    optimized_images = set()
     for path in paths:
         status, headers, html = fetch(base, path)
         assert status == 200, (path, status)
@@ -85,6 +87,8 @@ def verify(base, preview=False):
         assert len([item for item in page.schema if item.get('@type') == 'ArtGallery']) == 1
         if '/obras/' in path or '/works/' in path:
             assert len([item for item in page.schema if item.get('@type') == 'VisualArtwork']) == 1
+        if path in ['/', artwork]:
+            optimized_images.update(image['src'] for image in page.images[:2] if image.get('src'))
         for image in page.images:
             if image.get('src'):
                 assert image.get('width') and image.get('height') and image.get('srcset'), (path, image)
@@ -93,6 +97,11 @@ def verify(base, preview=False):
             assert 'noindex' in headers.get('X-Robots-Tag', '')
             assert 'noindex' in page.meta.get('robots', '')
         print('PASS', path)
+    if USE_VERCEL:
+        for image in sorted(optimized_images):
+            result = subprocess.run(['vercel', 'curl', image, '--deployment', base, '--', '--silent', '--show-error', '--header', 'Accept: image/webp', '--output', os.devnull, '--write-out', '%{http_code} %{content_type}'], capture_output=True, text=True, check=True)
+            assert result.stdout.startswith('200 image/webp'), ('Image optimization failed', result.stdout)
+        print('PASS optimized local and remote images return WebP')
     for path in ['/obras/not-a-real-artwork-xyz', '/en/works/not-a-real-artwork-xyz', '/not-a-real-page-xyz']:
         status, headers, html = fetch(base, path)
         assert status == 404, (path, status)
